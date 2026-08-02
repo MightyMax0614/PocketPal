@@ -26,16 +26,18 @@ jobs:
           python -m py_compile tools/img2threejs_bridge.py
           python -m py_compile tools/character_job_v2_adapter.py
 
-      - name: Validate active P1.5 Rive JavaScript
-        run: node --check prototype/p1-rive/app.js
-
-      - name: Validate active P1.5 entry
+      - name: Validate active P1.6 Soul Lab
         run: |
-          grep -q "PocketPal P1.5" prototype/p1-rive/index.html
-          grep -q "@rive-app/webgl2@2.36.0" prototype/p1-rive/index.html
-          grep -q "prototype/p1-rive/" index.html
-          grep -q "skills.riv" prototype/p1-rive/app.js
-          grep -q "vehicles.riv" prototype/p1-rive/app.js
+          node --check prototype/p1-soul/app.js
+          grep -q "PocketPal P1.6" prototype/p1-soul/index.html
+          grep -q "prototype/p1-soul/" index.html
+          grep -q "pocketpal.soul.v1" prototype/p1-soul/app.js
+          grep -q "localStorage" prototype/p1-soul/app.js
+
+      - name: Validate retained P1.5 Rive research
+        run: |
+          node --check prototype/p1-rive/app.js
+          grep -q "canvas-single@2.36.0" prototype/p1-rive/index.html
 
       - name: Validate retained P1.4 research JavaScript
         run: |
