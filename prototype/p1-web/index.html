@@ -7,8 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>PocketPal P1 Prototype</title>
-  <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="mobile.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="mobile.css?v=4" />
+  <link rel="stylesheet" href="character.css?v=4" />
 </head>
 <body>
   <main class="stage">
@@ -26,7 +27,8 @@
 
         <div class="view active" data-view="home">
           <div class="speech" id="speech">안녕! 오늘은 뭐 하고 놀까?</div>
-          <div class="character" id="character" aria-label="PocketPal 캐릭터">
+          <div class="character" id="character" aria-label="PocketPal 기본 캐릭터">
+            <img id="customCharacterImage" class="custom-character-image" alt="내가 만든 PocketPal 캐릭터" hidden />
             <div class="ears"><span></span><span></span></div>
             <div class="face">
               <span class="eye left"></span>
@@ -34,6 +36,7 @@
               <span class="mouth"></span>
             </div>
             <div class="body"></div>
+            <div class="character-name-badge" id="characterNameBadge" hidden></div>
           </div>
           <div class="home-hint">휠을 돌려 메뉴를 고르고 가운데를 눌러줘</div>
         </div>
@@ -41,12 +44,31 @@
         <div class="view" data-view="menu">
           <h1>무엇을 할까?</h1>
           <ul class="menu-list" id="menuList">
+            <li data-action="character">내 캐릭터 만들기</li>
             <li data-action="talk">대화하기</li>
             <li data-action="camera">카메라</li>
             <li data-action="gift">선물 만들기</li>
             <li data-action="memory">기억하기</li>
             <li data-action="home">친구에게 돌아가기</li>
           </ul>
+        </div>
+
+        <div class="view panel character-panel" data-view="character">
+          <h1>내 캐릭터</h1>
+          <label class="upload-box" for="characterImageInput">
+            <span>아이 그림이나 사진 선택</span>
+            <input id="characterImageInput" type="file" accept="image/*" />
+          </label>
+          <div class="character-preview-frame" id="characterPreviewFrame" hidden>
+            <img id="characterPreview" alt="선택한 캐릭터 미리보기" hidden />
+          </div>
+          <label for="characterNameInput">캐릭터 이름</label>
+          <input id="characterNameInput" type="text" maxlength="20" placeholder="예: 별이, 몽글이, 용용이" />
+          <div class="button-row">
+            <button class="primary" id="characterApply" disabled>캐릭터로 적용</button>
+            <button id="characterReset">기본 캐릭터</button>
+          </div>
+          <p class="result character-step-note" id="characterResult">지금은 그림을 2D 캐릭터로 바로 적용해요. 다음 단계에서 배경 제거와 3D 변환을 연결합니다.</p>
         </div>
 
         <div class="view panel" data-view="talk">
@@ -102,7 +124,8 @@
     </section>
   </main>
 
-  <script src="app.js?v=3"></script>
-  <script src="touch-fix.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <script src="touch-fix.js?v=4"></script>
+  <script src="character-customizer.js?v=4"></script>
 </body>
 </html>
