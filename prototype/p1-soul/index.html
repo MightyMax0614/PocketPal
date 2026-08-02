@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#edf0eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>PocketPal P1.6 Soul Lab</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+  <script defer src="app.js?v=1"></script>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="device">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">PocketPal P1.6</span>
+          <h1>Soul Lab</h1>
+        </div>
+        <span class="local-badge">로컬 저장</span>
+      </header>
+
+      <section class="presence-card" aria-live="polite">
+        <div class="presence-orb" id="presenceOrb" data-mood="calm"><span></span></div>
+        <div class="speech-wrap">
+          <span id="moodLabel" class="mood-label">편안함</span>
+          <p id="speechText">안녕. 먼저 네 이름과 내 이름을 정해줘.</p>
+        </div>
+        <button id="speakAgain" class="icon-button" type="button" aria-label="다시 읽기">🔊</button>
+      </section>
+
+      <section class="state-card">
+        <div class="state-row"><span>에너지</span><progress id="energyBar" max="100" value="72"></progress><strong id="energyValue">72</strong></div>
+        <div class="state-row"><span>호기심</span><progress id="curiosityBar" max="100" value="62"></progress><strong id="curiosityValue">62</strong></div>
+        <div class="state-row"><span>친밀도</span><progress id="closenessBar" max="100" value="15"></progress><strong id="closenessValue">15</strong></div>
+      </section>
+
+      <nav class="tabs" aria-label="Soul Lab 메뉴">
+        <button type="button" class="selected" data-tab="home">대화</button>
+        <button type="button" data-tab="memory">기억</button>
+        <button type="button" data-tab="profile">성격</button>
+        <button type="button" data-tab="parent">보호자</button>
+      </nav>
+
+      <section class="tab-panel active" data-panel="home">
+        <h2>대화와 먼저 말 걸기</h2>
+        <div class="quick-grid">
+          <button type="button" data-action="greet">인사하기</button>
+          <button type="button" data-action="curious">뭐 해?</button>
+          <button type="button" data-action="happy">좋은 일 있었어</button>
+          <button type="button" data-action="sad">속상해</button>
+          <button type="button" data-action="pet">쓰다듬기</button>
+          <button type="button" data-action="proactive">먼저 말해봐</button>
+        </div>
+
+        <label for="talkInput">직접 이야기하기</label>
+        <textarea id="talkInput" rows="3" placeholder="예: 오늘 학교에서 공룡 그림을 그렸어"></textarea>
+        <button id="talkButton" class="primary" type="button">말 걸기</button>
+
+        <div class="proactive-settings">
+          <label class="switch-row"><span>자발 발화</span><input id="proactiveEnabled" type="checkbox" checked /></label>
+          <label class="switch-row"><span>음성 읽기</span><input id="voiceEnabled" type="checkbox" checked /></label>
+          <label class="switch-row"><span>테스트 모드 · 20초</span><input id="testMode" type="checkbox" checked /></label>
+        </div>
+        <p class="helper">테스트 모드에서는 20초 동안 상호작용이 없으면 기억과 시간대에 맞춰 먼저 말을 걸어요.</p>
+      </section>
+
+      <section class="tab-panel" data-panel="memory">
+        <h2>장기 기억 시험</h2>
+        <div class="memory-form">
+          <select id="memoryType" aria-label="기억 종류">
+            <option value="like">좋아하는 것</option>
+            <option value="important">중요한 일</option>
+            <option value="recent">최근 이야기</option>
+            <option value="person">사람</option>
+          </select>
+          <input id="memoryInput" type="text" maxlength="120" placeholder="예: 티라노사우루스를 좋아해" />
+          <button id="memorySave" class="primary" type="button">기억 저장</button>
+        </div>
+        <ol id="memoryList" class="memory-list"></ol>
+      </section>
+
+      <section class="tab-panel" data-panel="profile">
+        <h2>친구의 성격과 말투</h2>
+        <div class="field-grid">
+          <label>아이 이름<input id="childName" type="text" maxlength="15" placeholder="예: 하린" /></label>
+          <label>친구 이름<input id="palName" type="text" maxlength="15" placeholder="예: 포켓" /></label>
+          <label>성격
+            <select id="personality">
+              <option value="gentle">다정함</option>
+              <option value="curious">호기심</option>
+              <option value="cheerful">명랑함</option>
+              <option value="calm">차분함</option>
+            </select>
+          </label>
+          <label>말투
+            <select id="speechStyle">
+              <option value="warm">따뜻하게</option>
+              <option value="playful">장난스럽게</option>
+              <option value="calm">조용하게</option>
+            </select>
+          </label>
+        </div>
+        <button id="profileSave" class="primary" type="button">설정 저장</button>
+        <p id="profileResult" class="helper">설정을 저장하면 먼저 거는 말과 대답이 달라져요.</p>
+      </section>
+
+      <section class="tab-panel" data-panel="parent">
+        <h2>보호자 데이터 관리</h2>
+        <dl class="data-summary">
+          <div><dt>저장 위치</dt><dd>현재 아이폰 브라우저</dd></div>
+          <div><dt>기억 수</dt><dd id="memoryCount">0개</dd></div>
+          <div><dt>최근 상호작용</dt><dd id="lastInteractionLabel">-</dd></div>
+          <div><dt>외부 전송</dt><dd>없음</dd></div>
+        </dl>
+        <div class="button-stack">
+          <button id="exportData" type="button">데이터 JSON 내보내기</button>
+          <label class="import-button" for="importData">JSON 가져오기<input id="importData" type="file" accept="application/json,.json" /></label>
+          <button id="resetData" class="danger" type="button">모든 로컬 데이터 삭제</button>
+        </div>
+        <p class="helper">현재 버전은 서버·NAS·클라우드로 데이터를 보내지 않아요.</p>
+      </section>
+
+      <section class="event-card">
+        <div class="section-heading"><h2>행동 기록</h2><button id="clearEvents" type="button">지우기</button></div>
+        <ol id="eventList" class="event-list"></ol>
+      </section>
+
+      <footer>캐릭터 그래픽과 분리된 PocketPal 소울 로직 검증용</footer>
+    </section>
+  </main>
+</body>
+</html>
