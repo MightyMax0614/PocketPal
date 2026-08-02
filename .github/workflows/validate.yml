@@ -29,6 +29,7 @@ jobs:
           node --check prototype/p1-web/app.js
           node --check prototype/p1-web/touch-fix.js
           node --check prototype/p1-web/character-customizer.js
+          node --check prototype/p1-web/character-3d.js
           node --check prototype/p1-web/job-manager.js
 
       - name: Validate module JavaScript
@@ -37,4 +38,6 @@ jobs:
           node --check /tmp/viewer-3d.mjs
 
       - name: Validate JSON examples
-        run: python -m json.tool prototype/assets/jobs/example-job.json > /dev/null
+        run: |
+          python -m json.tool prototype/assets/jobs/example-job.json > /dev/null
+          python -m json.tool prototype/assets/jobs/example-character-job-v2.json > /dev/null
