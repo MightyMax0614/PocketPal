@@ -7,7 +7,7 @@
 ## 현재 단계
 
 - P0 제품 사양: 대부분 완료
-- P1 브라우저 소프트웨어 시제품: **P1.2 진행 중**
+- P1 브라우저 소프트웨어 시제품: **P1.4 진행 중**
 - P2 1:1 외형 목업: 준비 중
 - 고가 부품·맞춤 배터리·전용 PCB: 아직 구매하지 않음
 
@@ -24,25 +24,64 @@
 - USB-C 하단 중앙
 - 마이크 2개, 스피커 1개, 진동, Wi-Fi, Bluetooth
 
-## P1.2 웹 시제품
+## P1.4 핵심 방향
 
-GitHub Pages에서 아이폰으로 바로 시험할 수 있습니다.
+PocketPal 캐릭터는 자동 생성 3D 대신 **하얀 중성 기본 바디 + 고품질 2D 애니메이션 + 꾸미기 파츠 + 소울 상태**로 진행합니다.
+
+기본 바디는 동일한 친구로 유지하고 아이가 다음 항목을 꾸밉니다.
+
+- 눈과 입
+- 모자와 머리 장식
+- 옷과 무늬
+- 배지
+- 아이가 그린 그림 선물
+
+캐릭터의 정체성은 외형뿐 아니라 이름, 기억, 말투, 성격, 친밀도와 자발 행동으로 형성합니다.
+
+## P1.4 웹 시제품
 
 현재 구현:
 
 - 모바일 스크롤과 충돌하지 않는 가상 클릭휠
+- 승인된 하얀 중성 기본 바디
+- 머리·목·몸통·팔·다리 분리 애니메이션 리그
+- 지속적인 호흡과 미세한 자세 움직임
+- 불규칙한 눈 깜빡임
+- 포인터와 무작위 시선 추적
+- 말할 때 입 움직임
+- 손 흔들기, 점프, 기쁨, 궁금함, 졸림, 쓰다듬기 동작
+- 점눈, 동그란눈, 졸린눈
+- 미소, 작은입, 고양이입
+- 비니, 왕관, 새싹
+- 민트, 분홍, 파랑, 노랑 옷
+- 별과 하트 배지
+- 이름 저장
+- 다정함, 호기심, 명랑함, 차분함 성격
+- 따뜻함, 장난스러움, 차분함 말투
+- 아이 이름과 좋아하는 이야기 저장
+- 기억과 시간에 따른 자발 발화
+- 그림을 head, face, body, badge, hand 슬롯에 선물하는 시험
 - 전·후면 카메라 전환
 - 로컬 기억 저장
-- 그림·사진을 2D 캐릭터로 즉시 적용
-- 캐릭터 이름과 이미지 재접속 유지
-- 3D 변환 작업용 `job.json` 생성
-- 원본 캐릭터 이미지 저장
-- 2.5D 임시 회전 미리보기
-- GLB/GLTF 실제 결과 불러오기
-- Three.js 절차형 모듈 URL 불러오기
-- img2threejs 공식 Python 단계를 호출하는 PC/NAS 브리지
 
-현재 2.5D 미리보기는 **진짜 3D 변환 결과가 아닙니다.** 실제 img2threejs 결과는 NAS/PC에서 생성한 절차형 Three.js 모듈 또는 GLB/GLTF로 뷰어에 넣습니다.
+## 소울 엔진 v0.1
+
+소울 엔진은 다음 상태를 로컬에 유지합니다.
+
+```text
+기분
+에너지
+호기심
+친밀도
+최근 상호작용
+기본 성격
+말투
+아이를 부르는 이름
+좋아하는 주제
+저장된 기억
+```
+
+일정 시간 동안 상호작용이 없으면 시간, 기억, 성격을 바탕으로 먼저 말을 겁니다. 캐릭터를 터치하거나 쓰다듬으면 친밀도가 올라가고 표정과 동작이 함께 변합니다.
 
 ## 저장소 구조
 
@@ -53,54 +92,26 @@ PocketPal/
 ├── docs/
 │   ├── PocketPal_Master_Spec_v0.1.md
 │   ├── PROJECT_STATUS_2026-08-02.md
-│   ├── P1_CUSTOM_CHARACTER_PIPELINE.md
-│   ├── P1_CUSTOM_CHARACTER_UI_SPEC.md
-│   ├── JOB_FORMAT.md
-│   └── IMG2THREEJS_BRIDGE.md
+│   ├── POCKETPAL_BASE_CHARACTER_V0.1.md
+│   └── 3D 연구 문서
 ├── prototype/
-│   ├── assets/jobs/example-job.json
 │   └── p1-web/
 │       ├── index.html
 │       ├── app.js
 │       ├── styles.css
 │       ├── mobile.css
-│       ├── character.css
-│       ├── character-customizer.js
-│       ├── job-manager.js
-│       ├── viewer-3d.html
-│       ├── viewer-3d.css
-│       └── viewer-3d.js
+│       ├── soul-character.css
+│       ├── base-body-v01.css
+│       ├── soul-character.js
+│       ├── character-studio.js
+│       └── 3D 연구 파일
 └── tools/
-    └── img2threejs_bridge.py
+    └── 3D 연구 브리지
 ```
 
-## 3D 변환 흐름
+## 3D 연구 코드
 
-```text
-아이폰 그림/사진
-    ↓
-2D 캐릭터 즉시 적용
-    ↓
-3D 만들기
-    ↓
-job.json + source.png
-    ↓
-PC/NAS img2threejs 작업
-    ↓
-createModel.js 또는 model.glb
-    ↓
-PocketPal 3D 뷰어
-```
-
-## PC/NAS 브리지 실행
-
-```bash
-python3 tools/img2threejs_bridge.py \
-  jobs/<job_id> \
-  --skill-root ~/.claude/skills/img2threejs
-```
-
-자세한 내용은 [img2threejs Bridge 사용 방법](docs/IMG2THREEJS_BRIDGE.md)을 참고합니다.
+기존 img2threejs, GLB 뷰어와 3D 작업 규격은 연구 자료로 저장소에 남겨 둡니다. P1.4 메인 화면에서는 불러오지 않으며, 캐릭터 품질과 사용성이 검증된 뒤 AR 전용 선택 기능으로만 재검토합니다.
 
 ## 개발 원칙
 
@@ -109,15 +120,13 @@ python3 tools/img2threejs_bridge.py \
 - 실제 치수와 데이터시트로 검증
 - 확정 / 잠정 / 검증 필요를 구분
 - 콘셉트 이미지를 제작용 CAD로 단정하지 않음
-- 2.5D 임시 화면과 실제 3D 결과를 명확하게 구분
+- 캐릭터 외형보다 대화, 기억, 자발 행동과 교감을 우선 검증
 
-## 문서
+## 주요 문서
 
 - [마스터 사양서](docs/PocketPal_Master_Spec_v0.1.md)
 - [2026-08-02 진행 기록](docs/PROJECT_STATUS_2026-08-02.md)
-- [커스텀 캐릭터 파이프라인](docs/P1_CUSTOM_CHARACTER_PIPELINE.md)
-- [3D 작업 규격](docs/JOB_FORMAT.md)
-- [img2threejs 브리지](docs/IMG2THREEJS_BRIDGE.md)
+- [PocketPal 기본 캐릭터 v0.1](docs/POCKETPAL_BASE_CHARACTER_V0.1.md)
 
 ---
 
