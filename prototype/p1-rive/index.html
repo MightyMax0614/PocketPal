@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#e9ece8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>PocketPal Rive 진단</title>
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
   <style>
     .diagnostic-panel{margin:14px;padding:16px;border:1px solid var(--line);border-radius:21px;background:var(--panel);box-shadow:0 8px 22px rgba(37,56,54,.07)}
     .diagnostic-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
@@ -23,14 +23,14 @@
     .device-build{margin-top:8px;color:rgba(31,57,55,.52);font-size:9px;text-align:center}
     @media(max-width:520px){.diagnostic-actions{grid-template-columns:1fr}}
   </style>
-  <script defer src="app.js?v=4"></script>
+  <script defer src="app.js?v=5"></script>
 </head>
 <body>
   <main class="page-shell">
     <section class="device" aria-label="PocketPal Rive 진단 시제품">
       <header class="device-header">
         <div>
-          <span class="eyebrow">PocketPal P1.5.1</span>
+          <span class="eyebrow">PocketPal P1.5.2</span>
           <h1>Rive 복구 테스트</h1>
         </div>
         <div class="runtime-health">
@@ -104,7 +104,7 @@
         <ol id="eventLog" class="event-log" aria-live="polite"></ol>
       </section>
 
-      <footer class="device-footer"><strong>진단용 빌드</strong><span>P1.5.1 · 외부 런타임과 애셋을 분리 검사</span></footer>
+      <footer class="device-footer"><strong>진단용 빌드</strong><span>P1.5.2 · Safari 렌더 감지 수정</span></footer>
       <p class="device-build" id="deviceBuild"></p>
     </section>
   </main>
