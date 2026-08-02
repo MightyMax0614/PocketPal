@@ -2,13 +2,53 @@
 
 html,
 body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
   overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding:
+    max(8px, env(safe-area-inset-top))
+    max(8px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom))
+    max(8px, env(safe-area-inset-left));
+  touch-action: none;
+}
+
+.device {
+  width: min(
+    390px,
+    calc(100vw - 16px),
+    calc((100dvh - 16px) * 62 / 104)
+  );
+  max-height: none;
 }
 
 .controls,
-.wheel {
-  touch-action: none;
+.wheel,
+.center-button {
+  touch-action: none !important;
+  overscroll-behavior: contain;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .wheel {
@@ -23,6 +63,21 @@ body {
 .wheel.is-touching .wheel-progress {
   border-top-color: rgba(50, 125, 135, 0.9);
   box-shadow: 0 -2px 8px rgba(50, 125, 135, 0.16);
+}
+
+/* 대화·기억 화면 내부만 필요한 경우 세로 스크롤을 허용한다. */
+.panel {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+textarea,
+input,
+.upload-box,
+.panel button,
+.panel label {
+  touch-action: manipulation;
 }
 
 .mobile-wheel-guide {
@@ -51,8 +106,8 @@ body {
 
 @media (pointer: coarse) {
   .controls {
-    width: 68%;
-    margin-top: 12px;
+    width: 70%;
+    margin-top: 10px;
   }
 
   .wheel-label {
@@ -62,5 +117,15 @@ body {
   .center-button {
     width: 40%;
     height: 40%;
+  }
+}
+
+@supports not (height: 100dvh) {
+  .stage {
+    height: 100vh;
+  }
+
+  .device {
+    width: min(390px, calc(100vw - 16px), calc((100vh - 16px) * 62 / 104));
   }
 }
