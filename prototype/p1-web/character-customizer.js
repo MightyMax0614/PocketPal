@@ -27,6 +27,12 @@
     if (typeof window.say === "function") window.say(message, true);
   }
 
+  function notifyCharacterChanged(name, imageData) {
+    window.dispatchEvent(new CustomEvent("pocketpal:character-changed", {
+      detail: { name: name || null, imageData: imageData || null }
+    }));
+  }
+
   function openDatabase() {
     return new Promise((resolve, reject) => {
       if (!("indexedDB" in window)) {
@@ -118,17 +124,21 @@
     if (!imageData) return false;
 
     const safeName = displayCharacter(imageData, name);
+    pendingImageData = imageData;
+    pendingName = safeName;
 
     if (persist) {
       try {
         await persistCharacter(imageData, safeName);
       } catch (error) {
         if (result) result.textContent = "화면에는 적용됐지만 Safari 저장 공간이 부족해 재접속 후에는 사라질 수 있어요.";
+        notifyCharacterChanged(safeName, imageData);
         return true;
       }
     }
 
-    if (result) result.textContent = `${safeName}이(가) 2D PocketPal 캐릭터로 적용됐어요. 3D 변환은 다음 단계에서 연결합니다.`;
+    if (result) result.textContent = `${safeName}이(가) 2D PocketPal 캐릭터로 적용됐어요.`;
+    notifyCharacterChanged(safeName, imageData);
     return true;
   }
 
@@ -157,6 +167,7 @@
     fileInput.value = "";
     applyButton.disabled = true;
     if (result) result.textContent = "기본 캐릭터로 돌아왔어요.";
+    notifyCharacterChanged(null, null);
     announce("기본 모습으로 돌아왔어!");
   }
 
@@ -233,9 +244,8 @@
       if (nameInput && !nameInput.value.trim()) nameInput.value = pendingName;
       applyButton.disabled = false;
 
-      // 아이폰에서는 선택 후 별도 버튼을 놓치기 쉬워 즉시 캐릭터로 적용한다.
       await applyCharacter(pendingImageData, pendingName, true);
-      if (result) result.textContent = "사진이 2D 캐릭터로 바로 적용됐어요. 이름을 바꾼 뒤 ‘다시 적용’을 누를 수도 있어요.";
+      if (result) result.textContent = "사진이 2D 캐릭터로 바로 적용됐어요. 아래에서 3D 변환 요청을 만들 수 있어요.";
     } catch (error) {
       console.error(error);
       pendingImageData = null;
@@ -260,6 +270,22 @@
 
   resetButton?.addEventListener("click", resetCharacter);
 
+  async function getCurrentCharacter() {
+    const name = pendingName || localStorage.getItem(STORAGE_NAME) || "나의 친구";
+    let imageData = pendingImageData;
+    if (!imageData) {
+      try { imageData = await dbGet(); } catch (error) { console.warn(error); }
+    }
+    if (!imageData) imageData = localStorage.getItem(STORAGE_IMAGE_FALLBACK);
+    return imageData ? { name, imageData } : null;
+  }
+
+  window.PocketPalCharacter = {
+    getCurrent: getCurrentCharacter,
+    hasCustom: () => character.classList.contains("has-custom"),
+    reset: resetCharacter
+  };
+
   async function restoreSavedCharacter() {
     const savedName = localStorage.getItem(STORAGE_NAME) || "나의 친구";
     let savedImage = null;
@@ -279,6 +305,7 @@
     if (previewFrame) previewFrame.hidden = false;
     applyButton.disabled = false;
     if (result) result.textContent = `${savedName} 캐릭터를 불러왔어요.`;
+    notifyCharacterChanged(savedName, savedImage);
   }
 
   restoreSavedCharacter();
