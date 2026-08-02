@@ -21,8 +21,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Validate Python bridge
-        run: python -m py_compile tools/img2threejs_bridge.py
+      - name: Validate Python bridges
+        run: |
+          python -m py_compile tools/img2threejs_bridge.py
+          python -m py_compile tools/character_job_v2_adapter.py
 
       - name: Validate classic JavaScript
         run: |
