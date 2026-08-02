@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "job_id": "char3d_20260802_191200",
+  "character_name": "민트냥",
+  "requested_at": "2026-08-02T19:12:00+09:00",
+  "status": "queued",
+  "target": "pocketpal_character_3d",
+  "inputs": {
+    "front_image": "front.png",
+    "side_image": null,
+    "back_image": null,
+    "source_type": "drawing_or_photo"
+  },
+  "metadata": {
+    "description": "큰 귀, 둥근 몸, 짧은 다리, 긴 꼬리",
+    "main_color": "민트색",
+    "personality": ["호기심", "다정함"],
+    "has_tail": true,
+    "has_wings": false,
+    "missing_views": ["side", "back"]
+  },
+  "options": {
+    "remove_background": true,
+    "estimate_missing_views": true,
+    "generate_full_360_mesh": true,
+    "generate_glb": true,
+    "generate_preview_images": true,
+    "rigging": false,
+    "attachment_points": ["head", "face", "chest", "back", "left_hand", "right_hand"]
+  },
+  "output_contract": {
+    "model_file": "character.glb",
+    "manifest_file": "character_manifest.json",
+    "previews": ["preview_front.png", "preview_side.png", "preview_back.png"]
+  }
+}
