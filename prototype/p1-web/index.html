@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>PocketPal P1 Prototype</title>
-  <link rel="stylesheet" href="styles.css?v=4" />
-  <link rel="stylesheet" href="mobile.css?v=4" />
-  <link rel="stylesheet" href="character.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="mobile.css?v=5" />
+  <link rel="stylesheet" href="character.css?v=5" />
 </head>
 <body>
   <main class="stage">
@@ -65,10 +65,10 @@
           <label for="characterNameInput">캐릭터 이름</label>
           <input id="characterNameInput" type="text" maxlength="20" placeholder="예: 별이, 몽글이, 용용이" />
           <div class="button-row">
-            <button class="primary" id="characterApply" disabled>캐릭터로 적용</button>
+            <button class="primary" id="characterApply" disabled>이름까지 다시 적용</button>
             <button id="characterReset">기본 캐릭터</button>
           </div>
-          <p class="result character-step-note" id="characterResult">지금은 그림을 2D 캐릭터로 바로 적용해요. 다음 단계에서 배경 제거와 3D 변환을 연결합니다.</p>
+          <p class="result character-step-note" id="characterResult">사진을 선택하면 우선 2D 캐릭터로 바로 적용돼요. 실제 3D 변환은 다음 개발 단계입니다.</p>
         </div>
 
         <div class="view panel" data-view="talk">
@@ -124,8 +124,8 @@
     </section>
   </main>
 
-  <script src="app.js?v=4"></script>
-  <script src="touch-fix.js?v=4"></script>
-  <script src="character-customizer.js?v=4"></script>
+  <script src="app.js?v=5"></script>
+  <script src="touch-fix.js?v=5"></script>
+  <script src="character-customizer.js?v=5"></script>
 </body>
 </html>
