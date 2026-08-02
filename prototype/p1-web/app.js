@@ -13,13 +13,12 @@ const speech = document.querySelector("#speech");
 const clock = document.querySelector("#clock");
 
 const parentMenuByView = {
-  character: "character-menu",
-  "character-3d-prep": "character-menu",
-  "character-3d-status": "character-menu",
-  "character-3d-result": "character-menu",
+  "character-studio": "character-menu",
+  "character-motion": "character-menu",
+  "character-personality": "character-menu",
   talk: "menu",
   camera: "menu",
-  gift: "menu",
+  gift: "character-menu",
   memory: "menu"
 };
 
@@ -30,13 +29,6 @@ let accumulatedAngle = 0;
 let visualAngle = 0;
 let cameraFacing = "user";
 let mediaStream = null;
-
-const proactiveMessages = [
-  "오늘 같이 사진 한 장 찍을까?",
-  "네가 좋아하는 걸 하나 더 기억해도 될까?",
-  "조금 심심해. 휠을 천천히 쓰다듬어 줘!",
-  "오늘 있었던 일 중에 제일 재미있었던 건 뭐야?"
-];
 
 function isMenuView(name) {
   return menus.has(name);
@@ -115,14 +107,14 @@ function normalizeDelta(delta) {
   return delta;
 }
 
-wheel.addEventListener("pointerdown", (event) => {
+wheel?.addEventListener("pointerdown", (event) => {
   pointerActive = true;
   previousAngle = angleFromPointer(event);
   accumulatedAngle = 0;
   wheel.setPointerCapture(event.pointerId);
 });
 
-wheel.addEventListener("pointermove", (event) => {
+wheel?.addEventListener("pointermove", (event) => {
   if (!pointerActive) return;
 
   const nextAngle = angleFromPointer(event);
@@ -142,14 +134,14 @@ wheel.addEventListener("pointermove", (event) => {
 
 function releaseWheel(event) {
   pointerActive = false;
-  if (event.pointerId !== undefined && wheel.hasPointerCapture(event.pointerId)) {
+  if (event.pointerId !== undefined && wheel?.hasPointerCapture(event.pointerId)) {
     wheel.releasePointerCapture(event.pointerId);
   }
 }
 
-wheel.addEventListener("pointerup", releaseWheel);
-wheel.addEventListener("pointercancel", releaseWheel);
-centerButton.addEventListener("click", selectCurrent);
+wheel?.addEventListener("pointerup", releaseWheel);
+wheel?.addEventListener("pointercancel", releaseWheel);
+centerButton?.addEventListener("click", selectCurrent);
 
 menus.forEach((menu, menuName) => {
   menu.items.forEach((item, index) => {
@@ -179,11 +171,17 @@ window.addEventListener("keydown", (event) => {
 });
 
 function say(message, useVoice = false) {
-  speech.textContent = message;
+  const safeMessage = String(message || "").trim();
+  if (!safeMessage) return;
+  if (speech) speech.textContent = safeMessage;
+
+  window.dispatchEvent(new CustomEvent("pocketpal:say", {
+    detail: { message: safeMessage, useVoice }
+  }));
 
   if (useVoice && "speechSynthesis" in window) {
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(message);
+    const utterance = new SpeechSynthesisUtterance(safeMessage);
     utterance.lang = "ko-KR";
     utterance.rate = 1.02;
     window.speechSynthesis.speak(utterance);
@@ -192,6 +190,7 @@ function say(message, useVoice = false) {
 
 function updateClock() {
   const now = new Date();
+  if (!clock) return;
   clock.textContent = now.toLocaleTimeString("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
@@ -202,29 +201,24 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 30_000);
 
-setInterval(() => {
-  if (currentView !== "home") return;
-  const next = proactiveMessages[Math.floor(Math.random() * proactiveMessages.length)];
-  say(next);
-}, 25_000);
-
 const talkInput = document.querySelector("#talkInput");
 const talkButton = document.querySelector("#talkButton");
 const talkResult = document.querySelector("#talkResult");
 
-function localReply(text) {
+function fallbackLocalReply(text) {
   const normalized = text.trim();
   if (!normalized) return "무슨 이야기인지 천천히 말해 줘.";
   if (normalized.includes("학교")) return "학교에서 있었던 일, 더 자세히 들려줄래?";
   if (normalized.includes("그림")) return "그 그림을 나에게 선물해 주면 정말 기쁠 것 같아!";
   if (normalized.includes("슬퍼") || normalized.includes("속상")) return "그랬구나. 내가 옆에서 같이 있어 줄게.";
   if (normalized.includes("좋아")) return "좋아하는 걸 하나 더 알게 됐네. 기억해 둘까?";
-  return `“${normalized}”라고 말해 줬구나. 다음 버전에서는 AI와 연결해서 더 자연스럽게 대화할게.`;
+  return `“${normalized}”라고 말해 줬구나. 조금 더 들려줘.`;
 }
 
 talkButton?.addEventListener("click", () => {
-  const reply = localReply(talkInput.value);
-  talkResult.textContent = reply;
+  const text = talkInput?.value || "";
+  const reply = window.PocketPalSoul?.replyTo?.(text) || fallbackLocalReply(text);
+  if (talkResult) talkResult.textContent = reply;
   say(reply, true);
 });
 
@@ -237,7 +231,7 @@ async function startCamera() {
   stopCamera();
 
   if (!navigator.mediaDevices?.getUserMedia) {
-    cameraState.textContent = "이 브라우저에서는 카메라 기능을 사용할 수 없어요.";
+    if (cameraState) cameraState.textContent = "이 브라우저에서는 카메라 기능을 사용할 수 없어요.";
     return;
   }
 
@@ -253,10 +247,11 @@ async function startCamera() {
     cameraVideo.srcObject = mediaStream;
     await cameraVideo.play();
     cameraVideo.style.transform = cameraFacing === "user" ? "scaleX(-1)" : "none";
-    cameraState.textContent = cameraFacing === "user" ? "전면 카메라 모드" : "후면 카메라 모드";
+    if (cameraState) cameraState.textContent = cameraFacing === "user" ? "전면 카메라 모드" : "후면 카메라 모드";
+    window.PocketPalSoul?.react?.("camera");
   } catch (error) {
     console.error(error);
-    cameraState.textContent = "카메라 권한을 허용해 주세요. HTTPS 또는 GitHub Pages에서 시험해야 할 수 있어요.";
+    if (cameraState) cameraState.textContent = "카메라 권한을 허용해 주세요. HTTPS 또는 GitHub Pages에서 시험해야 할 수 있어요.";
   }
 }
 
@@ -264,7 +259,7 @@ function stopCamera() {
   if (!mediaStream) return;
   mediaStream.getTracks().forEach((track) => track.stop());
   mediaStream = null;
-  cameraVideo.srcObject = null;
+  if (cameraVideo) cameraVideo.srcObject = null;
 }
 
 cameraStart?.addEventListener("click", startCamera);
@@ -273,35 +268,13 @@ cameraFlip?.addEventListener("click", async () => {
   await startCamera();
 });
 
-const giftImage = document.querySelector("#giftImage");
-const giftPreview = document.querySelector("#giftPreview");
-const giftButton = document.querySelector("#giftButton");
-const giftResult = document.querySelector("#giftResult");
-let giftObjectUrl = null;
-
-giftImage?.addEventListener("change", () => {
-  const file = giftImage.files?.[0];
-  if (!file) return;
-
-  if (giftObjectUrl) URL.revokeObjectURL(giftObjectUrl);
-  giftObjectUrl = URL.createObjectURL(file);
-  giftPreview.src = giftObjectUrl;
-  giftPreview.hidden = false;
-  giftButton.disabled = false;
-  giftResult.textContent = `${file.name}을 선택했어요. 다음 단계에서 배경 제거와 3D 변환을 연결합니다.`;
-});
-
-giftButton?.addEventListener("click", () => {
-  giftResult.textContent = "선물을 준비했어! 아직은 미리보기지만, 곧 캐릭터가 실제로 착용하게 만들 거야.";
-  say("우와, 나에게 주는 선물이야? 정말 고마워!", true);
-});
-
 const memoryInput = document.querySelector("#memoryInput");
 const memorySave = document.querySelector("#memorySave");
 const memoryResult = document.querySelector("#memoryResult");
 
 function loadMemory() {
   const saved = localStorage.getItem("pocketpal.memory");
+  if (!memoryInput || !memoryResult) return;
   if (saved) {
     memoryInput.value = saved;
     memoryResult.textContent = `기억 중: ${saved}`;
@@ -311,13 +284,14 @@ function loadMemory() {
 }
 
 memorySave?.addEventListener("click", () => {
-  const memory = memoryInput.value.trim();
+  const memory = memoryInput?.value.trim() || "";
   if (!memory) {
-    memoryResult.textContent = "기억할 내용을 먼저 적어 주세요.";
+    if (memoryResult) memoryResult.textContent = "기억할 내용을 먼저 적어 주세요.";
     return;
   }
   localStorage.setItem("pocketpal.memory", memory);
-  memoryResult.textContent = `기억했어: ${memory}`;
+  if (memoryResult) memoryResult.textContent = `기억했어: ${memory}`;
+  window.dispatchEvent(new CustomEvent("pocketpal:memory-saved", { detail: { memory } }));
   say("응, 소중하게 기억할게!", true);
 });
 
@@ -328,8 +302,8 @@ window.showView = showView;
 window.moveMenu = moveMenu;
 window.selectCurrent = selectCurrent;
 window.say = say;
+window.getPocketPalView = () => currentView;
 
 window.addEventListener("beforeunload", () => {
   stopCamera();
-  if (giftObjectUrl) URL.revokeObjectURL(giftObjectUrl);
 });
