@@ -5,182 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#e9ece8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>PocketPal Rive Lab</title>
-
-  <!-- 외부 파일이 늦게 와도 빈 화면이 되지 않게 하는 최소 안전 스타일 -->
+  <title>PocketPal Rive 진단</title>
+  <link rel="stylesheet" href="styles.css?v=4" />
   <style>
-    html, body { margin: 0; min-height: 100%; background: #e2e6e2; color: #1d2828; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif; }
-    #bootSafety { margin: 16px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,.9); box-shadow: 0 12px 35px rgba(30,45,42,.12); }
-    #bootSafety strong { display: block; font-size: 20px; }
-    #bootSafety span { display: block; margin-top: 6px; font-size: 13px; line-height: 1.45; color: #52615f; }
-    #bootSafety button { margin-top: 12px; border: 0; border-radius: 12px; padding: 11px 14px; background: #2d7f7c; color: white; font-weight: 800; }
-    html.app-painted #bootSafety { display: none; }
+    .diagnostic-panel{margin:14px;padding:16px;border:1px solid var(--line);border-radius:21px;background:var(--panel);box-shadow:0 8px 22px rgba(37,56,54,.07)}
+    .diagnostic-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+    .diagnostic-item{display:grid;grid-template-columns:22px minmax(0,1fr);gap:9px;align-items:start;padding:10px 11px;border:1px solid rgba(34,68,65,.1);border-radius:13px;background:rgba(249,250,248,.88)}
+    .diagnostic-icon{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#e5e9e6;color:#66716f;font-size:12px;font-weight:900}
+    .diagnostic-item[data-state="pending"] .diagnostic-icon{background:#f4e8c8;color:#a57517}
+    .diagnostic-item[data-state="ok"] .diagnostic-icon{background:#dff0e8;color:#2f765b}
+    .diagnostic-item[data-state="error"] .diagnostic-icon{background:#f5dedd;color:#a5413e}
+    .diagnostic-item strong{display:block;font-size:12px}
+    .diagnostic-item span{display:block;margin-top:3px;color:rgba(31,57,55,.66);font-size:10px;line-height:1.45;word-break:break-word}
+    .diagnostic-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+    .diagnostic-actions button{min-height:42px;border:1px solid rgba(35,84,80,.13);border-radius:13px;background:#f8faf8;color:#263d3c;font-weight:800}
+    .diagnostic-actions .primary{background:var(--accent);color:#fff}
+    .device-build{margin-top:8px;color:rgba(31,57,55,.52);font-size:9px;text-align:center}
+    @media(max-width:520px){.diagnostic-actions{grid-template-columns:1fr}}
   </style>
-
-  <link rel="stylesheet" href="styles.css?v=3" />
-  <script>
-    window.addEventListener("error", function (event) {
-      var box = document.getElementById("bootSafety");
-      var detail = document.getElementById("bootSafetyDetail");
-      document.documentElement.classList.remove("app-painted");
-      if (box) box.style.setProperty("display", "block", "important");
-      if (detail) detail.textContent = "오류: " + (event.message || "알 수 없는 초기화 오류");
-    });
-  </script>
-
-  <!-- WASM이 JS 안에 포함된 single 런타임: iPhone에서 별도 WASM 요청을 제거 -->
-  <script defer src="https://unpkg.com/@rive-app/canvas-single@2.36.0" onerror="document.documentElement.classList.remove('app-painted');document.getElementById('bootSafety').style.setProperty('display','block','important');document.getElementById('bootSafetyDetail').textContent='Rive 단일 파일 런타임을 받지 못했어요. 인터넷 연결 후 다시 시도해 주세요.'"></script>
-  <script defer src="app.js?v=3"></script>
+  <script defer src="app.js?v=4"></script>
 </head>
 <body>
-  <section id="bootSafety" aria-live="polite">
-    <strong>PocketPal P1.5 준비 중</strong>
-    <span id="bootSafetyDetail">별도 WASM 요청이 없는 Rive 런타임을 불러오고 있어요.</span>
-    <button type="button" onclick="location.reload()">다시 불러오기</button>
-  </section>
-
   <main class="page-shell">
-    <section class="device" aria-label="PocketPal Rive 엔진 검증 시제품">
+    <section class="device" aria-label="PocketPal Rive 진단 시제품">
       <header class="device-header">
         <div>
-          <span class="eyebrow">PocketPal P1.5</span>
-          <h1>Rive Engine Lab</h1>
+          <span class="eyebrow">PocketPal P1.5.1</span>
+          <h1>Rive 복구 테스트</h1>
         </div>
         <div class="runtime-health">
           <span id="healthDot" class="health-dot loading"></span>
-          <strong id="healthText">준비 중</strong>
+          <strong id="healthText">진단 중</strong>
         </div>
       </header>
 
       <section class="character-stage" id="characterStage">
         <canvas id="riveCanvas" width="720" height="720" aria-label="Rive 애니메이션 캔버스"></canvas>
         <div class="stage-message" id="stageMessage">
-          <strong>Rive 단일 파일 런타임을 불러오는 중이에요</strong>
-          <span>첫 실행도 정상이라면 몇 초 안에 완료됩니다.</span>
+          <strong>Rive 실행 경로를 확인하고 있어요</strong>
+          <span>각 단계를 아래에 따로 표시합니다.</span>
         </div>
         <div class="fps-badge"><span id="fpsValue">--</span> FPS</div>
       </section>
 
+      <section class="diagnostic-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">Visible Diagnostics</span><h2>어디에서 멈췄는지 확인</h2></div>
+          <button id="copyDiagnostics" type="button">진단 복사</button>
+        </div>
+        <ol class="diagnostic-list" id="diagnosticList">
+          <li class="diagnostic-item" id="stepHtml" data-state="ok"><b class="diagnostic-icon">✓</b><div><strong>화면 코드</strong><span>HTML과 기본 UI가 실행됐어요.</span></div></li>
+          <li class="diagnostic-item" id="stepRuntime" data-state="pending"><b class="diagnostic-icon">…</b><div><strong>Rive 런타임</strong><span>아직 확인 전</span></div></li>
+          <li class="diagnostic-item" id="stepAsset" data-state="pending"><b class="diagnostic-icon">…</b><div><strong>.riv 파일 다운로드</strong><span>아직 확인 전</span></div></li>
+          <li class="diagnostic-item" id="stepParse" data-state="pending"><b class="diagnostic-icon">…</b><div><strong>파일 해석</strong><span>아직 확인 전</span></div></li>
+          <li class="diagnostic-item" id="stepRender" data-state="pending"><b class="diagnostic-icon">…</b><div><strong>캔버스 렌더링</strong><span>아직 확인 전</span></div></li>
+          <li class="diagnostic-item" id="stepMachine" data-state="pending"><b class="diagnostic-icon">…</b><div><strong>상태 머신</strong><span>아직 확인 전</span></div></li>
+        </ol>
+        <div class="diagnostic-actions">
+          <button id="retryAll" class="primary" type="button">처음부터 다시 검사</button>
+          <button id="testGithubAsset" type="button">GitHub 공식 파일 검사</button>
+          <button id="testRiveCdn" type="button">Rive CDN 파일 검사</button>
+        </div>
+        <p class="helper-text" id="diagnosticSummary">검사를 시작합니다.</p>
+      </section>
+
       <section class="soul-panel">
         <div class="panel-heading">
-          <div>
-            <span class="eyebrow">Soul → Motion</span>
-            <h2>소울 반응 시험</h2>
-          </div>
-          <button id="pauseButton" type="button">일시정지</button>
+          <div><span class="eyebrow">Soul → Motion</span><h2>소울 반응 시험</h2></div>
+          <button id="pauseButton" type="button" disabled>일시정지</button>
         </div>
         <div class="preset-grid">
-          <button type="button" data-soul="calm">편안함</button>
-          <button type="button" data-soul="curious">궁금함</button>
-          <button type="button" data-soul="happy">기쁨</button>
-          <button type="button" data-soul="talking">말하기</button>
-          <button type="button" data-soul="sleepy">졸림</button>
-          <button type="button" data-soul="pet">쓰다듬기</button>
+          <button type="button" data-soul="calm" disabled>편안함</button>
+          <button type="button" data-soul="curious" disabled>궁금함</button>
+          <button type="button" data-soul="happy" disabled>기쁨</button>
+          <button type="button" data-soul="talking" disabled>말하기</button>
+          <button type="button" data-soul="sleepy" disabled>졸림</button>
+          <button type="button" data-soul="pet" disabled>쓰다듬기</button>
         </div>
-        <p id="soulMessage" class="helper-text">샘플 파일에서는 가능한 입력만 자동으로 연결합니다.</p>
+        <p id="soulMessage" class="helper-text">상태 머신이 실행되면 버튼이 활성화됩니다.</p>
       </section>
 
       <section class="asset-panel">
-        <div class="panel-heading">
-          <div>
-            <span class="eyebrow">Animation Asset</span>
-            <h2>Rive 파일 바꾸기</h2>
-          </div>
-        </div>
-
-        <div class="sample-grid">
-          <button id="loadSkills" class="sample-card selected" type="button">
-            <strong>상태 머신 샘플</strong>
-            <span>공식 skills.riv</span>
-          </button>
-          <button id="loadVehicles" class="sample-card" type="button">
-            <strong>렌더링 샘플</strong>
-            <span>공식 vehicles.riv</span>
-          </button>
-        </div>
-
+        <div class="panel-heading"><div><span class="eyebrow">Local Test</span><h2>내 .riv 파일 열기</h2></div></div>
         <label class="file-picker" for="localRiveFile">
-          <strong>내 .riv 파일 열기</strong>
-          <span>아이폰 파일 앱에서 바로 선택</span>
+          <strong>아이폰 파일 앱에서 .riv 선택</strong>
+          <span>외부 다운로드 없이 파일 자체를 검사합니다.</span>
           <input id="localRiveFile" type="file" accept=".riv,application/octet-stream" />
         </label>
-
-        <div class="selection-grid">
-          <label>
-            <span>Artboard</span>
-            <select id="artboardSelect" disabled><option>파일을 먼저 불러오세요</option></select>
-          </label>
-          <label>
-            <span>State Machine</span>
-            <select id="machineSelect" disabled><option>파일을 먼저 불러오세요</option></select>
-          </label>
-        </div>
-
-        <button id="applyMachine" class="primary-button" type="button" disabled>선택한 상태 머신 실행</button>
       </section>
 
       <section class="inspector-panel">
-        <div class="panel-heading">
-          <div>
-            <span class="eyebrow">Runtime Inspector</span>
-            <h2>입력값 검사</h2>
-          </div>
-          <span id="bindingBadge" class="binding-badge">확인 전</span>
-        </div>
-        <div id="inputInspector" class="input-inspector">
-          <p class="empty-state">상태 머신을 불러오면 Number·Boolean·Trigger 입력이 여기에 표시됩니다.</p>
-        </div>
+        <div class="panel-heading"><div><span class="eyebrow">Runtime Inspector</span><h2>상태 머신 입력</h2></div><span id="bindingBadge" class="binding-badge">확인 전</span></div>
+        <div id="inputInspector" class="input-inspector"><p class="empty-state">Rive 파일이 실행되면 입력값이 여기에 표시됩니다.</p></div>
       </section>
 
       <section class="event-panel">
-        <div class="panel-heading">
-          <div>
-            <span class="eyebrow">Event Log</span>
-            <h2>실행 기록</h2>
-          </div>
-          <button id="clearLog" type="button">지우기</button>
-        </div>
+        <div class="panel-heading"><div><span class="eyebrow">Event Log</span><h2>상세 실행 기록</h2></div><button id="clearLog" type="button">지우기</button></div>
         <ol id="eventLog" class="event-log" aria-live="polite"></ol>
       </section>
 
-      <footer class="device-footer">
-        <strong>엔진 검증용</strong>
-        <span>최종 PocketPal 캐릭터는 전용 .riv 파일로 교체합니다.</span>
-      </footer>
+      <footer class="device-footer"><strong>진단용 빌드</strong><span>P1.5.1 · 외부 런타임과 애셋을 분리 검사</span></footer>
+      <p class="device-build" id="deviceBuild"></p>
     </section>
   </main>
-
-  <script>
-    requestAnimationFrame(function () {
-      document.documentElement.classList.add("app-painted");
-    });
-
-    // skills.riv가 네트워크에서 오래 멈추면 더 단순한 공식 샘플로 자동 전환한다.
-    window.setTimeout(function () {
-      var health = document.getElementById("healthText");
-      var detail = document.getElementById("bootSafetyDetail");
-      if (!health || health.textContent === "실행 중") return;
-      if (detail) detail.textContent = "첫 샘플이 늦어 더 작은 공식 샘플로 자동 전환합니다.";
-      document.getElementById("loadVehicles")?.click();
-    }, 8000);
-
-    // 18초가 지나도 실행되지 않으면 기다리게 하지 않고 명확한 오류를 표시한다.
-    window.setTimeout(function () {
-      var health = document.getElementById("healthText");
-      if (!health || health.textContent === "실행 중") return;
-      health.textContent = "네트워크 지연";
-      var strong = document.querySelector("#stageMessage strong");
-      var span = document.querySelector("#stageMessage span");
-      if (strong) strong.textContent = "Rive 샘플을 받지 못했어요";
-      if (span) span.textContent = "계속 기다릴 필요는 없어요. 아래에서 다시 불러오거나 로컬 .riv 파일을 선택해 주세요.";
-      document.getElementById("stageMessage")?.classList.remove("hidden");
-      document.documentElement.classList.remove("app-painted");
-      var box = document.getElementById("bootSafety");
-      var detail = document.getElementById("bootSafetyDetail");
-      if (box) box.style.setProperty("display", "block", "important");
-      if (detail) detail.textContent = "18초 안에 샘플을 받지 못했습니다. Safari를 다시 열거나 다른 네트워크에서 시험해 주세요.";
-    }, 18000);
-  </script>
 </body>
 </html>
