@@ -31,10 +31,10 @@
 
   function statusMessage(status) {
     const messages = {
-      none: "아직 3D를 만들지 않았어요",
+      none: "아직 실제 3D 변환을 시작하지 않았어요",
       queued: "3D 변환 요청이 준비됐어요 · NAS/PC 작업기 연결 대기",
       processing: "3D 캐릭터를 만드는 중이에요",
-      done: "3D 생성 완료",
+      done: "실제 3D 생성 완료",
       failed: "3D 생성에 실패했어요"
     };
     return messages[status] || messages.none;
@@ -114,6 +114,7 @@
     jobDownloadButton.disabled = !currentJob;
     sourceDownloadButton.disabled = !hasCharacter;
     createButton.textContent = currentJob ? "3D 다시 요청" : "3D 만들기";
+    previewButton.textContent = status === "done" ? "3D 결과 보기" : "캐릭터 분리 확인";
   }
 
   createButton.addEventListener("click", async () => {
