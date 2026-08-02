@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" fill="none">
+  <defs>
+    <linearGradient id="bodyFill" x1="240" y1="130" x2="420" y2="570" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#ECEDE8"/>
+    </linearGradient>
+    <linearGradient id="bodyShade" x1="250" y1="190" x2="390" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8DAD4" stop-opacity="0"/>
+      <stop offset="1" stop-color="#C7CBC4" stop-opacity="0.55"/>
+    </linearGradient>
+    <radialGradient id="headLight" cx="0" cy="0" r="1" gradientTransform="translate(286 171) rotate(48) scale(126)">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E8EAE5"/>
+    </radialGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <g id="rig_root">
+    <g id="shadow_layer">
+      <ellipse id="ground_shadow" cx="320" cy="574" rx="100" ry="20" fill="#63706A" fill-opacity="0.18" filter="url(#softShadow)"/>
+    </g>
+
+    <g id="body_back">
+      <rect id="leg_left" x="252" y="432" width="60" height="139" rx="30" fill="url(#bodyFill)"/>
+      <rect id="leg_right" x="328" y="432" width="60" height="139" rx="30" fill="url(#bodyFill)"/>
+      <rect id="arm_left" x="192" y="280" width="62" height="204" rx="31" transform="rotate(3 192 280)" fill="url(#bodyFill)"/>
+      <rect id="arm_right" x="386" y="280" width="62" height="204" rx="31" transform="rotate(-3 386 280)" fill="url(#bodyFill)"/>
+    </g>
+
+    <g id="body_front">
+      <rect id="torso" x="232" y="250" width="176" height="273" rx="82" fill="url(#bodyFill)"/>
+      <path id="torso_shade" d="M320 250C369 250 408 289 408 338V441C408 486 372 523 327 523H320V250Z" fill="url(#bodyShade)"/>
+      <rect id="neck" x="300" y="220" width="40" height="43" rx="20" fill="url(#bodyFill)"/>
+      <circle id="head" cx="320" cy="166" r="82" fill="url(#headLight)"/>
+      <path id="head_shade" d="M320 84C365 84 402 121 402 166C402 211 365 248 320 248V84Z" fill="#C9CDC6" fill-opacity="0.18"/>
+    </g>
+
+    <g id="face_anchor" transform="translate(0 2)">
+      <g id="face_default">
+        <ellipse id="eye_left" cx="292" cy="166" rx="5" ry="7" fill="#343A38"/>
+        <ellipse id="eye_right" cx="348" cy="166" rx="5" ry="7" fill="#343A38"/>
+        <path id="mouth_neutral" d="M313 195C318 199 322 199 327 195" stroke="#343A38" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <g id="face_slots" opacity="0">
+        <rect id="slot_face" x="260" y="132" width="120" height="92" rx="46" fill="#00FF88"/>
+        <circle id="slot_eye_left" cx="292" cy="166" r="18" fill="#00FF88"/>
+        <circle id="slot_eye_right" cx="348" cy="166" r="18" fill="#00FF88"/>
+        <rect id="slot_mouth" x="295" y="184" width="50" height="28" rx="14" fill="#00FF88"/>
+      </g>
+    </g>
+
+    <g id="attachment_slots" opacity="0">
+      <ellipse id="slot_head" cx="320" cy="98" rx="78" ry="34" fill="#FF00A8"/>
+      <rect id="slot_body_front" x="254" y="286" width="132" height="188" rx="56" fill="#00AAFF"/>
+      <rect id="slot_badge" x="340" y="318" width="42" height="42" rx="21" fill="#FFD400"/>
+      <rect id="slot_hand_left" x="176" y="392" width="66" height="66" rx="33" fill="#8A5CFF"/>
+      <rect id="slot_hand_right" x="398" y="392" width="66" height="66" rx="33" fill="#8A5CFF"/>
+      <rect id="slot_back" x="254" y="292" width="132" height="176" rx="58" fill="#FF7347"/>
+    </g>
+  </g>
+</svg>
