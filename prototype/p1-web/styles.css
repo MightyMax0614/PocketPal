@@ -1,0 +1,393 @@
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Noto Sans KR", sans-serif;
+  background: #e8e5df;
+  color: #202124;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255,255,255,.95), transparent 38%),
+    linear-gradient(160deg, #dedbd4, #f3f1ed 55%, #d7d4ce);
+}
+
+button, textarea, input { font: inherit; }
+button { touch-action: manipulation; }
+
+.stage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.device {
+  --scale: min(1, calc((100vw - 40px) / 390));
+  position: relative;
+  width: min(390px, calc(100vw - 40px));
+  aspect-ratio: 62 / 104;
+  max-height: calc(100vh - 40px);
+  border-radius: 34px;
+  padding: 15px 18px 18px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fbfaf7 0%, #e4e1da 52%, #c8c4bc 100%);
+  border: 1px solid rgba(70,70,70,.22);
+  box-shadow:
+    0 32px 70px rgba(0,0,0,.22),
+    inset 0 1px 1px rgba(255,255,255,.95),
+    inset 0 -1px 2px rgba(60,60,60,.2);
+}
+
+.top-bezel {
+  height: 8px;
+  display: grid;
+  place-items: center;
+}
+
+.hidden-camera {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #c7c5c0;
+  opacity: .16;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 52%;
+  border-radius: 15px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #dff3ff, #fff3df 72%, #f5dfbb);
+  border: 1px solid rgba(0,0,0,.24);
+  box-shadow: inset 0 0 18px rgba(0,0,0,.08), 0 1px rgba(255,255,255,.8);
+}
+
+.status-bar {
+  height: 27px;
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(25,35,45,.7);
+  border-bottom: 1px solid rgba(25,35,45,.08);
+}
+
+.status-title { letter-spacing: .08em; }
+
+.view {
+  position: absolute;
+  inset: 27px 0 0;
+  display: none;
+  padding: 14px;
+}
+
+.view.active { display: block; }
+.view h1 { margin: 0 0 12px; font-size: 21px; }
+
+.speech {
+  position: relative;
+  width: 78%;
+  margin: 0 auto 8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 8px 18px rgba(70,85,90,.12);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.speech::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.character {
+  position: relative;
+  width: 108px;
+  height: 112px;
+  margin: 7px auto 0;
+  animation: breathe 2.6s ease-in-out infinite;
+}
+
+.ears {
+  position: absolute;
+  inset: 7px 14px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ears span {
+  width: 29px;
+  height: 31px;
+  border-radius: 12px 22px 8px 22px;
+  background: #89c9d0;
+  transform: rotate(-25deg);
+}
+
+.ears span:last-child { transform: scaleX(-1) rotate(-25deg); }
+
+.face {
+  position: absolute;
+  top: 18px;
+  left: 11px;
+  width: 86px;
+  height: 74px;
+  border-radius: 44% 44% 48% 48%;
+  background: linear-gradient(145deg, #a7e0df, #6bb8c0);
+  border: 2px solid rgba(25,80,90,.22);
+  box-shadow: inset 0 5px 9px rgba(255,255,255,.35);
+}
+
+.eye {
+  position: absolute;
+  top: 28px;
+  width: 10px;
+  height: 14px;
+  border-radius: 50%;
+  background: #203b43;
+  transform-origin: center;
+  animation: blink 5.4s infinite;
+}
+
+.eye.left { left: 23px; }
+.eye.right { right: 23px; }
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: 20px;
+  height: 9px;
+  border-bottom: 3px solid #28535b;
+  border-radius: 0 0 20px 20px;
+  transform: translateX(-50%);
+}
+
+.body {
+  position: absolute;
+  left: 22px;
+  bottom: 0;
+  width: 64px;
+  height: 44px;
+  border-radius: 50% 50% 35% 35%;
+  background: linear-gradient(145deg, #8bd2d4, #5aa9b3);
+  border: 2px solid rgba(25,80,90,.2);
+}
+
+.home-hint {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(25,35,45,.62);
+}
+
+.menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.menu-list li {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.56);
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.menu-list li.selected {
+  background: rgba(255,255,255,.96);
+  border-color: rgba(38,111,121,.38);
+  box-shadow: 0 7px 14px rgba(55,95,105,.14);
+  transform: translateX(3px);
+}
+
+.panel {
+  overflow-y: auto;
+  background: rgba(255,255,255,.28);
+}
+
+.panel label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+  border: 1px solid rgba(45,75,85,.18);
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,.82);
+  outline: none;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 9px 12px;
+  background: rgba(255,255,255,.82);
+  color: #20343a;
+  font-weight: 750;
+}
+
+button.primary {
+  background: #327d87;
+  color: white;
+  margin-top: 8px;
+}
+
+button:disabled { opacity: .45; }
+
+.result, .camera-state {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(25,35,45,.7);
+}
+
+.button-row { display: flex; gap: 8px; }
+
+#cameraVideo {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #172126;
+  transform: scaleX(-1);
+}
+
+.upload-box {
+  min-height: 86px;
+  display: grid !important;
+  place-items: center;
+  border: 2px dashed rgba(50,100,110,.32);
+  border-radius: 14px;
+  background: rgba(255,255,255,.5);
+  text-align: center;
+}
+
+.upload-box input { display: none; }
+
+#giftPreview {
+  width: 100%;
+  max-height: 115px;
+  margin-top: 8px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: rgba(255,255,255,.72);
+}
+
+.controls {
+  position: relative;
+  width: 62%;
+  aspect-ratio: 1;
+  margin: 16px auto 0;
+}
+
+.wheel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 36%, #f9f8f5, #ddd9d2 61%, #c9c5be);
+  border: 1px solid rgba(50,50,50,.2);
+  box-shadow: inset 0 2px 5px rgba(255,255,255,.95), inset 0 -3px 8px rgba(60,60,60,.13);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.wheel::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.7);
+  pointer-events: none;
+}
+
+.wheel-progress {
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(50,125,135,.58);
+  transform: rotate(var(--wheel-angle, 0deg));
+  pointer-events: none;
+}
+
+.wheel-label {
+  position: absolute;
+  font-size: 9px;
+  color: rgba(35,42,45,.52);
+  pointer-events: none;
+}
+
+.wheel-label.top { top: 13px; left: 50%; transform: translateX(-50%); }
+.wheel-label.bottom { bottom: 12px; left: 50%; transform: translateX(-50%); }
+.wheel-label.left { left: 14px; top: 50%; transform: translateY(-50%); }
+.wheel-label.right { right: 14px; top: 50%; transform: translateY(-50%); }
+
+.center-button {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 38%;
+  height: 38%;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #efede7, #d5d1ca);
+  border: 1px solid rgba(60,60,60,.18);
+  box-shadow: inset 0 2px 3px rgba(255,255,255,.9), 0 1px 2px rgba(0,0,0,.1);
+  font-size: 10px;
+  z-index: 2;
+}
+
+.center-button:active { transform: translate(-50%, -48%); box-shadow: inset 0 2px 5px rgba(0,0,0,.15); }
+
+.hardware-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 7px;
+  text-align: center;
+  font-size: 8px;
+  color: rgba(30,35,38,.46);
+}
+
+@keyframes blink {
+  0%, 46%, 50%, 100% { transform: scaleY(1); }
+  48% { transform: scaleY(.08); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.015); }
+}
+
+@media (max-height: 760px) {
+  .device { width: min(330px, calc(100vw - 30px)); }
+  .controls { margin-top: 11px; }
+}
