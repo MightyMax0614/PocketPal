@@ -54,8 +54,8 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Character" type="Node2D" parent="."]
-position = Vector2(240, 62)
-scale = Vector2(0.72, 0.72)
+position = Vector2(240, 104)
+scale = Vector2(0.64, 0.64)
 script = ExtResource("2_character")
 
 [node name="Shadow" type="Sprite2D" parent="Character"]
