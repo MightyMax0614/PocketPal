@@ -1,0 +1,66 @@
+/* PocketPal P1 mobile click-wheel usability patch */
+
+html,
+body {
+  overscroll-behavior: none;
+}
+
+.controls,
+.wheel {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wheel {
+  cursor: grab;
+}
+
+.wheel.is-touching {
+  cursor: grabbing;
+  filter: brightness(0.985);
+}
+
+.wheel.is-touching .wheel-progress {
+  border-top-color: rgba(50, 125, 135, 0.9);
+  box-shadow: 0 -2px 8px rgba(50, 125, 135, 0.16);
+}
+
+.mobile-wheel-guide {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  z-index: 5;
+  width: max-content;
+  max-width: 92vw;
+  padding: 5px 9px;
+  border-radius: 999px;
+  transform: translate(-50%, -100%);
+  background: rgba(35, 48, 52, 0.78);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.controls.guide-visible .mobile-wheel-guide {
+  opacity: 1;
+}
+
+@media (pointer: coarse) {
+  .controls {
+    width: 68%;
+    margin-top: 12px;
+  }
+
+  .wheel-label {
+    font-size: 10px;
+  }
+
+  .center-button {
+    width: 40%;
+    height: 40%;
+  }
+}
