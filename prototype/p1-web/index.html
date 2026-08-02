@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f1eb" />
+  <title>PocketPal P1 Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="stage">
+    <section class="device" aria-label="PocketPal P1 브라우저 시제품">
+      <div class="top-bezel" aria-hidden="true">
+        <span class="hidden-camera"></span>
+      </div>
+
+      <section class="screen" id="screen">
+        <header class="status-bar">
+          <span id="clock">10:37</span>
+          <span class="status-title">PocketPal P1</span>
+          <span>●</span>
+        </header>
+
+        <div class="view active" data-view="home">
+          <div class="speech" id="speech">안녕! 오늘은 뭐 하고 놀까?</div>
+          <div class="character" id="character" aria-label="PocketPal 캐릭터">
+            <div class="ears"><span></span><span></span></div>
+            <div class="face">
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+              <span class="mouth"></span>
+            </div>
+            <div class="body"></div>
+          </div>
+          <div class="home-hint">휠을 돌려 메뉴를 고르고 가운데를 눌러줘</div>
+        </div>
+
+        <div class="view" data-view="menu">
+          <h1>무엇을 할까?</h1>
+          <ul class="menu-list" id="menuList">
+            <li data-action="talk">대화하기</li>
+            <li data-action="camera">카메라</li>
+            <li data-action="gift">선물 만들기</li>
+            <li data-action="memory">기억하기</li>
+            <li data-action="home">친구에게 돌아가기</li>
+          </ul>
+        </div>
+
+        <div class="view panel" data-view="talk">
+          <h1>대화하기</h1>
+          <label for="talkInput">PocketPal에게 말할 내용</label>
+          <textarea id="talkInput" rows="4" placeholder="예: 오늘 학교에서 그림을 그렸어"></textarea>
+          <button class="primary" id="talkButton">말 걸기</button>
+          <p class="result" id="talkResult">첫 버전은 간단한 로컬 반응을 사용해요.</p>
+        </div>
+
+        <div class="view panel" data-view="camera">
+          <h1>카메라</h1>
+          <video id="cameraVideo" playsinline muted></video>
+          <p class="camera-state" id="cameraState">카메라를 시작해 주세요.</p>
+          <div class="button-row">
+            <button class="primary" id="cameraStart">시작</button>
+            <button id="cameraFlip">앞/뒤 전환</button>
+          </div>
+        </div>
+
+        <div class="view panel" data-view="gift">
+          <h1>3D 선물</h1>
+          <label class="upload-box" for="giftImage">
+            <span>그림을 선택해 주세요</span>
+            <input id="giftImage" type="file" accept="image/*" />
+          </label>
+          <img id="giftPreview" alt="선물 그림 미리보기" hidden />
+          <button class="primary" id="giftButton" disabled>선물 준비하기</button>
+          <p class="result" id="giftResult">현재는 업로드와 미리보기까지 구현했어요.</p>
+        </div>
+
+        <div class="view panel" data-view="memory">
+          <h1>기억하기</h1>
+          <label for="memoryInput">PocketPal이 기억할 내용</label>
+          <textarea id="memoryInput" rows="4" placeholder="예: 나는 공룡과 파란색을 좋아해"></textarea>
+          <button class="primary" id="memorySave">기억 저장</button>
+          <p class="result" id="memoryResult"></p>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="평면 클릭휠 시뮬레이션">
+        <button class="wheel" id="wheel" aria-label="클릭휠을 돌리려면 원을 따라 드래그하세요">
+          <span class="wheel-label top">MENU</span>
+          <span class="wheel-label left">◀</span>
+          <span class="wheel-label right">▶</span>
+          <span class="wheel-label bottom">▶Ⅱ</span>
+          <span class="wheel-progress" id="wheelProgress"></span>
+        </button>
+        <button class="center-button" id="centerButton" aria-label="선택">선택</button>
+      </section>
+
+      <footer class="hardware-note">104 × 62 × 12 mm · 평면 클릭휠 콘셉트</footer>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
