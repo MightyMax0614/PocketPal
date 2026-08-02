@@ -1,0 +1,622 @@
+/* PocketPal P1.4 — white base body, animation rig, customization and soul UI */
+
+.soul-character {
+  --look-x: 0px;
+  --look-y: 0px;
+  --body-white: #fbfbf7;
+  --body-shadow: #dedfd9;
+  --body-line: rgba(80, 82, 78, 0.16);
+  --accent: #76c7c7;
+  position: relative;
+  display: block;
+  width: 132px;
+  height: 145px;
+  margin: 2px auto 0;
+  animation: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 9px 8px rgba(55, 69, 68, 0.13));
+}
+
+.pal-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 78px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: rgba(65, 84, 84, 0.14);
+  filter: blur(3px);
+  animation: pal-shadow-breathe 3.4s ease-in-out infinite;
+}
+
+.pal-rig {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 94%;
+  animation: pal-breathe 3.4s ease-in-out infinite;
+}
+
+.pal-head,
+.pal-body,
+.pal-arm,
+.pal-leg,
+.pal-neck {
+  position: absolute;
+  background:
+    radial-gradient(circle at 34% 25%, rgba(255,255,255,.98), transparent 34%),
+    linear-gradient(145deg, var(--body-white), var(--body-shadow));
+  border: 1px solid var(--body-line);
+  box-shadow:
+    inset 4px 5px 9px rgba(255,255,255,.72),
+    inset -4px -5px 8px rgba(116,119,113,.07);
+}
+
+.pal-head {
+  z-index: 7;
+  top: 2px;
+  left: 25px;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  transform-origin: 50% 84%;
+  animation: pal-head-idle 5.2s ease-in-out infinite;
+}
+
+.pal-neck {
+  z-index: 4;
+  top: 72px;
+  left: 57px;
+  width: 18px;
+  height: 16px;
+  border-radius: 8px;
+}
+
+.pal-body {
+  z-index: 5;
+  top: 72px;
+  left: 31px;
+  width: 70px;
+  height: 65px;
+  overflow: hidden;
+  border-radius: 30px 30px 23px 23px;
+}
+
+.pal-arm {
+  z-index: 4;
+  top: 78px;
+  width: 24px;
+  height: 58px;
+  border-radius: 15px 15px 18px 18px;
+  transform-origin: 50% 12%;
+}
+
+.pal-arm-left {
+  left: 20px;
+  transform: rotate(5deg);
+  animation: pal-arm-left-idle 4.7s ease-in-out infinite;
+}
+
+.pal-arm-right {
+  right: 20px;
+  transform: rotate(-5deg);
+  animation: pal-arm-right-idle 5.1s ease-in-out infinite;
+}
+
+.pal-leg {
+  z-index: 3;
+  top: 119px;
+  width: 26px;
+  height: 25px;
+  border-radius: 9px 9px 16px 16px;
+}
+
+.pal-leg-left { left: 41px; }
+.pal-leg-right { right: 41px; }
+
+.pal-face {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.pal-eye {
+  position: absolute;
+  top: 36px;
+  width: 8px;
+  height: 11px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #313432;
+  transform-origin: center;
+  transition: width 180ms ease, height 180ms ease, border-radius 180ms ease, top 180ms ease;
+}
+
+.pal-eye-left { left: 24px; }
+.pal-eye-right { right: 24px; }
+
+.pal-pupil {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 62%;
+  height: 62%;
+  border-radius: 50%;
+  transform: translate(calc(-50% + var(--look-x)), calc(-50% + var(--look-y)));
+  background: #222523;
+  transition: transform 100ms ease-out;
+}
+
+.pal-eye-shine {
+  position: absolute;
+  left: 22%;
+  top: 18%;
+  width: 28%;
+  height: 24%;
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+}
+
+.soul-character[data-eyes="round"] .pal-eye {
+  top: 32px;
+  width: 15px;
+  height: 19px;
+  background: #313432;
+}
+
+.soul-character[data-eyes="round"] .pal-eye-left { left: 20px; }
+.soul-character[data-eyes="round"] .pal-eye-right { right: 20px; }
+
+.soul-character[data-eyes="sleepy"] .pal-eye {
+  top: 38px;
+  width: 17px;
+  height: 7px;
+  border-radius: 50% 50% 65% 65%;
+  background: transparent;
+  border-bottom: 3px solid #343735;
+  overflow: visible;
+}
+
+.soul-character[data-eyes="sleepy"] .pal-pupil,
+.soul-character[data-eyes="sleepy"] .pal-eye-shine { display: none; }
+.soul-character[data-eyes="sleepy"] .pal-eye-left { left: 19px; }
+.soul-character[data-eyes="sleepy"] .pal-eye-right { right: 19px; }
+
+.soul-character.is-blinking:not([data-eyes="sleepy"]) .pal-eye {
+  height: 2px;
+  top: 42px;
+  border-radius: 50%;
+}
+
+.pal-cheek {
+  position: absolute;
+  top: 49px;
+  width: 13px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(244, 151, 151, 0.32);
+  opacity: .25;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.pal-cheek-left { left: 14px; }
+.pal-cheek-right { right: 14px; }
+
+.pal-mouth {
+  position: absolute;
+  left: 50%;
+  top: 51px;
+  width: 16px;
+  height: 9px;
+  transform: translateX(-50%);
+  border-bottom: 2px solid #3e4240;
+  border-radius: 0 0 16px 16px;
+  transition: width 160ms ease, height 160ms ease, top 160ms ease, border 160ms ease;
+}
+
+.pal-mouth i { display: none; }
+
+.soul-character[data-mouth="tiny"] .pal-mouth {
+  top: 54px;
+  width: 5px;
+  height: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: #3e4240;
+}
+
+.soul-character[data-mouth="cat"] .pal-mouth {
+  top: 50px;
+  width: 18px;
+  height: 11px;
+  border: 0;
+  background:
+    radial-gradient(circle at 25% 30%, transparent 5px, #3e4240 5.5px, #3e4240 6.5px, transparent 7px),
+    radial-gradient(circle at 75% 30%, transparent 5px, #3e4240 5.5px, #3e4240 6.5px, transparent 7px);
+}
+
+.soul-character.is-talking .pal-mouth {
+  top: 49px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #3e4240;
+  border-radius: 45% 45% 52% 52%;
+  background: #f4a7a7;
+  animation: pal-talk-mouth 170ms ease-in-out infinite alternate;
+}
+
+.pal-outfit {
+  position: absolute;
+  z-index: 2;
+  left: -2px;
+  right: -2px;
+  top: 18px;
+  bottom: -3px;
+  border-radius: 19px 19px 22px 22px;
+  opacity: 0;
+  transition: opacity 180ms ease, background 180ms ease;
+}
+
+.soul-character:not([data-outfit="none"]) .pal-outfit { opacity: 1; }
+.soul-character[data-outfit="mint"] .pal-outfit { background: linear-gradient(145deg, #bfe8df, #79c6b7); }
+.soul-character[data-outfit="pink"] .pal-outfit { background: linear-gradient(145deg, #ffd2dc, #e995aa); }
+.soul-character[data-outfit="blue"] .pal-outfit { background: linear-gradient(145deg, #c8ddf6, #7ca9d7); }
+.soul-character[data-outfit="yellow"] .pal-outfit { background: linear-gradient(145deg, #fff1b3, #e7bf55); }
+
+.pal-badge {
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  top: 31px;
+  width: 14px;
+  height: 14px;
+  display: none;
+  place-items: center;
+}
+
+.soul-character:not([data-badge="none"]) .pal-badge { display: grid; }
+.pal-badge span { width: 100%; height: 100%; }
+.soul-character[data-badge="star"] .pal-badge span {
+  clip-path: polygon(50% 0, 62% 34%, 100% 36%, 70% 58%, 80% 100%, 50% 75%, 20% 100%, 30% 58%, 0 36%, 38% 34%);
+  background: #ffd45e;
+}
+.soul-character[data-badge="heart"] .pal-badge span {
+  position: relative;
+  transform: rotate(-45deg) scale(.72);
+  border-radius: 3px 0 0 3px;
+  background: #ee7188;
+}
+.soul-character[data-badge="heart"] .pal-badge span::before,
+.soul-character[data-badge="heart"] .pal-badge span::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: inherit;
+}
+.soul-character[data-badge="heart"] .pal-badge span::before { top: -7px; left: 0; }
+.soul-character[data-badge="heart"] .pal-badge span::after { left: 7px; top: 0; }
+
+.pal-hat {
+  position: absolute;
+  z-index: 8;
+  left: 7px;
+  top: -15px;
+  width: 68px;
+  height: 34px;
+  display: none;
+  pointer-events: none;
+}
+
+.soul-character:not([data-hat="none"]) .pal-hat { display: block; }
+.hat-part { position: absolute; display: block; }
+
+.soul-character[data-hat="beanie"] .hat-part-a {
+  left: 8px; top: 7px; width: 52px; height: 24px;
+  border-radius: 28px 28px 7px 7px;
+  background: #77c4c6;
+  border: 1px solid rgba(40,90,95,.18);
+}
+.soul-character[data-hat="beanie"] .hat-part-b {
+  left: 6px; top: 25px; width: 56px; height: 8px;
+  border-radius: 6px;
+  background: #5aa7ad;
+}
+.soul-character[data-hat="beanie"] .hat-part-c {
+  left: 29px; top: 0; width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #5aa7ad;
+}
+
+.soul-character[data-hat="crown"] .hat-part-a {
+  left: 11px; top: 4px; width: 47px; height: 29px;
+  clip-path: polygon(0 100%, 4% 18%, 26% 60%, 50% 0, 74% 60%, 96% 18%, 100% 100%);
+  background: linear-gradient(#ffe88d, #e9b84a);
+  border-bottom: 3px solid #d19a31;
+}
+
+.soul-character[data-hat="leaf"] .hat-part-a,
+.soul-character[data-hat="leaf"] .hat-part-b {
+  top: 9px;
+  width: 28px;
+  height: 15px;
+  border-radius: 100% 0 100% 0;
+  background: #71bd73;
+  transform-origin: bottom center;
+}
+.soul-character[data-hat="leaf"] .hat-part-a { left: 11px; transform: rotate(24deg); }
+.soul-character[data-hat="leaf"] .hat-part-b { right: 11px; transform: scaleX(-1) rotate(24deg); }
+.soul-character[data-hat="leaf"] .hat-part-c {
+  left: 32px; top: 15px; width: 4px; height: 17px;
+  border-radius: 4px;
+  background: #4a9252;
+}
+
+.pal-custom-gift {
+  position: absolute;
+  z-index: 12;
+  max-width: 58px;
+  max-height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 3px rgba(30,45,45,.16));
+  pointer-events: none;
+}
+
+.pal-custom-gift[data-slot="head"] { left: 37px; top: -5px; width: 58px; height: 42px; }
+.pal-custom-gift[data-slot="face"] { left: 45px; top: 28px; width: 42px; height: 38px; }
+.pal-custom-gift[data-slot="body"] { left: 43px; top: 82px; width: 46px; height: 49px; }
+.pal-custom-gift[data-slot="badge"] { left: 79px; top: 98px; width: 23px; height: 23px; }
+.pal-custom-gift[data-slot="hand"] { right: -4px; top: 82px; width: 47px; height: 47px; transform: rotate(-8deg); }
+
+.character-name-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  z-index: 15;
+  max-width: 100px;
+  overflow: hidden;
+  padding: 2px 8px;
+  border: 1px solid rgba(39,82,89,.1);
+  border-radius: 999px;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,.82);
+  color: rgba(29,53,59,.76);
+  font-size: 8px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.soul-state-strip {
+  width: 88%;
+  min-height: 20px;
+  margin: 1px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(35,61,65,.65);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.soul-state-strip span:first-child {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+}
+
+.soul-state-strip span + span::before { content: "· "; }
+
+.soul-character.mood-happy .pal-cheek,
+.soul-character.motion-happy .pal-cheek,
+.soul-character.motion-pet .pal-cheek { opacity: .9; transform: scale(1.15); }
+.soul-character.mood-curious .pal-head,
+.soul-character.motion-curious .pal-head { transform: rotate(10deg) translateY(-1px); }
+.soul-character.mood-sleepy .pal-rig { animation-duration: 5.2s; }
+.soul-character.mood-sleepy .pal-head { transform: rotate(-5deg) translateY(2px); }
+
+.soul-character.motion-wave .pal-arm-right { animation: pal-wave 540ms ease-in-out 4; }
+.soul-character.motion-jump .pal-rig { animation: pal-jump 720ms cubic-bezier(.28,.8,.35,1) 1; }
+.soul-character.motion-jump .pal-shadow { animation: pal-shadow-jump 720ms ease 1; }
+.soul-character.motion-happy .pal-rig { animation: pal-happy-bounce 560ms ease-in-out 3; }
+.soul-character.motion-curious .pal-head { animation: pal-curious 1.1s ease-in-out 2; }
+.soul-character.motion-sleepy .pal-head { animation: pal-sleepy 1.6s ease-in-out 2; }
+.soul-character.motion-pet .pal-rig { animation: pal-petted 850ms ease-in-out 1; }
+.soul-character.motion-pet .pal-head { animation: pal-petted-head 850ms ease-in-out 1; }
+.soul-character.motion-look .pal-head { animation: pal-look-around 1.4s ease-in-out 1; }
+
+.soul-panel input[type="text"],
+.gift-panel select {
+  width: 100%;
+  border: 1px solid rgba(45,75,85,.18);
+  border-radius: 11px;
+  padding: 8px 9px;
+  background: rgba(255,255,255,.84);
+  color: #20343a;
+  outline: none;
+}
+
+.panel-intro {
+  margin: -5px 0 9px;
+  font-size: 10px;
+  line-height: 1.45;
+  color: rgba(30,55,60,.66);
+}
+
+.option-group {
+  margin: 7px 0;
+  padding: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  border: 1px solid rgba(45,75,85,.12);
+  border-radius: 11px;
+  background: rgba(255,255,255,.38);
+}
+
+.option-group legend {
+  padding: 0 4px;
+  color: rgba(35,60,65,.72);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.option-group button {
+  flex: 1 1 auto;
+  min-width: 44px;
+  padding: 6px 7px;
+  border: 1px solid rgba(48,90,98,.11);
+  background: rgba(255,255,255,.7);
+  font-size: 8px;
+}
+
+.option-group button.selected {
+  border-color: rgba(50,125,135,.5);
+  background: rgba(218,241,241,.95);
+  color: #215b63;
+  box-shadow: inset 0 0 0 1px rgba(50,125,135,.08);
+}
+
+.studio-actions button { flex: 1; }
+.full-button { width: 100%; }
+
+.motion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.motion-grid button {
+  min-height: 34px;
+  font-size: 9px;
+}
+
+.soul-debug-card {
+  margin-top: 9px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.soul-debug-card div {
+  padding: 7px 3px;
+  display: grid;
+  gap: 2px;
+  text-align: center;
+  border: 1px solid rgba(45,75,85,.1);
+  border-radius: 10px;
+  background: rgba(255,255,255,.57);
+}
+
+.soul-debug-card span { font-size: 7px; color: rgba(30,55,60,.58); }
+.soul-debug-card strong { font-size: 9px; color: rgba(30,55,60,.82); }
+
+.gift-panel select { margin-bottom: 7px; }
+.gift-panel #giftClear { margin-top: 5px; width: 100%; }
+
+#soulIndicator {
+  color: #67b97f;
+  text-shadow: 0 0 6px rgba(65,180,104,.42);
+  animation: soul-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes pal-breathe {
+  0%, 100% { transform: translateY(0) scaleX(1) scaleY(1); }
+  50% { transform: translateY(-1.5px) scaleX(1.012) scaleY(1.018); }
+}
+
+@keyframes pal-shadow-breathe {
+  0%, 100% { transform: translateX(-50%) scaleX(1); opacity: .78; }
+  50% { transform: translateX(-50%) scaleX(.92); opacity: .58; }
+}
+
+@keyframes pal-head-idle {
+  0%, 100% { transform: rotate(-1deg) translateY(0); }
+  42% { transform: rotate(1.2deg) translateY(-1px); }
+  72% { transform: rotate(.2deg) translateY(0); }
+}
+
+@keyframes pal-arm-left-idle {
+  0%, 100% { transform: rotate(5deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes pal-arm-right-idle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(-2deg); }
+}
+
+@keyframes pal-talk-mouth {
+  from { transform: translateX(-50%) scaleY(.55) scaleX(.9); }
+  to { transform: translateX(-50%) scaleY(1.12) scaleX(1.04); }
+}
+
+@keyframes pal-wave {
+  0%, 100% { transform: rotate(-5deg); }
+  25% { transform: translate(5px,-13px) rotate(-58deg); }
+  55% { transform: translate(5px,-14px) rotate(-24deg); }
+  80% { transform: translate(5px,-13px) rotate(-62deg); }
+}
+
+@keyframes pal-jump {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  18% { transform: translateY(4px) scaleX(1.06) scaleY(.94); }
+  48% { transform: translateY(-20px) scaleX(.97) scaleY(1.05); }
+  74% { transform: translateY(2px) scaleX(1.04) scaleY(.96); }
+}
+
+@keyframes pal-shadow-jump {
+  0%, 100% { transform: translateX(-50%) scaleX(1); opacity: .72; }
+  48% { transform: translateX(-50%) scaleX(.55); opacity: .24; }
+}
+
+@keyframes pal-happy-bounce {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-7px) rotate(-4deg); }
+  55% { transform: translateY(0) rotate(4deg); }
+  78% { transform: translateY(-4px) rotate(-2deg); }
+}
+
+@keyframes pal-curious {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  40%, 72% { transform: rotate(13deg) translate(2px,-2px); }
+}
+
+@keyframes pal-sleepy {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  55% { transform: rotate(-7deg) translate(-2px,4px); }
+}
+
+@keyframes pal-petted {
+  0%, 100% { transform: translateX(0) scale(1); }
+  35% { transform: translateX(5px) scaleX(1.03) scaleY(.98); }
+  70% { transform: translateX(-2px) scaleX(.99) scaleY(1.02); }
+}
+
+@keyframes pal-petted-head {
+  0%, 100% { transform: rotate(0); }
+  38% { transform: rotate(8deg) translate(3px,1px); }
+  72% { transform: rotate(4deg); }
+}
+
+@keyframes pal-look-around {
+  0%, 100% { transform: rotate(0); }
+  32% { transform: rotate(-7deg); }
+  68% { transform: rotate(7deg); }
+}
+
+@keyframes soul-pulse {
+  0%, 100% { opacity: .6; transform: scale(.9); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@media (max-height: 760px) {
+  .soul-character { width: 118px; height: 132px; transform: scale(.91); transform-origin: top center; margin-bottom: -12px; }
+  .soul-state-strip { margin-top: -4px; }
+}
