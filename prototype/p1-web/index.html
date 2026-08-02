@@ -7,9 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>PocketPal P1 Prototype</title>
-  <link rel="stylesheet" href="styles.css?v=8" />
-  <link rel="stylesheet" href="mobile.css?v=8" />
-  <link rel="stylesheet" href="character.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="mobile.css?v=9" />
+  <link rel="stylesheet" href="character.css?v=9" />
+  <link rel="stylesheet" href="character-3d.css?v=9" />
 </head>
 <body>
   <main class="stage">
@@ -21,7 +22,7 @@
       <section class="screen" id="screen">
         <header class="status-bar">
           <span id="clock">10:37</span>
-          <span class="status-title">PocketPal P1.2</span>
+          <span class="status-title">PocketPal P1.3</span>
           <span>●</span>
         </header>
 
@@ -43,8 +44,8 @@
 
         <div class="view" data-view="menu">
           <h1>무엇을 할까?</h1>
-          <ul class="menu-list" id="menuList">
-            <li data-action="character">내 캐릭터 만들기</li>
+          <ul class="menu-list" id="menuList" data-menu="menu">
+            <li data-action="character-menu">내 캐릭터</li>
             <li data-action="talk">대화하기</li>
             <li data-action="camera">카메라</li>
             <li data-action="gift">선물 만들기</li>
@@ -53,8 +54,19 @@
           </ul>
         </div>
 
-        <div class="view panel character-panel" data-view="character">
+        <div class="view" data-view="character-menu">
           <h1>내 캐릭터</h1>
+          <ul class="menu-list" id="characterMenuList" data-menu="character-menu">
+            <li data-action="character">그림·사진 적용</li>
+            <li data-action="character-3d-prep">3D 준비</li>
+            <li data-action="character-3d-status">3D 상태 보기</li>
+            <li data-action="character-3d-result">3D 결과 보기</li>
+            <li data-action="menu">메인 메뉴로</li>
+          </ul>
+        </div>
+
+        <div class="view panel character-panel" data-view="character">
+          <h1>그림·사진 적용</h1>
           <label class="upload-box" for="characterImageInput">
             <span>아이 그림이나 사진 선택</span>
             <input id="characterImageInput" type="file" accept="image/*" />
@@ -68,21 +80,90 @@
             <button class="primary" id="characterApply" disabled>이름까지 다시 적용</button>
             <button id="characterReset">기본 캐릭터</button>
           </div>
+          <p class="result character-step-note" id="characterResult">업로드하면 바로 2D 친구로 적용돼요. 실제 360도 제작은 ‘3D 준비’에서 진행합니다.</p>
+        </div>
 
-          <section class="character-status-card" id="character3dCard" data-status="none" aria-live="polite">
-            <p id="character2dStatus">현재 상태: 기본 캐릭터 사용 중</p>
-            <p id="character3dStatus">3D 상태: 아직 실제 3D 변환을 시작하지 않았어요</p>
+        <div class="view panel character-3d-panel" data-view="character-3d-prep">
+          <h1>캐릭터 3D 준비</h1>
+          <p class="panel-intro">정면은 필수예요. 측면·뒷면이 없으면 AI 추정 대상으로 기록합니다.</p>
+
+          <div class="turnaround-grid">
+            <label class="turnaround-card required" for="character3dFrontInput">
+              <strong>정면</strong><small>필수</small>
+              <img id="character3dFrontPreview" alt="캐릭터 정면 미리보기" hidden />
+              <span class="turnaround-placeholder">사진 선택</span>
+              <input id="character3dFrontInput" type="file" accept="image/*" />
+            </label>
+            <label class="turnaround-card" for="character3dSideInput">
+              <strong>측면</strong><small>선택</small>
+              <img id="character3dSidePreview" alt="캐릭터 측면 미리보기" hidden />
+              <span class="turnaround-placeholder">없으면 AI 추정</span>
+              <input id="character3dSideInput" type="file" accept="image/*" />
+            </label>
+            <label class="turnaround-card" for="character3dBackInput">
+              <strong>뒷면</strong><small>선택</small>
+              <img id="character3dBackPreview" alt="캐릭터 뒷면 미리보기" hidden />
+              <span class="turnaround-placeholder">없으면 AI 추정</span>
+              <input id="character3dBackInput" type="file" accept="image/*" />
+            </label>
+          </div>
+
+          <button id="character3dUseCurrent" type="button">현재 2D 그림을 정면으로 사용</button>
+
+          <label for="character3dName">캐릭터 이름</label>
+          <input id="character3dName" type="text" maxlength="20" placeholder="예: 민트냥" />
+          <label for="character3dDescription">형태 설명</label>
+          <textarea id="character3dDescription" rows="2" placeholder="예: 큰 귀, 둥근 몸, 짧은 다리, 긴 꼬리"></textarea>
+
+          <div class="compact-fields">
+            <label>주 색상<input id="character3dColor" type="text" maxlength="30" placeholder="민트색" /></label>
+            <label>성격<input id="character3dPersonality" type="text" maxlength="60" placeholder="호기심, 다정함" /></label>
+          </div>
+
+          <div class="feature-checks">
+            <label><input id="character3dTail" type="checkbox" /> 꼬리 있음</label>
+            <label><input id="character3dWings" type="checkbox" /> 날개 있음</label>
+          </div>
+
+          <button class="primary full-button" id="character3dBuildJob" type="button">실제 3D 작업 요청 만들기</button>
+          <p class="result" id="character3dPrepResult">정면 이미지를 준비해 주세요.</p>
+        </div>
+
+        <div class="view panel character-3d-panel" data-view="character-3d-status">
+          <h1>3D 작업 상태</h1>
+          <section class="character-status-card" id="character3dStatusCard" data-status="none" aria-live="polite">
+            <strong id="character3dStatusTitle">아직 요청 전</strong>
+            <p id="character3dStatusDetail">3D 준비 화면에서 작업 요청을 만들어 주세요.</p>
           </section>
+          <dl class="job-summary">
+            <div><dt>캐릭터</dt><dd id="character3dStatusName">-</dd></div>
+            <div><dt>입력 각도</dt><dd id="character3dStatusViews">-</dd></div>
+            <div><dt>작업 ID</dt><dd id="character3dStatusJobId">-</dd></div>
+            <div><dt>결과 모델</dt><dd id="character3dStatusModel">없음</dd></div>
+          </dl>
+          <div class="button-row">
+            <button class="primary" id="character3dDownloadJob" disabled>job_v2.json</button>
+            <button id="character3dDownloadInputs" disabled>입력 그림 저장</button>
+          </div>
+          <p class="result">현재 웹은 작업 요청과 결과 확인을 담당하고, 실제 생성은 PC·NAS의 img2threejs 작업기가 담당합니다.</p>
+        </div>
 
-          <div class="button-row character-3d-actions">
-            <button class="primary" id="character3dCreate" disabled>3D 만들기</button>
-            <button id="character3dPreview" disabled>캐릭터 분리 확인</button>
+        <div class="view panel character-3d-panel" data-view="character-3d-result">
+          <h1>실제 3D 결과</h1>
+          <div class="real-3d-empty" id="character3dResultEmpty">
+            <strong>가짜 2.5D는 표시하지 않아요</strong>
+            <p>PC·NAS에서 생성한 실제 GLB 파일만 360도로 확인합니다.</p>
           </div>
-          <div class="button-row character-export-actions">
-            <button id="characterJobDownload" disabled>job.json 저장</button>
-            <button id="characterSourceDownload" disabled>원본 저장</button>
+          <label class="upload-box compact-upload" for="character3dModelInput">
+            <span>실제 character.glb 선택</span>
+            <input id="character3dModelInput" type="file" accept=".glb,model/gltf-binary" />
+          </label>
+          <p class="model-file-name" id="character3dModelName">저장된 GLB 없음</p>
+          <div class="button-row">
+            <button class="primary" id="character3dOpenViewer" disabled>360도 결과 보기</button>
+            <button id="character3dClearModel" disabled>결과 삭제</button>
           </div>
-          <p class="result character-step-note" id="characterResult">그림은 먼저 2D 캐릭터로 적용됩니다. 3D 만들기를 누르면 img2threejs 작업용 요청을 준비합니다.</p>
+          <p class="result" id="character3dResultMessage">GLB가 준비된 뒤에만 3D 뷰어가 열립니다.</p>
         </div>
 
         <div class="view panel" data-view="talk">
@@ -138,9 +219,9 @@
     </section>
   </main>
 
-  <script src="app.js?v=8"></script>
-  <script src="touch-fix.js?v=8"></script>
-  <script src="character-customizer.js?v=8"></script>
-  <script src="job-manager.js?v=8"></script>
+  <script src="app.js?v=9"></script>
+  <script src="touch-fix.js?v=9"></script>
+  <script src="character-customizer.js?v=9"></script>
+  <script src="character-3d.js?v=9"></script>
 </body>
 </html>
