@@ -3,9 +3,9 @@ extends Node2D
 signal petted
 
 @onready var head_pivot: Node2D = $HeadPivot
-@onready var face: Node2D = $HeadPivot/Face
+@onready var face = $HeadPivot/Face
 @onready var torso_pivot: Node2D = $TorsoPivot
-@onready var outfit: Node2D = $TorsoPivot/Outfit
+@onready var outfit = $TorsoPivot/Outfit
 @onready var arm_left: Node2D = $ArmLeftPivot
 @onready var arm_right: Node2D = $ArmRightPivot
 @onready var leg_left: Node2D = $LegLeftPivot
