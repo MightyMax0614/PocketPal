@@ -113,7 +113,6 @@
     previewButton.disabled = !hasCharacter;
     jobDownloadButton.disabled = !currentJob;
     sourceDownloadButton.disabled = !hasCharacter;
-
     createButton.textContent = currentJob ? "3D 다시 요청" : "3D 만들기";
   }
 
@@ -149,9 +148,14 @@
     downloadBlob(dataUrlToBlob(character.imageData), `${currentJob?.job_id || "pocketpal-character"}.source.png`);
   });
 
-  window.addEventListener("pocketpal:character-changed", async () => {
-    currentJob = null;
-    localStorage.removeItem(JOB_STORAGE_KEY);
+  window.addEventListener("pocketpal:character-changed", async (event) => {
+    const changedName = event.detail?.name || null;
+    const restoredSameCharacter = Boolean(currentJob && changedName && currentJob.character_name === changedName);
+
+    if (!restoredSameCharacter) {
+      currentJob = null;
+      localStorage.removeItem(JOB_STORAGE_KEY);
+    }
     await updateUi();
   });
 
