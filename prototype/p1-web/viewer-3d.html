@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#e9f1f2" />
-  <title>PocketPal Character Viewer</title>
+  <title>PocketPal 실제 3D Viewer</title>
   <link rel="stylesheet" href="viewer-3d.css?v=2" />
   <script type="importmap">
     {
@@ -20,26 +20,26 @@
     <header class="viewer-header">
       <button id="viewerBack" type="button">← 돌아가기</button>
       <div>
-        <strong>캐릭터 분리 미리보기</strong>
-        <small id="viewerSubtitle">배경 제거·실루엣 확인 중</small>
+        <strong>실제 3D 캐릭터</strong>
+        <small id="viewerSubtitle">저장된 GLB 결과</small>
       </div>
       <button id="viewerAutoRotate" type="button" aria-pressed="true">자동 회전</button>
     </header>
 
-    <section id="viewerCanvas" class="viewer-canvas" aria-label="PocketPal 캐릭터 변환 뷰어"></section>
+    <section id="viewerCanvas" class="viewer-canvas" aria-label="실제 GLB 캐릭터 3D 뷰어"></section>
 
     <section class="viewer-panel">
-      <p id="viewerStatus">캐릭터와 배경을 분리하는 중이에요…</p>
+      <p id="viewerStatus">저장된 실제 3D 결과를 불러오는 중이에요…</p>
       <p class="viewer-warning">
-        자동 화면은 사진 전체 판이 아니라 <b>캐릭터 부분만 배경에서 분리</b>해 두께를 확인하는 단계입니다.
-        아직 진짜 3D 캐릭터는 아니며, img2threejs 결과인 GLB/GLTF 또는 Three.js 모델이 생성되면 이 화면에서 실제 3D로 교체합니다.
+        이 화면은 <b>GLB 또는 img2threejs의 실제 Three.js 결과</b>만 표시합니다.
+        사진판·컷아웃·가짜 2.5D는 자동으로 만들지 않습니다.
       </p>
       <div class="viewer-actions">
-        <label class="file-button" for="viewerModelFile">실제 GLB/GLTF 결과 불러오기</label>
-        <input id="viewerModelFile" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" />
-        <button id="viewerReset" type="button">캐릭터 분리 화면으로 복귀</button>
+        <label class="file-button" for="viewerModelFile">다른 GLB 열기</label>
+        <input id="viewerModelFile" type="file" accept=".glb,model/gltf-binary" />
+        <button id="viewerReload" type="button">저장 결과 다시 열기</button>
       </div>
-      <p class="viewer-help">한 손가락: 회전 · 두 손가락: 확대/축소</p>
+      <p class="viewer-help">한 손가락: 회전 · 두 손가락: 확대/축소 · 위·아래에서도 확인 가능</p>
     </section>
   </main>
 
