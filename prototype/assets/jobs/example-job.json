@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "job_id": "char_20260802_153700",
+  "character_name": "별이",
+  "source_type": "drawing_or_photo",
+  "source_image": "source.png",
+  "requested_at": "2026-08-02T06:37:00.000Z",
+  "status": "queued",
+  "target": "pocketpal_character",
+  "output_contract": {
+    "preferred": "procedural_threejs_module",
+    "accepted": [
+      "procedural_threejs_module",
+      "glb",
+      "gltf"
+    ],
+    "viewer_entry": "viewer-3d.html"
+  },
+  "options": {
+    "style": "cute",
+    "preserve_silhouette": true,
+    "remove_background": true,
+    "create_preview": true,
+    "expose_attachment_points": [
+      "head",
+      "face",
+      "chest",
+      "back",
+      "left_hand",
+      "right_hand"
+    ],
+    "rigging": false
+  }
+}
