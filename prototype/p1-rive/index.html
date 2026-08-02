@@ -7,11 +7,38 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>PocketPal Rive Lab</title>
-  <link rel="stylesheet" href="styles.css?v=1" />
-  <script defer src="https://unpkg.com/@rive-app/webgl2@2.36.0"></script>
-  <script defer src="app.js?v=1"></script>
+
+  <!-- 외부 CSS가 늦게 와도 빈 화면이 되지 않게 하는 최소 안전 스타일 -->
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #e2e6e2; color: #1d2828; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif; }
+    #bootSafety { margin: 16px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,.9); box-shadow: 0 12px 35px rgba(30,45,42,.12); }
+    #bootSafety strong { display: block; font-size: 20px; }
+    #bootSafety span { display: block; margin-top: 6px; font-size: 13px; line-height: 1.45; color: #52615f; }
+    #bootSafety button { margin-top: 12px; border: 0; border-radius: 12px; padding: 11px 14px; background: #2d7f7c; color: white; font-weight: 800; }
+    html.app-painted #bootSafety { display: none; }
+  </style>
+
+  <link rel="stylesheet" href="styles.css?v=2" />
+  <script>
+    window.addEventListener("error", function (event) {
+      var box = document.getElementById("bootSafety");
+      var detail = document.getElementById("bootSafetyDetail");
+      if (box) box.style.display = "block";
+      if (detail) detail.textContent = "오류: " + (event.message || "알 수 없는 초기화 오류");
+    });
+  </script>
+
+  <!-- iPhone Safari 안정성 검증을 위해 WebGL2 대신 Canvas 런타임 사용 -->
+  <script defer src="https://unpkg.com/@rive-app/canvas@2.36.0" onerror="document.getElementById('bootSafetyDetail').textContent='Rive Canvas 런타임을 받지 못했어요. 인터넷 연결 후 다시 시도해 주세요.'"></script>
+  <script defer src="app.js?v=2"></script>
 </head>
 <body>
+  <section id="bootSafety" aria-live="polite">
+    <strong>PocketPal P1.5 준비 중</strong>
+    <span id="bootSafetyDetail">화면과 Rive Canvas 런타임을 불러오고 있어요.</span>
+    <button type="button" onclick="location.reload()">다시 불러오기</button>
+  </section>
+
   <main class="page-shell">
     <section class="device" aria-label="PocketPal Rive 엔진 검증 시제품">
       <header class="device-header">
@@ -26,9 +53,9 @@
       </header>
 
       <section class="character-stage" id="characterStage">
-        <canvas id="riveCanvas" aria-label="Rive 애니메이션 캔버스"></canvas>
+        <canvas id="riveCanvas" width="720" height="720" aria-label="Rive 애니메이션 캔버스"></canvas>
         <div class="stage-message" id="stageMessage">
-          <strong>Rive 런타임을 불러오는 중이에요</strong>
+          <strong>Rive Canvas 런타임을 불러오는 중이에요</strong>
           <span>CSS 캐릭터 대신 전문 리깅 파일을 실행합니다.</span>
         </div>
         <div class="fps-badge"><span id="fpsValue">--</span> FPS</div>
@@ -122,5 +149,11 @@
       </footer>
     </section>
   </main>
+
+  <script>
+    requestAnimationFrame(function () {
+      document.documentElement.classList.add("app-painted");
+    });
+  </script>
 </body>
 </html>
