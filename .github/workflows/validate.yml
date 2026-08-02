@@ -26,15 +26,16 @@ jobs:
           python -m py_compile tools/img2threejs_bridge.py
           python -m py_compile tools/character_job_v2_adapter.py
 
-      - name: Validate active P1.5.1 Rive recovery
+      - name: Validate active P1.5.2 Rive recovery
         run: |
           node --check prototype/p1-rive/app.js
-          grep -q "PocketPal P1.5.1" prototype/p1-rive/index.html
+          grep -q "PocketPal P1.5.2" prototype/p1-rive/index.html
           grep -q "prototype/p1-rive/" index.html
           grep -q "canvas-single" prototype/p1-rive/app.js
           grep -q "raw.githubusercontent.com/rive-app/rive-flutter" prototype/p1-rive/app.js
           grep -q "stepRuntime" prototype/p1-rive/index.html
           grep -q "stepRender" prototype/p1-rive/index.html
+          grep -q "onLoad 후 첫 화면 표시 확인" prototype/p1-rive/app.js
 
       - name: Validate retained P1.6 Soul Lab
         run: |
