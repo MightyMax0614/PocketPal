@@ -1,0 +1,44 @@
+{
+  "version": "0.1",
+  "artboard": "PocketPal",
+  "stateMachine": "PocketPalState",
+  "prototypeControl": "legacy_inputs",
+  "futureControl": "data_binding",
+  "inputs": [
+    {"name": "mood", "type": "number", "range": [0, 4], "meaning": "0 calm, 1 curious, 2 happy, 3 sad, 4 sleepy"},
+    {"name": "energy", "type": "number", "range": [0, 100]},
+    {"name": "look_x", "type": "number", "range": [-100, 100]},
+    {"name": "look_y", "type": "number", "range": [-100, 100]},
+    {"name": "talking", "type": "boolean"},
+    {"name": "sleepy", "type": "boolean"},
+    {"name": "pet", "type": "trigger"},
+    {"name": "wave", "type": "trigger"},
+    {"name": "jump", "type": "trigger"},
+    {"name": "notice", "type": "trigger"},
+    {"name": "face_style", "type": "number", "range": [0, 9]},
+    {"name": "hat_style", "type": "number", "range": [0, 9]},
+    {"name": "outfit_style", "type": "number", "range": [0, 9]},
+    {"name": "badge_style", "type": "number", "range": [0, 9]}
+  ],
+  "requiredAnimations": [
+    "idle_breathe",
+    "blink",
+    "look",
+    "talk_loop",
+    "pet_reaction",
+    "wave",
+    "jump",
+    "curious",
+    "happy",
+    "sleepy"
+  ],
+  "attachmentSlots": [
+    "head",
+    "face",
+    "body_front",
+    "badge",
+    "back",
+    "hand_left",
+    "hand_right"
+  ]
+}
