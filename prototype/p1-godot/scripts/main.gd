@@ -1,6 +1,6 @@
 extends Control
 
-@onready var character: Node2D = $Character
+@onready var character = $Character
 @onready var speech: Label = $SpeechBubble
 @onready var auto_timer: Timer = $AutoTimer
 
