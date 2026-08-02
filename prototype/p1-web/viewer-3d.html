@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#e9f1f2" />
-  <title>PocketPal 3D Viewer</title>
-  <link rel="stylesheet" href="viewer-3d.css?v=1" />
+  <title>PocketPal Character Viewer</title>
+  <link rel="stylesheet" href="viewer-3d.css?v=2" />
   <script type="importmap">
     {
       "imports": {
@@ -20,29 +20,29 @@
     <header class="viewer-header">
       <button id="viewerBack" type="button">← 돌아가기</button>
       <div>
-        <strong>3D 캐릭터 미리보기</strong>
-        <small id="viewerSubtitle">현재 그림을 이용한 2.5D 테스트</small>
+        <strong>캐릭터 분리 미리보기</strong>
+        <small id="viewerSubtitle">배경 제거·실루엣 확인 중</small>
       </div>
       <button id="viewerAutoRotate" type="button" aria-pressed="true">자동 회전</button>
     </header>
 
-    <section id="viewerCanvas" class="viewer-canvas" aria-label="3D 캐릭터 뷰어"></section>
+    <section id="viewerCanvas" class="viewer-canvas" aria-label="PocketPal 캐릭터 변환 뷰어"></section>
 
     <section class="viewer-panel">
-      <p id="viewerStatus">캐릭터 이미지를 불러오는 중이에요…</p>
+      <p id="viewerStatus">캐릭터와 배경을 분리하는 중이에요…</p>
       <p class="viewer-warning">
-        현재 자동 표시는 진짜 3D 변환 결과가 아니라 그림에 두께를 준 <b>2.5D 임시 미리보기</b>입니다.
-        img2threejs 또는 다른 변환기에서 만든 GLB/GLTF를 선택하면 실제 3D 결과를 확인할 수 있어요.
+        자동 화면은 사진 전체 판이 아니라 <b>캐릭터 부분만 배경에서 분리</b>해 두께를 확인하는 단계입니다.
+        아직 진짜 3D 캐릭터는 아니며, img2threejs 결과인 GLB/GLTF 또는 Three.js 모델이 생성되면 이 화면에서 실제 3D로 교체합니다.
       </p>
       <div class="viewer-actions">
-        <label class="file-button" for="viewerModelFile">GLB/GLTF 결과 불러오기</label>
+        <label class="file-button" for="viewerModelFile">실제 GLB/GLTF 결과 불러오기</label>
         <input id="viewerModelFile" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" />
-        <button id="viewerReset" type="button">2.5D 화면으로 복귀</button>
+        <button id="viewerReset" type="button">캐릭터 분리 화면으로 복귀</button>
       </div>
       <p class="viewer-help">한 손가락: 회전 · 두 손가락: 확대/축소</p>
     </section>
   </main>
 
-  <script type="module" src="viewer-3d.js?v=1"></script>
+  <script type="module" src="viewer-3d.js?v=2"></script>
 </body>
 </html>
