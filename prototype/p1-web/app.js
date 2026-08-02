@@ -1,14 +1,29 @@
 "use strict";
 
 const views = [...document.querySelectorAll(".view")];
-const menuItems = [...document.querySelectorAll("#menuList li")];
+const menus = new Map(
+  [...document.querySelectorAll(".menu-list[data-menu]")].map((list) => [
+    list.dataset.menu,
+    { list, items: [...list.querySelectorAll("li")], index: 0 }
+  ])
+);
 const wheel = document.querySelector("#wheel");
 const centerButton = document.querySelector("#centerButton");
 const speech = document.querySelector("#speech");
 const clock = document.querySelector("#clock");
 
+const parentMenuByView = {
+  character: "character-menu",
+  "character-3d-prep": "character-menu",
+  "character-3d-status": "character-menu",
+  "character-3d-result": "character-menu",
+  talk: "menu",
+  camera: "menu",
+  gift: "menu",
+  memory: "menu"
+};
+
 let currentView = "home";
-let menuIndex = 0;
 let pointerActive = false;
 let previousAngle = 0;
 let accumulatedAngle = 0;
@@ -23,31 +38,42 @@ const proactiveMessages = [
   "오늘 있었던 일 중에 제일 재미있었던 건 뭐야?"
 ];
 
+function isMenuView(name) {
+  return menus.has(name);
+}
+
+function activeMenu() {
+  return menus.get(currentView) || null;
+}
+
+function updateMenuSelection(menuName = currentView) {
+  const menu = menus.get(menuName);
+  if (!menu) return;
+  menu.items.forEach((item, index) => item.classList.toggle("selected", index === menu.index));
+  menu.items[menu.index]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+
 function showView(name) {
+  if (!views.some((view) => view.dataset.view === name)) name = "home";
   currentView = name;
   views.forEach((view) => view.classList.toggle("active", view.dataset.view === name));
 
-  if (name === "menu") {
-    updateMenuSelection();
-  }
+  if (isMenuView(name)) updateMenuSelection(name);
+  if (name !== "camera") stopCamera();
 
-  if (name !== "camera") {
-    stopCamera();
-  }
-}
-
-function updateMenuSelection() {
-  menuItems.forEach((item, index) => item.classList.toggle("selected", index === menuIndex));
-  menuItems[menuIndex]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  window.dispatchEvent(new CustomEvent("pocketpal:view-changed", { detail: { view: name } }));
 }
 
 function moveMenu(direction) {
-  if (currentView !== "menu") {
-    showView("menu");
+  if (!isMenuView(currentView)) {
+    const destination = currentView === "home" ? "menu" : (parentMenuByView[currentView] || "menu");
+    showView(destination);
     return;
   }
 
-  menuIndex = (menuIndex + direction + menuItems.length) % menuItems.length;
+  const menu = activeMenu();
+  if (!menu?.items.length) return;
+  menu.index = (menu.index + direction + menu.items.length) % menu.items.length;
   updateMenuSelection();
   if (navigator.vibrate) navigator.vibrate(10);
 }
@@ -58,12 +84,13 @@ function selectCurrent() {
     return;
   }
 
-  if (currentView !== "menu") {
-    showView("menu");
+  if (!isMenuView(currentView)) {
+    showView(parentMenuByView[currentView] || "menu");
     return;
   }
 
-  const action = menuItems[menuIndex]?.dataset.action;
+  const menu = activeMenu();
+  const action = menu?.items[menu.index]?.dataset.action;
   if (!action) return;
 
   if (action === "home") {
@@ -124,11 +151,14 @@ wheel.addEventListener("pointerup", releaseWheel);
 wheel.addEventListener("pointercancel", releaseWheel);
 centerButton.addEventListener("click", selectCurrent);
 
-menuItems.forEach((item, index) => {
-  item.addEventListener("click", () => {
-    menuIndex = index;
-    updateMenuSelection();
-    selectCurrent();
+menus.forEach((menu, menuName) => {
+  menu.items.forEach((item, index) => {
+    item.addEventListener("click", () => {
+      menu.index = index;
+      if (currentView !== menuName) showView(menuName);
+      updateMenuSelection(menuName);
+      selectCurrent();
+    });
   });
 });
 
@@ -145,7 +175,7 @@ window.addEventListener("keydown", (event) => {
     event.preventDefault();
     selectCurrent();
   }
-  if (event.key === "Escape") showView("home");
+  if (event.key === "Escape") showView(parentMenuByView[currentView] || "home");
 });
 
 function say(message, useVoice = false) {
@@ -192,7 +222,7 @@ function localReply(text) {
   return `“${normalized}”라고 말해 줬구나. 다음 버전에서는 AI와 연결해서 더 자연스럽게 대화할게.`;
 }
 
-talkButton.addEventListener("click", () => {
+talkButton?.addEventListener("click", () => {
   const reply = localReply(talkInput.value);
   talkResult.textContent = reply;
   say(reply, true);
@@ -237,8 +267,8 @@ function stopCamera() {
   cameraVideo.srcObject = null;
 }
 
-cameraStart.addEventListener("click", startCamera);
-cameraFlip.addEventListener("click", async () => {
+cameraStart?.addEventListener("click", startCamera);
+cameraFlip?.addEventListener("click", async () => {
   cameraFacing = cameraFacing === "user" ? "environment" : "user";
   await startCamera();
 });
@@ -249,7 +279,7 @@ const giftButton = document.querySelector("#giftButton");
 const giftResult = document.querySelector("#giftResult");
 let giftObjectUrl = null;
 
-giftImage.addEventListener("change", () => {
+giftImage?.addEventListener("change", () => {
   const file = giftImage.files?.[0];
   if (!file) return;
 
@@ -261,7 +291,7 @@ giftImage.addEventListener("change", () => {
   giftResult.textContent = `${file.name}을 선택했어요. 다음 단계에서 배경 제거와 3D 변환을 연결합니다.`;
 });
 
-giftButton.addEventListener("click", () => {
+giftButton?.addEventListener("click", () => {
   giftResult.textContent = "선물을 준비했어! 아직은 미리보기지만, 곧 캐릭터가 실제로 착용하게 만들 거야.";
   say("우와, 나에게 주는 선물이야? 정말 고마워!", true);
 });
@@ -280,7 +310,7 @@ function loadMemory() {
   }
 }
 
-memorySave.addEventListener("click", () => {
+memorySave?.addEventListener("click", () => {
   const memory = memoryInput.value.trim();
   if (!memory) {
     memoryResult.textContent = "기억할 내용을 먼저 적어 주세요.";
@@ -292,7 +322,12 @@ memorySave.addEventListener("click", () => {
 });
 
 loadMemory();
-updateMenuSelection();
+menus.forEach((_, name) => updateMenuSelection(name));
+
+window.showView = showView;
+window.moveMenu = moveMenu;
+window.selectCurrent = selectCurrent;
+window.say = say;
 
 window.addEventListener("beforeunload", () => {
   stopCamera();
