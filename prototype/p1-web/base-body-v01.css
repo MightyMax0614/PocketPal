@@ -1,0 +1,184 @@
+/* PocketPal Base Body v0.1 — proportions matched to the approved white neutral body */
+
+.soul-character {
+  width: 132px;
+  height: 145px;
+}
+
+.pal-head {
+  top: 2px;
+  left: 42px;
+  width: 48px;
+  height: 48px;
+}
+
+.pal-neck {
+  top: 43px;
+  left: 59px;
+  width: 14px;
+  height: 13px;
+}
+
+.pal-body {
+  top: 50px;
+  left: 30px;
+  width: 72px;
+  height: 78px;
+  border-radius: 31px 31px 22px 22px;
+}
+
+.pal-arm {
+  top: 57px;
+  width: 22px;
+  height: 67px;
+}
+
+.pal-arm-left { left: 19px; }
+.pal-arm-right { right: 19px; }
+
+.pal-leg {
+  top: 115px;
+  width: 27px;
+  height: 29px;
+}
+
+.pal-leg-left { left: 41px; }
+.pal-leg-right { right: 41px; }
+
+.pal-eye {
+  top: 20px;
+  width: 6px;
+  height: 8px;
+}
+
+.pal-eye-left { left: 13px; }
+.pal-eye-right { right: 13px; }
+
+.soul-character[data-eyes="round"] .pal-eye {
+  top: 17px;
+  width: 10px;
+  height: 13px;
+}
+
+.soul-character[data-eyes="round"] .pal-eye-left { left: 10px; }
+.soul-character[data-eyes="round"] .pal-eye-right { right: 10px; }
+
+.soul-character[data-eyes="sleepy"] .pal-eye {
+  top: 22px;
+  width: 11px;
+  height: 5px;
+}
+
+.soul-character[data-eyes="sleepy"] .pal-eye-left { left: 10px; }
+.soul-character[data-eyes="sleepy"] .pal-eye-right { right: 10px; }
+
+.soul-character.is-blinking:not([data-eyes="sleepy"]) .pal-eye { top: 24px; }
+
+.pal-cheek {
+  top: 29px;
+  width: 8px;
+  height: 5px;
+}
+
+.pal-cheek-left { left: 7px; }
+.pal-cheek-right { right: 7px; }
+
+.pal-mouth {
+  top: 31px;
+  width: 11px;
+  height: 6px;
+}
+
+.soul-character[data-mouth="tiny"] .pal-mouth {
+  top: 32px;
+  width: 4px;
+  height: 3px;
+}
+
+.soul-character[data-mouth="cat"] .pal-mouth {
+  top: 29px;
+  width: 12px;
+  height: 8px;
+  background: none;
+}
+
+.soul-character[data-mouth="cat"] .pal-mouth::before,
+.soul-character[data-mouth="cat"] .pal-mouth::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 7px;
+  height: 6px;
+  border-bottom: 2px solid #3e4240;
+  border-radius: 0 0 8px 8px;
+}
+
+.soul-character[data-mouth="cat"] .pal-mouth::before { left: 0; transform: rotate(8deg); }
+.soul-character[data-mouth="cat"] .pal-mouth::after { right: 0; transform: rotate(-8deg); }
+
+.soul-character.is-talking .pal-mouth {
+  top: 28px;
+  width: 9px;
+  height: 10px;
+}
+
+.pal-outfit { top: 22px; }
+
+.pal-badge {
+  right: 13px;
+  top: 38px;
+}
+
+.pal-hat {
+  left: 0;
+  top: -13px;
+  width: 48px;
+  height: 27px;
+}
+
+.soul-character[data-hat="beanie"] .hat-part-a {
+  left: 4px;
+  top: 6px;
+  width: 40px;
+  height: 18px;
+}
+
+.soul-character[data-hat="beanie"] .hat-part-b {
+  left: 3px;
+  top: 20px;
+  width: 42px;
+  height: 7px;
+}
+
+.soul-character[data-hat="beanie"] .hat-part-c {
+  left: 20px;
+  width: 8px;
+  height: 8px;
+}
+
+.soul-character[data-hat="crown"] .hat-part-a {
+  left: 6px;
+  top: 3px;
+  width: 36px;
+  height: 24px;
+}
+
+.soul-character[data-hat="leaf"] .hat-part-a,
+.soul-character[data-hat="leaf"] .hat-part-b {
+  width: 21px;
+  height: 12px;
+}
+
+.soul-character[data-hat="leaf"] .hat-part-a { left: 4px; }
+.soul-character[data-hat="leaf"] .hat-part-b { right: 4px; }
+.soul-character[data-hat="leaf"] .hat-part-c {
+  left: 22px;
+  top: 12px;
+  height: 14px;
+}
+
+.pal-custom-gift[data-slot="head"] { left: 41px; top: -5px; width: 50px; height: 35px; }
+.pal-custom-gift[data-slot="face"] { left: 49px; top: 14px; width: 34px; height: 30px; }
+.pal-custom-gift[data-slot="body"] { left: 43px; top: 67px; width: 46px; height: 50px; }
+.pal-custom-gift[data-slot="badge"] { left: 78px; top: 83px; width: 23px; height: 23px; }
+.pal-custom-gift[data-slot="hand"] { right: 1px; top: 74px; width: 43px; height: 43px; }
