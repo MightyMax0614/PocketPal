@@ -6,15 +6,14 @@
   <meta name="theme-color" content="#f4f1eb" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>PocketPal P1 Prototype</title>
-  <link rel="stylesheet" href="styles.css?v=9" />
-  <link rel="stylesheet" href="mobile.css?v=9" />
-  <link rel="stylesheet" href="character.css?v=9" />
-  <link rel="stylesheet" href="character-3d.css?v=9" />
+  <title>PocketPal P1.4 Soul Character</title>
+  <link rel="stylesheet" href="styles.css?v=10" />
+  <link rel="stylesheet" href="mobile.css?v=10" />
+  <link rel="stylesheet" href="soul-character.css?v=10" />
 </head>
 <body>
   <main class="stage">
-    <section class="device" aria-label="PocketPal P1 브라우저 시제품">
+    <section class="device" aria-label="PocketPal P1.4 브라우저 시제품">
       <div class="top-bezel" aria-hidden="true">
         <span class="hidden-camera"></span>
       </div>
@@ -22,24 +21,62 @@
       <section class="screen" id="screen">
         <header class="status-bar">
           <span id="clock">10:37</span>
-          <span class="status-title">PocketPal P1.3</span>
-          <span>●</span>
+          <span class="status-title">PocketPal P1.4</span>
+          <span id="soulIndicator" title="소울 엔진 상태">●</span>
         </header>
 
         <div class="view active" data-view="home">
-          <div class="speech" id="speech">안녕! 오늘은 뭐 하고 놀까?</div>
-          <div class="character" id="character" aria-label="PocketPal 기본 캐릭터">
-            <img id="customCharacterImage" class="custom-character-image" alt="내가 만든 PocketPal 캐릭터" hidden />
-            <div class="ears"><span></span><span></span></div>
-            <div class="face">
-              <span class="eye left"></span>
-              <span class="eye right"></span>
-              <span class="mouth"></span>
+          <div class="speech" id="speech">안녕! 오늘부터 내가 네 친구야.</div>
+
+          <div
+            class="character soul-character mood-calm"
+            id="character"
+            data-eyes="dot"
+            data-mouth="smile"
+            data-hat="none"
+            data-outfit="none"
+            data-badge="none"
+            aria-label="하얀 PocketPal 기본 캐릭터"
+          >
+            <div class="pal-shadow" aria-hidden="true"></div>
+            <div class="pal-rig">
+              <div class="pal-leg pal-leg-left"></div>
+              <div class="pal-leg pal-leg-right"></div>
+
+              <div class="pal-body">
+                <div class="pal-outfit" aria-hidden="true"></div>
+                <div class="pal-badge" aria-hidden="true"><span></span></div>
+              </div>
+
+              <div class="pal-arm pal-arm-left"></div>
+              <div class="pal-arm pal-arm-right"></div>
+              <div class="pal-neck"></div>
+
+              <div class="pal-head">
+                <div class="pal-hat" aria-hidden="true">
+                  <span class="hat-part hat-part-a"></span>
+                  <span class="hat-part hat-part-b"></span>
+                  <span class="hat-part hat-part-c"></span>
+                </div>
+                <div class="pal-face">
+                  <span class="pal-eye pal-eye-left"><i class="pal-pupil"></i><b class="pal-eye-shine"></b></span>
+                  <span class="pal-eye pal-eye-right"><i class="pal-pupil"></i><b class="pal-eye-shine"></b></span>
+                  <span class="pal-cheek pal-cheek-left"></span>
+                  <span class="pal-cheek pal-cheek-right"></span>
+                  <span class="pal-mouth"><i></i></span>
+                </div>
+              </div>
+
+              <img id="palCustomGift" class="pal-custom-gift" alt="아이가 선물한 꾸미기 아이템" hidden />
             </div>
-            <div class="body"></div>
-            <div class="character-name-badge" id="characterNameBadge" hidden></div>
+            <div class="character-name-badge" id="characterNameBadge">포켓</div>
           </div>
-          <div class="home-hint">휠을 돌려 메뉴를 고르고 가운데를 눌러줘</div>
+
+          <div class="soul-state-strip" aria-live="polite">
+            <span id="soulMoodLabel">편안함</span>
+            <span id="soulActivityLabel">네 얼굴을 바라보는 중</span>
+          </div>
+          <div class="home-hint">캐릭터를 쓰다듬거나 휠로 메뉴를 열어줘</div>
         </div>
 
         <div class="view" data-view="menu">
@@ -48,7 +85,7 @@
             <li data-action="character-menu">내 캐릭터</li>
             <li data-action="talk">대화하기</li>
             <li data-action="camera">카메라</li>
-            <li data-action="gift">선물 만들기</li>
+            <li data-action="gift">그림 선물</li>
             <li data-action="memory">기억하기</li>
             <li data-action="home">친구에게 돌아가기</li>
           </ul>
@@ -57,113 +94,112 @@
         <div class="view" data-view="character-menu">
           <h1>내 캐릭터</h1>
           <ul class="menu-list" id="characterMenuList" data-menu="character-menu">
-            <li data-action="character">그림·사진 적용</li>
-            <li data-action="character-3d-prep">3D 준비</li>
-            <li data-action="character-3d-status">3D 상태 보기</li>
-            <li data-action="character-3d-result">3D 결과 보기</li>
+            <li data-action="character-studio">얼굴·옷 꾸미기</li>
+            <li data-action="character-motion">움직임·감정</li>
+            <li data-action="character-personality">성격과 말투</li>
+            <li data-action="gift">그림을 선물하기</li>
             <li data-action="menu">메인 메뉴로</li>
           </ul>
         </div>
 
-        <div class="view panel character-panel" data-view="character">
-          <h1>그림·사진 적용</h1>
-          <label class="upload-box" for="characterImageInput">
-            <span>아이 그림이나 사진 선택</span>
-            <input id="characterImageInput" type="file" accept="image/*" />
-          </label>
-          <div class="character-preview-frame" id="characterPreviewFrame" hidden>
-            <img id="characterPreview" alt="선택한 캐릭터 미리보기" hidden />
+        <div class="view panel soul-panel" data-view="character-studio">
+          <h1>얼굴·옷 꾸미기</h1>
+          <p class="panel-intro">하얀 기본 바디는 그대로 두고 얼굴과 옷을 바꿔 나만의 친구로 만들어요.</p>
+
+          <label for="palNameInput">친구 이름</label>
+          <input id="palNameInput" type="text" maxlength="12" placeholder="포켓" />
+
+          <fieldset class="option-group" data-option-group="eyes">
+            <legend>눈</legend>
+            <button type="button" data-value="dot">점눈</button>
+            <button type="button" data-value="round">동그란눈</button>
+            <button type="button" data-value="sleepy">졸린눈</button>
+          </fieldset>
+
+          <fieldset class="option-group" data-option-group="mouth">
+            <legend>입</legend>
+            <button type="button" data-value="smile">미소</button>
+            <button type="button" data-value="tiny">작은입</button>
+            <button type="button" data-value="cat">고양이입</button>
+          </fieldset>
+
+          <fieldset class="option-group" data-option-group="hat">
+            <legend>모자</legend>
+            <button type="button" data-value="none">없음</button>
+            <button type="button" data-value="beanie">비니</button>
+            <button type="button" data-value="crown">왕관</button>
+            <button type="button" data-value="leaf">새싹</button>
+          </fieldset>
+
+          <fieldset class="option-group" data-option-group="outfit">
+            <legend>옷</legend>
+            <button type="button" data-value="none">기본</button>
+            <button type="button" data-value="mint">민트</button>
+            <button type="button" data-value="pink">분홍</button>
+            <button type="button" data-value="blue">파랑</button>
+            <button type="button" data-value="yellow">노랑</button>
+          </fieldset>
+
+          <fieldset class="option-group" data-option-group="badge">
+            <legend>배지</legend>
+            <button type="button" data-value="none">없음</button>
+            <button type="button" data-value="star">별</button>
+            <button type="button" data-value="heart">하트</button>
+          </fieldset>
+
+          <div class="button-row studio-actions">
+            <button class="primary" id="palStudioApply" type="button">이 모습으로 적용</button>
+            <button id="palStudioReset" type="button">처음 모습</button>
           </div>
-          <label for="characterNameInput">캐릭터 이름</label>
-          <input id="characterNameInput" type="text" maxlength="20" placeholder="예: 별이, 몽글이, 용용이" />
-          <div class="button-row">
-            <button class="primary" id="characterApply" disabled>이름까지 다시 적용</button>
-            <button id="characterReset">기본 캐릭터</button>
-          </div>
-          <p class="result character-step-note" id="characterResult">업로드하면 바로 2D 친구로 적용돼요. 실제 360도 제작은 ‘3D 준비’에서 진행합니다.</p>
+          <p class="result" id="palStudioResult">버튼을 누르면 홈 캐릭터에 바로 미리보기돼요.</p>
         </div>
 
-        <div class="view panel character-3d-panel" data-view="character-3d-prep">
-          <h1>캐릭터 3D 준비</h1>
-          <p class="panel-intro">정면은 필수예요. 측면·뒷면이 없으면 AI 추정 대상으로 기록합니다.</p>
-
-          <div class="turnaround-grid">
-            <label class="turnaround-card required" for="character3dFrontInput">
-              <strong>정면</strong><small>필수</small>
-              <img id="character3dFrontPreview" alt="캐릭터 정면 미리보기" hidden />
-              <span class="turnaround-placeholder">사진 선택</span>
-              <input id="character3dFrontInput" type="file" accept="image/*" />
-            </label>
-            <label class="turnaround-card" for="character3dSideInput">
-              <strong>측면</strong><small>선택</small>
-              <img id="character3dSidePreview" alt="캐릭터 측면 미리보기" hidden />
-              <span class="turnaround-placeholder">없으면 AI 추정</span>
-              <input id="character3dSideInput" type="file" accept="image/*" />
-            </label>
-            <label class="turnaround-card" for="character3dBackInput">
-              <strong>뒷면</strong><small>선택</small>
-              <img id="character3dBackPreview" alt="캐릭터 뒷면 미리보기" hidden />
-              <span class="turnaround-placeholder">없으면 AI 추정</span>
-              <input id="character3dBackInput" type="file" accept="image/*" />
-            </label>
+        <div class="view panel soul-panel" data-view="character-motion">
+          <h1>움직임·감정</h1>
+          <p class="panel-intro">정적인 이미지가 아니라 실제 애니메이션처럼 움직이는지 시험해요.</p>
+          <div class="motion-grid">
+            <button type="button" data-motion="wave">손 흔들기</button>
+            <button type="button" data-motion="jump">통통 뛰기</button>
+            <button type="button" data-motion="happy">기쁨</button>
+            <button type="button" data-motion="curious">궁금함</button>
+            <button type="button" data-motion="sleepy">졸림</button>
+            <button type="button" data-motion="pet">쓰다듬기</button>
           </div>
-
-          <button id="character3dUseCurrent" type="button">현재 2D 그림을 정면으로 사용</button>
-
-          <label for="character3dName">캐릭터 이름</label>
-          <input id="character3dName" type="text" maxlength="20" placeholder="예: 민트냥" />
-          <label for="character3dDescription">형태 설명</label>
-          <textarea id="character3dDescription" rows="2" placeholder="예: 큰 귀, 둥근 몸, 짧은 다리, 긴 꼬리"></textarea>
-
-          <div class="compact-fields">
-            <label>주 색상<input id="character3dColor" type="text" maxlength="30" placeholder="민트색" /></label>
-            <label>성격<input id="character3dPersonality" type="text" maxlength="60" placeholder="호기심, 다정함" /></label>
-          </div>
-
-          <div class="feature-checks">
-            <label><input id="character3dTail" type="checkbox" /> 꼬리 있음</label>
-            <label><input id="character3dWings" type="checkbox" /> 날개 있음</label>
-          </div>
-
-          <button class="primary full-button" id="character3dBuildJob" type="button">실제 3D 작업 요청 만들기</button>
-          <p class="result" id="character3dPrepResult">정면 이미지를 준비해 주세요.</p>
-        </div>
-
-        <div class="view panel character-3d-panel" data-view="character-3d-status">
-          <h1>3D 작업 상태</h1>
-          <section class="character-status-card" id="character3dStatusCard" data-status="none" aria-live="polite">
-            <strong id="character3dStatusTitle">아직 요청 전</strong>
-            <p id="character3dStatusDetail">3D 준비 화면에서 작업 요청을 만들어 주세요.</p>
+          <section class="soul-debug-card">
+            <div><span>기분</span><strong id="motionMoodValue">편안함</strong></div>
+            <div><span>에너지</span><strong id="motionEnergyValue">72%</strong></div>
+            <div><span>친밀도</span><strong id="motionClosenessValue">20%</strong></div>
           </section>
-          <dl class="job-summary">
-            <div><dt>캐릭터</dt><dd id="character3dStatusName">-</dd></div>
-            <div><dt>입력 각도</dt><dd id="character3dStatusViews">-</dd></div>
-            <div><dt>작업 ID</dt><dd id="character3dStatusJobId">-</dd></div>
-            <div><dt>결과 모델</dt><dd id="character3dStatusModel">없음</dd></div>
-          </dl>
-          <div class="button-row">
-            <button class="primary" id="character3dDownloadJob" disabled>job_v2.json</button>
-            <button id="character3dDownloadInputs" disabled>입력 그림 저장</button>
-          </div>
-          <p class="result">현재 웹은 작업 요청과 결과 확인을 담당하고, 실제 생성은 PC·NAS의 img2threejs 작업기가 담당합니다.</p>
+          <p class="result" id="motionResult">홈에서는 눈 깜빡임·호흡·시선 이동이 항상 작동합니다.</p>
         </div>
 
-        <div class="view panel character-3d-panel" data-view="character-3d-result">
-          <h1>실제 3D 결과</h1>
-          <div class="real-3d-empty" id="character3dResultEmpty">
-            <strong>가짜 2.5D는 표시하지 않아요</strong>
-            <p>PC·NAS에서 생성한 실제 GLB 파일만 360도로 확인합니다.</p>
-          </div>
-          <label class="upload-box compact-upload" for="character3dModelInput">
-            <span>실제 character.glb 선택</span>
-            <input id="character3dModelInput" type="file" accept=".glb,model/gltf-binary" />
-          </label>
-          <p class="model-file-name" id="character3dModelName">저장된 GLB 없음</p>
-          <div class="button-row">
-            <button class="primary" id="character3dOpenViewer" disabled>360도 결과 보기</button>
-            <button id="character3dClearModel" disabled>결과 삭제</button>
-          </div>
-          <p class="result" id="character3dResultMessage">GLB가 준비된 뒤에만 3D 뷰어가 열립니다.</p>
+        <div class="view panel soul-panel" data-view="character-personality">
+          <h1>성격과 말투</h1>
+          <p class="panel-intro">외형과 별개로 기억과 말투가 이 친구의 소울을 만듭니다.</p>
+
+          <fieldset class="option-group personality-options" data-option-group="personality">
+            <legend>기본 성격</legend>
+            <button type="button" data-value="gentle">다정함</button>
+            <button type="button" data-value="curious">호기심</button>
+            <button type="button" data-value="cheerful">명랑함</button>
+            <button type="button" data-value="calm">차분함</button>
+          </fieldset>
+
+          <fieldset class="option-group" data-option-group="speechStyle">
+            <legend>말투</legend>
+            <button type="button" data-value="warm">따뜻하게</button>
+            <button type="button" data-value="playful">장난스럽게</button>
+            <button type="button" data-value="calm">조용하게</button>
+          </fieldset>
+
+          <label for="palChildNameInput">아이를 부를 이름</label>
+          <input id="palChildNameInput" type="text" maxlength="12" placeholder="예: 하린아" />
+
+          <label for="palFavoriteTopicInput">좋아하는 이야기</label>
+          <input id="palFavoriteTopicInput" type="text" maxlength="40" placeholder="예: 공룡, 우주, 그림" />
+
+          <button class="primary full-button" id="palPersonalityApply" type="button">소울 설정 저장</button>
+          <p class="result" id="palPersonalityResult">설정에 따라 먼저 거는 말과 반응이 달라져요.</p>
         </div>
 
         <div class="view panel" data-view="talk">
@@ -171,7 +207,7 @@
           <label for="talkInput">PocketPal에게 말할 내용</label>
           <textarea id="talkInput" rows="4" placeholder="예: 오늘 학교에서 그림을 그렸어"></textarea>
           <button class="primary" id="talkButton">말 걸기</button>
-          <p class="result" id="talkResult">첫 버전은 간단한 로컬 반응을 사용해요.</p>
+          <p class="result" id="talkResult">소울 상태와 기억을 이용한 로컬 반응을 시험합니다.</p>
         </div>
 
         <div class="view panel" data-view="camera">
@@ -184,15 +220,25 @@
           </div>
         </div>
 
-        <div class="view panel" data-view="gift">
-          <h1>3D 선물</h1>
+        <div class="view panel gift-panel" data-view="gift">
+          <h1>그림 선물</h1>
+          <p class="panel-intro">아이가 그린 그림을 모자·얼굴·옷·배지·손 소품 슬롯에 얹는 첫 시험이에요.</p>
           <label class="upload-box" for="giftImage">
             <span>그림을 선택해 주세요</span>
             <input id="giftImage" type="file" accept="image/*" />
           </label>
           <img id="giftPreview" alt="선물 그림 미리보기" hidden />
-          <button class="primary" id="giftButton" disabled>선물 준비하기</button>
-          <p class="result" id="giftResult">현재는 업로드와 미리보기까지 구현했어요.</p>
+          <label for="giftSlot">어디에 선물할까요?</label>
+          <select id="giftSlot">
+            <option value="head">머리·모자</option>
+            <option value="face">얼굴 장식</option>
+            <option value="body">옷 앞면</option>
+            <option value="badge">배지</option>
+            <option value="hand">손 소품</option>
+          </select>
+          <button class="primary" id="giftButton" disabled>캐릭터에게 선물</button>
+          <button id="giftClear" disabled>선물 벗기기</button>
+          <p class="result" id="giftResult">현재는 배경 제거 전 원본을 슬롯에 올려 위치와 반응을 시험합니다.</p>
         </div>
 
         <div class="view panel" data-view="memory">
@@ -219,9 +265,9 @@
     </section>
   </main>
 
-  <script src="app.js?v=9"></script>
-  <script src="touch-fix.js?v=9"></script>
-  <script src="character-customizer.js?v=9"></script>
-  <script src="character-3d.js?v=9"></script>
+  <script src="app.js?v=10"></script>
+  <script src="touch-fix.js?v=10"></script>
+  <script src="soul-character.js?v=10"></script>
+  <script src="character-studio.js?v=10"></script>
 </body>
 </html>
