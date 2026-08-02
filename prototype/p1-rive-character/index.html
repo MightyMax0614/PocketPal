@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#edf0eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>PocketPal P1.7 Character Studio</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+  <script defer src="pocketpal-contract.js?v=1"></script>
+  <script defer src="app.js?v=1"></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="device">
+      <header class="topbar">
+        <div><span class="eyebrow">PocketPal P1.7</span><h1>Character Studio</h1></div>
+        <span id="engineStatus" class="status loading">준비 중</span>
+      </header>
+
+      <section class="stage-card">
+        <canvas id="riveCanvas" width="720" height="720" aria-label="PocketPal Rive 캐릭터"></canvas>
+        <div id="stageMessage" class="stage-message">
+          <strong>캐릭터 엔진을 준비하고 있어요</strong>
+          <span>최종 pocketpal.riv이 없으면 공식 샘플로 구조를 검증합니다.</span>
+        </div>
+        <span id="assetBadge" class="asset-badge">확인 중</span>
+      </section>
+
+      <section class="panel compact">
+        <div class="panel-title"><div><span class="eyebrow">Soul → Motion</span><h2>행동 시험</h2></div><button id="pauseButton" type="button" disabled>일시정지</button></div>
+        <div class="action-grid">
+          <button type="button" data-action="calm" disabled>편안함</button>
+          <button type="button" data-action="curious" disabled>궁금함</button>
+          <button type="button" data-action="happy" disabled>기쁨</button>
+          <button type="button" data-action="talk" disabled>말하기</button>
+          <button type="button" data-action="pet" disabled>쓰다듬기</button>
+          <button type="button" data-action="wave" disabled>손 흔들기</button>
+          <button type="button" data-action="jump" disabled>점프</button>
+          <button type="button" data-action="sleepy" disabled>졸림</button>
+        </div>
+        <p id="actionMessage" class="helper">PocketPal State Machine이 확인되면 버튼이 활성화됩니다.</p>
+      </section>
+
+      <section class="panel compact">
+        <div class="panel-title"><div><span class="eyebrow">Customization</span><h2>꾸미기 값 시험</h2></div></div>
+        <div class="custom-grid">
+          <label>얼굴<select data-style="face_style" disabled><option value="0">기본</option><option value="1">둥근 눈</option><option value="2">졸린 눈</option></select></label>
+          <label>모자<select data-style="hat_style" disabled><option value="0">없음</option><option value="1">비니</option><option value="2">왕관</option></select></label>
+          <label>옷<select data-style="outfit_style" disabled><option value="0">기본</option><option value="1">민트</option><option value="2">분홍</option></select></label>
+          <label>배지<select data-style="badge_style" disabled><option value="0">없음</option><option value="1">별</option><option value="2">하트</option></select></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title"><div><span class="eyebrow">Rig Contract</span><h2>제작 계약 검사</h2></div><span id="contractScore" class="score">0/14</span></div>
+        <div id="contractList" class="contract-list"></div>
+        <p id="contractMessage" class="helper">공식 샘플은 실패가 정상입니다. 전용 pocketpal.riv이 이 계약을 만족해야 합니다.</p>
+      </section>
+
+      <section class="panel compact">
+        <div class="panel-title"><div><span class="eyebrow">Asset</span><h2>Rive 파일 교체</h2></div></div>
+        <div class="asset-actions">
+          <label class="file-button" for="localFile">아이폰에서 pocketpal.riv 선택<input id="localFile" type="file" accept=".riv,application/octet-stream" /></label>
+          <button id="reloadLocal" type="button">저장소 파일 다시 확인</button>
+          <button id="loadFallback" type="button">공식 샘플 보기</button>
+        </div>
+        <a class="source-link" href="../assets/rive/pocketpal-base-body.svg" download>Rive 가져오기용 기본 바디 SVG</a>
+      </section>
+
+      <section class="panel compact">
+        <div class="panel-title"><div><span class="eyebrow">Build Status</span><h2>현재 단계</h2></div></div>
+        <ol class="milestones">
+          <li class="done">아이폰 Rive 실행 검증</li>
+          <li class="done">하얀 기본 바디 레이어 원본</li>
+          <li class="done">State Machine 입력 계약</li>
+          <li>Rive Editor 리깅 및 pocketpal.riv 내보내기</li>
+          <li>Soul Engine과 실사용 화면 통합</li>
+        </ol>
+      </section>
+
+      <footer>최종 외형이 아니라 Rive 캐릭터 제작·연동 검증 화면</footer>
+    </section>
+  </main>
+</body>
+</html>
