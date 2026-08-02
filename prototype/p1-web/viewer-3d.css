@@ -1,0 +1,101 @@
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Noto Sans KR", sans-serif;
+  color: #17353a;
+  background: #e8eeee;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+button, input { font: inherit; }
+button { touch-action: manipulation; }
+
+body {
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255,255,255,.95), transparent 42%),
+    linear-gradient(160deg, #dce7e8, #f4f2ed 58%, #d7dedf);
+}
+
+.viewer-shell {
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: max(10px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom));
+  gap: 10px;
+}
+
+.viewer-header {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewer-header div { min-width: 0; text-align: center; }
+.viewer-header strong, .viewer-header small { display: block; }
+.viewer-header strong { font-size: 14px; }
+.viewer-header small { margin-top: 2px; overflow: hidden; color: rgba(23,53,58,.62); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+
+button, .file-button {
+  border: 1px solid rgba(28,72,79,.15);
+  border-radius: 12px;
+  padding: 9px 11px;
+  background: rgba(255,255,255,.78);
+  color: #214c53;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 6px 15px rgba(30,70,78,.08);
+}
+
+button[aria-pressed="true"] { background: #327d87; color: #fff; }
+
+.viewer-canvas {
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(31,75,82,.18);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,.95), rgba(224,239,240,.65) 55%, rgba(191,211,214,.8));
+  box-shadow: inset 0 0 30px rgba(36,79,86,.08), 0 18px 35px rgba(30,65,72,.14);
+  touch-action: none;
+}
+
+.viewer-canvas canvas { display: block; width: 100%; height: 100%; }
+
+.viewer-panel {
+  border: 1px solid rgba(31,75,82,.14);
+  border-radius: 18px;
+  padding: 10px;
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 12px 28px rgba(30,65,72,.1);
+}
+
+.viewer-panel p { margin: 0; }
+#viewerStatus { font-size: 12px; font-weight: 800; }
+.viewer-warning { margin-top: 6px !important; font-size: 9px; line-height: 1.45; color: rgba(22,52,58,.68); }
+.viewer-help { margin-top: 7px !important; text-align: center; font-size: 9px; color: rgba(22,52,58,.56); }
+
+.viewer-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.file-button { display: grid; place-items: center; text-align: center; background: #327d87; color: #fff; }
+#viewerModelFile { display: none; }
+
+@media (max-height: 680px) {
+  .viewer-warning { display: none; }
+  .viewer-panel { padding: 8px; }
+  .viewer-header { min-height: 40px; }
+}
