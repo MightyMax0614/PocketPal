@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#e9ece8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>PocketPal Rive Lab</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+  <script defer src="https://unpkg.com/@rive-app/webgl2@2.36.0"></script>
+  <script defer src="app.js?v=1"></script>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="device" aria-label="PocketPal Rive 엔진 검증 시제품">
+      <header class="device-header">
+        <div>
+          <span class="eyebrow">PocketPal P1.5</span>
+          <h1>Rive Engine Lab</h1>
+        </div>
+        <div class="runtime-health">
+          <span id="healthDot" class="health-dot loading"></span>
+          <strong id="healthText">준비 중</strong>
+        </div>
+      </header>
+
+      <section class="character-stage" id="characterStage">
+        <canvas id="riveCanvas" aria-label="Rive 애니메이션 캔버스"></canvas>
+        <div class="stage-message" id="stageMessage">
+          <strong>Rive 런타임을 불러오는 중이에요</strong>
+          <span>CSS 캐릭터 대신 전문 리깅 파일을 실행합니다.</span>
+        </div>
+        <div class="fps-badge"><span id="fpsValue">--</span> FPS</div>
+      </section>
+
+      <section class="soul-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Soul → Motion</span>
+            <h2>소울 반응 시험</h2>
+          </div>
+          <button id="pauseButton" type="button">일시정지</button>
+        </div>
+        <div class="preset-grid">
+          <button type="button" data-soul="calm">편안함</button>
+          <button type="button" data-soul="curious">궁금함</button>
+          <button type="button" data-soul="happy">기쁨</button>
+          <button type="button" data-soul="talking">말하기</button>
+          <button type="button" data-soul="sleepy">졸림</button>
+          <button type="button" data-soul="pet">쓰다듬기</button>
+        </div>
+        <p id="soulMessage" class="helper-text">샘플 파일에서는 가능한 입력만 자동으로 연결합니다.</p>
+      </section>
+
+      <section class="asset-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Animation Asset</span>
+            <h2>Rive 파일 바꾸기</h2>
+          </div>
+        </div>
+
+        <div class="sample-grid">
+          <button id="loadSkills" class="sample-card selected" type="button">
+            <strong>상태 머신 샘플</strong>
+            <span>공식 skills.riv</span>
+          </button>
+          <button id="loadVehicles" class="sample-card" type="button">
+            <strong>렌더링 샘플</strong>
+            <span>공식 vehicles.riv</span>
+          </button>
+        </div>
+
+        <label class="file-picker" for="localRiveFile">
+          <strong>내 .riv 파일 열기</strong>
+          <span>아이폰 파일 앱에서 바로 선택</span>
+          <input id="localRiveFile" type="file" accept=".riv,application/octet-stream" />
+        </label>
+
+        <div class="selection-grid">
+          <label>
+            <span>Artboard</span>
+            <select id="artboardSelect" disabled><option>파일을 먼저 불러오세요</option></select>
+          </label>
+          <label>
+            <span>State Machine</span>
+            <select id="machineSelect" disabled><option>파일을 먼저 불러오세요</option></select>
+          </label>
+        </div>
+
+        <button id="applyMachine" class="primary-button" type="button" disabled>선택한 상태 머신 실행</button>
+      </section>
+
+      <section class="inspector-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Runtime Inspector</span>
+            <h2>입력값 검사</h2>
+          </div>
+          <span id="bindingBadge" class="binding-badge">확인 전</span>
+        </div>
+        <div id="inputInspector" class="input-inspector">
+          <p class="empty-state">상태 머신을 불러오면 Number·Boolean·Trigger 입력이 여기에 표시됩니다.</p>
+        </div>
+      </section>
+
+      <section class="event-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">Event Log</span>
+            <h2>실행 기록</h2>
+          </div>
+          <button id="clearLog" type="button">지우기</button>
+        </div>
+        <ol id="eventLog" class="event-log" aria-live="polite"></ol>
+      </section>
+
+      <footer class="device-footer">
+        <strong>엔진 검증용</strong>
+        <span>최종 PocketPal 캐릭터는 전용 .riv 파일로 교체합니다.</span>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
