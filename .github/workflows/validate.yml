@@ -1,0 +1,40 @@
+name: Validate PocketPal
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate Python bridge
+        run: python -m py_compile tools/img2threejs_bridge.py
+
+      - name: Validate classic JavaScript
+        run: |
+          node --check prototype/p1-web/app.js
+          node --check prototype/p1-web/touch-fix.js
+          node --check prototype/p1-web/character-customizer.js
+          node --check prototype/p1-web/job-manager.js
+
+      - name: Validate module JavaScript
+        run: |
+          cp prototype/p1-web/viewer-3d.js /tmp/viewer-3d.mjs
+          node --check /tmp/viewer-3d.mjs
+
+      - name: Validate JSON examples
+        run: python -m json.tool prototype/assets/jobs/example-job.json > /dev/null
