@@ -34,6 +34,9 @@ jobs:
           grep -q "prototype/p1-rive-character/" index.html
           grep -q "PocketPalState" prototype/p1-rive-character/pocketpal-contract.js
           grep -q "pocketpal.riv" prototype/p1-rive-character/app.js
+          grep -q "basePreview" prototype/p1-rive-character/index.html
+          grep -q "showBaseBody" prototype/p1-rive-character/app.js
+          grep -q "Rive 엔진 샘플 보기" prototype/p1-rive-character/index.html
           python -m json.tool prototype/assets/rive/pocketpal-rig-contract.json > /dev/null
           python - <<'PY'
           import xml.etree.ElementTree as ET
