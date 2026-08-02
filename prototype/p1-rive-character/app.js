@@ -7,7 +7,9 @@
     `https://unpkg.com/@rive-app/canvas-single@${VERSION}/rive.js`,
     `https://cdn.jsdelivr.net/npm/@rive-app/canvas-single@${VERSION}/rive.js`
   ];
+
   const canvas = document.querySelector("#riveCanvas");
+  const basePreview = document.querySelector("#basePreview");
   const stageMessage = document.querySelector("#stageMessage");
   const engineStatus = document.querySelector("#engineStatus");
   const assetBadge = document.querySelector("#assetBadge");
@@ -35,6 +37,29 @@
     engineStatus.textContent = text;
   }
 
+  function showBaseBody() {
+    try { rive?.cleanup(); } catch (error) { console.warn(error); }
+    rive = null;
+    activeMachine = "";
+    activeInputs = [];
+    paused = false;
+    canvas.classList.add("hidden");
+    basePreview.classList.remove("hidden");
+    pauseButton.disabled = true;
+    pauseButton.textContent = "일시정지";
+    document.querySelectorAll("[data-action], [data-style]").forEach((item) => { item.disabled = true; });
+    assetBadge.textContent = "하얀 기본 바디 · 리깅 전";
+    status("ready", "기본 바디 표시");
+    showStage("하얀 기본 바디", "움직임은 pocketpal.riv 리깅 후 활성화됩니다.", false);
+    actionMessage.textContent = "현재는 승인한 하얀 기본 바디 원본입니다. 아직 Rive 동작은 연결되지 않았어요.";
+    renderContract(false, "base");
+  }
+
+  function showRiveCanvas() {
+    basePreview.classList.add("hidden");
+    canvas.classList.remove("hidden");
+  }
+
   function cleanup() {
     try { rive?.cleanup(); } catch (error) { console.warn(error); }
     rive = null;
@@ -56,7 +81,11 @@
       script.src = url;
       script.async = true;
       script.onload = () => { clearTimeout(timer); resolve(); };
-      script.onerror = () => { clearTimeout(timer); script.remove(); reject(new Error(`런타임 실패: ${url}`)); };
+      script.onerror = () => {
+        clearTimeout(timer);
+        script.remove();
+        reject(new Error(`런타임 실패: ${url}`));
+      };
       document.head.append(script);
     });
   }
@@ -94,7 +123,7 @@
     return `Type ${input.type}`;
   }
 
-  function renderContract(isPocketPal) {
+  function renderContract(isPocketPal, mode = "rive") {
     contractList.innerHTML = "";
     const byName = new Map(activeInputs.map((item) => [item.name, item]));
     let passed = 0;
@@ -117,11 +146,15 @@
 
     contractScore.textContent = `${passed}/${contract.inputs.length}`;
     contractScore.classList.toggle("good", passed === contract.inputs.length);
-    contractMessage.textContent = passed === contract.inputs.length
-      ? "PocketPal 리그 계약을 모두 만족했습니다. 소울과 꾸미기 제어가 활성화됐어요."
-      : isPocketPal
-        ? "일부 입력이 빠졌습니다. Rive Editor에서 계약 이름과 타입을 맞춰야 합니다."
-        : "현재는 공식 대체 샘플입니다. 전용 pocketpal.riv을 열면 실제 계약을 검사합니다.";
+    if (passed === contract.inputs.length) {
+      contractMessage.textContent = "PocketPal 리그 계약을 모두 만족했습니다. 소울과 꾸미기 제어가 활성화됐어요.";
+    } else if (isPocketPal) {
+      contractMessage.textContent = "일부 입력이 빠졌습니다. Rive Editor에서 계약 이름과 타입을 맞춰야 합니다.";
+    } else if (mode === "base") {
+      contractMessage.textContent = "현재는 리깅 전 하얀 기본 바디입니다. pocketpal.riv 제작 후 14개 입력을 검사합니다.";
+    } else {
+      contractMessage.textContent = "진단용 공식 Rive 샘플입니다. PocketPal 캐릭터 계약과는 무관합니다.";
+    }
     return passed === contract.inputs.length;
   }
 
@@ -194,19 +227,17 @@
           layout: new window.rive.Layout({ fit: window.rive.Fit.Contain, alignment: window.rive.Alignment.Center }),
           onLoad: () => {
             if (token !== loadToken) return;
+            showRiveCanvas();
             try { rive.resizeDrawingSurfaceToCanvas(); } catch (error) { console.warn(error); }
             activeMachine = meta.isPocketPal ? contract.stateMachine : "";
             try { activeInputs = activeMachine ? rive.stateMachineInputs(activeMachine) || [] : []; }
             catch (error) { activeInputs = []; }
-            const complete = renderContract(meta.isPocketPal);
+            const complete = renderContract(meta.isPocketPal, meta.isPocketPal ? "pocketpal" : "sample");
             setControls(complete);
             pauseButton.disabled = false;
             assetBadge.textContent = meta.label;
-            status("ready", "실행 중");
-            showStage(meta.label, meta.isPocketPal ? "PocketPal 캐릭터 리그를 실행 중입니다." : "공식 샘플로 Rive 엔진을 실행 중입니다.", false);
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              if (token === loadToken) status("ready", "실행 성공");
-            }));
+            status("ready", "실행 성공");
+            showStage(meta.label, meta.isPocketPal ? "PocketPal 캐릭터 리그를 실행 중입니다." : "Rive 엔진 진단용 공식 샘플입니다.", false);
             if (!settled) {
               settled = true;
               clearTimeout(timer);
@@ -236,16 +267,27 @@
       if (token !== loadToken) return;
       status("error", "로드 실패");
       showStage("캐릭터 파일을 열지 못했어요", String(error.message || error), true);
-      renderContract(false);
+      renderContract(false, "sample");
       throw error;
     }
   }
 
-  async function loadPocketPalOrFallback() {
+  async function loadPocketPalOrBase() {
+    const token = ++loadToken;
+    cleanup();
+    status("loading", "전용 파일 확인 중");
+    assetBadge.textContent = "pocketpal.riv 확인 중";
+    showStage("PocketPal 캐릭터 확인", "저장소의 전용 Rive 파일을 확인하고 있어요.", true);
     try {
-      await loadUrl(`${contract.localAsset}?v=${Date.now()}`, { label: "pocketpal.riv", isPocketPal: true });
+      const buffer = await fetchBuffer(`${contract.localAsset}?v=${Date.now()}`, 6000);
+      if (token !== loadToken) return;
+      await ensureRuntime();
+      if (token !== loadToken) return;
+      await instantiate(buffer, { label: "pocketpal.riv", isPocketPal: true }, token);
     } catch (error) {
-      await loadUrl(contract.fallbackAsset, { label: "공식 대체 샘플", isPocketPal: false });
+      if (token !== loadToken) return;
+      console.info("pocketpal.riv not ready; showing base body", error);
+      showBaseBody();
     }
   }
 
@@ -262,6 +304,7 @@
     } catch (error) {
       status("error", "파일 오류");
       showStage("선택한 파일을 열지 못했어요", String(error.message || error), true);
+      showBaseBody();
     }
   }
 
@@ -280,8 +323,10 @@
     const file = localFile.files?.[0];
     if (file) loadFile(file);
   });
-  document.querySelector("#reloadLocal").addEventListener("click", loadPocketPalOrFallback);
-  document.querySelector("#loadFallback").addEventListener("click", () => loadUrl(contract.fallbackAsset, { label: "공식 대체 샘플", isPocketPal: false }));
+  document.querySelector("#reloadLocal").addEventListener("click", loadPocketPalOrBase);
+  document.querySelector("#loadFallback").addEventListener("click", () => {
+    loadUrl(contract.fallbackAsset, { label: "Rive 엔진 샘플 · 진단용", isPocketPal: false }).catch(showBaseBody);
+  });
   pauseButton.addEventListener("click", () => {
     if (!rive) return;
     paused = !paused;
@@ -298,6 +343,6 @@
   }
   window.addEventListener("beforeunload", cleanup);
 
-  renderContract(false);
-  loadPocketPalOrFallback();
+  renderContract(false, "base");
+  loadPocketPalOrBase();
 })();
