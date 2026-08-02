@@ -21,11 +21,15 @@
 
   const guide = document.createElement("div");
   guide.className = "mobile-wheel-guide";
-  guide.textContent = "휠을 크게 원으로 돌리거나 ◀ ▶를 톡 눌러도 돼";
+  guide.textContent = "페이지는 움직이지 않아. 휠만 크게 원으로 돌려줘";
   controlsElement.prepend(guide);
 
   if (coarsePointer && homeHint) {
-    homeHint.textContent = "휠을 크게 원으로 돌리거나 ◀ ▶를 눌러줘";
+    homeHint.textContent = "페이지는 고정돼 있어. 휠을 크게 원으로 돌려줘";
+  }
+
+  function stopBrowserGesture(event) {
+    if (event.cancelable) event.preventDefault();
   }
 
   function showGuide() {
@@ -101,7 +105,7 @@
   function onPointerDown(event) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
 
-    event.preventDefault();
+    stopBrowserGesture(event);
     event.stopImmediatePropagation();
 
     activePointerId = event.pointerId;
@@ -120,7 +124,7 @@
   function onPointerMove(event) {
     if (activePointerId !== event.pointerId) return;
 
-    event.preventDefault();
+    stopBrowserGesture(event);
     event.stopImmediatePropagation();
 
     const dx = event.clientX - previousX;
@@ -131,7 +135,6 @@
 
     const geometry = wheelGeometry(event);
 
-    // 중앙 버튼 근처에서는 각도가 급변하므로 회전 입력에서 제외한다.
     if (geometry.radius < geometry.wheelRadius * 0.22) {
       previousAngle = geometry.angle;
       return;
@@ -140,7 +143,6 @@
     let delta = normalizeDelta(geometry.angle - previousAngle);
     previousAngle = geometry.angle;
 
-    // 손가락이 순간적으로 중심을 가로지를 때 생기는 큰 점프를 억제한다.
     delta = Math.max(-32, Math.min(32, delta));
     accumulatedAngle += delta;
     visualAngle += delta;
@@ -157,7 +159,7 @@
   function releasePointer(event) {
     if (activePointerId !== event.pointerId) return;
 
-    event.preventDefault();
+    stopBrowserGesture(event);
     event.stopImmediatePropagation();
 
     if (totalMovement < 10) {
@@ -173,15 +175,27 @@
     wheelElement.classList.remove("is-touching");
   }
 
-  wheelElement.addEventListener("pointerdown", onPointerDown, { capture: true });
-  wheelElement.addEventListener("pointermove", onPointerMove, { capture: true });
-  wheelElement.addEventListener("pointerup", releasePointer, { capture: true });
-  wheelElement.addEventListener("pointercancel", releasePointer, { capture: true });
+  wheelElement.addEventListener("pointerdown", onPointerDown, { capture: true, passive: false });
+  wheelElement.addEventListener("pointermove", onPointerMove, { capture: true, passive: false });
+  wheelElement.addEventListener("pointerup", releasePointer, { capture: true, passive: false });
+  wheelElement.addEventListener("pointercancel", releasePointer, { capture: true, passive: false });
 
-  // iOS Safari가 휠 동작을 페이지 스크롤로 해석하지 않도록 막는다.
-  wheelElement.addEventListener(
+  // iOS Safari가 휠 동작을 스크롤, 당겨서 새로고침, 확대 제스처로 해석하지 못하게 한다.
+  document.addEventListener(
     "touchmove",
-    (event) => event.preventDefault(),
+    (event) => {
+      if (activePointerId !== null) stopBrowserGesture(event);
+    },
     { passive: false, capture: true }
   );
+
+  wheelElement.addEventListener("touchstart", stopBrowserGesture, { passive: false, capture: true });
+  wheelElement.addEventListener("touchmove", stopBrowserGesture, { passive: false, capture: true });
+  wheelElement.addEventListener("gesturestart", stopBrowserGesture, { passive: false, capture: true });
+  wheelElement.addEventListener("gesturechange", stopBrowserGesture, { passive: false, capture: true });
+
+  // Safari가 주소창 높이를 바꾸더라도 문서 위치는 항상 0으로 유지한다.
+  window.addEventListener("scroll", () => {
+    if (window.scrollX !== 0 || window.scrollY !== 0) window.scrollTo(0, 0);
+  }, { passive: true });
 })();
