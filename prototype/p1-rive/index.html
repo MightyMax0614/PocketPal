@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>PocketPal Rive Lab</title>
 
-  <!-- 외부 CSS가 늦게 와도 빈 화면이 되지 않게 하는 최소 안전 스타일 -->
+  <!-- 외부 파일이 늦게 와도 빈 화면이 되지 않게 하는 최소 안전 스타일 -->
   <style>
     html, body { margin: 0; min-height: 100%; background: #e2e6e2; color: #1d2828; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif; }
     #bootSafety { margin: 16px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,.9); box-shadow: 0 12px 35px rgba(30,45,42,.12); }
@@ -18,24 +18,25 @@
     html.app-painted #bootSafety { display: none; }
   </style>
 
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
   <script>
     window.addEventListener("error", function (event) {
       var box = document.getElementById("bootSafety");
       var detail = document.getElementById("bootSafetyDetail");
-      if (box) box.style.display = "block";
+      document.documentElement.classList.remove("app-painted");
+      if (box) box.style.setProperty("display", "block", "important");
       if (detail) detail.textContent = "오류: " + (event.message || "알 수 없는 초기화 오류");
     });
   </script>
 
-  <!-- iPhone Safari 안정성 검증을 위해 WebGL2 대신 Canvas 런타임 사용 -->
-  <script defer src="https://unpkg.com/@rive-app/canvas@2.36.0" onerror="document.getElementById('bootSafetyDetail').textContent='Rive Canvas 런타임을 받지 못했어요. 인터넷 연결 후 다시 시도해 주세요.'"></script>
-  <script defer src="app.js?v=2"></script>
+  <!-- WASM이 JS 안에 포함된 single 런타임: iPhone에서 별도 WASM 요청을 제거 -->
+  <script defer src="https://unpkg.com/@rive-app/canvas-single@2.36.0" onerror="document.documentElement.classList.remove('app-painted');document.getElementById('bootSafety').style.setProperty('display','block','important');document.getElementById('bootSafetyDetail').textContent='Rive 단일 파일 런타임을 받지 못했어요. 인터넷 연결 후 다시 시도해 주세요.'"></script>
+  <script defer src="app.js?v=3"></script>
 </head>
 <body>
   <section id="bootSafety" aria-live="polite">
     <strong>PocketPal P1.5 준비 중</strong>
-    <span id="bootSafetyDetail">화면과 Rive Canvas 런타임을 불러오고 있어요.</span>
+    <span id="bootSafetyDetail">별도 WASM 요청이 없는 Rive 런타임을 불러오고 있어요.</span>
     <button type="button" onclick="location.reload()">다시 불러오기</button>
   </section>
 
@@ -55,8 +56,8 @@
       <section class="character-stage" id="characterStage">
         <canvas id="riveCanvas" width="720" height="720" aria-label="Rive 애니메이션 캔버스"></canvas>
         <div class="stage-message" id="stageMessage">
-          <strong>Rive Canvas 런타임을 불러오는 중이에요</strong>
-          <span>CSS 캐릭터 대신 전문 리깅 파일을 실행합니다.</span>
+          <strong>Rive 단일 파일 런타임을 불러오는 중이에요</strong>
+          <span>첫 실행도 정상이라면 몇 초 안에 완료됩니다.</span>
         </div>
         <div class="fps-badge"><span id="fpsValue">--</span> FPS</div>
       </section>
@@ -154,6 +155,32 @@
     requestAnimationFrame(function () {
       document.documentElement.classList.add("app-painted");
     });
+
+    // skills.riv가 네트워크에서 오래 멈추면 더 단순한 공식 샘플로 자동 전환한다.
+    window.setTimeout(function () {
+      var health = document.getElementById("healthText");
+      var detail = document.getElementById("bootSafetyDetail");
+      if (!health || health.textContent === "실행 중") return;
+      if (detail) detail.textContent = "첫 샘플이 늦어 더 작은 공식 샘플로 자동 전환합니다.";
+      document.getElementById("loadVehicles")?.click();
+    }, 8000);
+
+    // 18초가 지나도 실행되지 않으면 기다리게 하지 않고 명확한 오류를 표시한다.
+    window.setTimeout(function () {
+      var health = document.getElementById("healthText");
+      if (!health || health.textContent === "실행 중") return;
+      health.textContent = "네트워크 지연";
+      var strong = document.querySelector("#stageMessage strong");
+      var span = document.querySelector("#stageMessage span");
+      if (strong) strong.textContent = "Rive 샘플을 받지 못했어요";
+      if (span) span.textContent = "계속 기다릴 필요는 없어요. 아래에서 다시 불러오거나 로컬 .riv 파일을 선택해 주세요.";
+      document.getElementById("stageMessage")?.classList.remove("hidden");
+      document.documentElement.classList.remove("app-painted");
+      var box = document.getElementById("bootSafety");
+      var detail = document.getElementById("bootSafetyDetail");
+      if (box) box.style.setProperty("display", "block", "important");
+      if (detail) detail.textContent = "18초 안에 샘플을 받지 못했습니다. Safari를 다시 열거나 다른 네트워크에서 시험해 주세요.";
+    }, 18000);
   </script>
 </body>
 </html>
