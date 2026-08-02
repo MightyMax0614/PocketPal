@@ -46,8 +46,8 @@
 
 .character-preview-frame {
   display: grid;
-  min-height: 104px;
-  margin: 8px 0;
+  min-height: 92px;
+  margin: 7px 0;
   place-items: center;
   overflow: hidden;
   border: 1px solid rgba(45, 75, 85, 0.16);
@@ -64,7 +64,7 @@
 
 #characterPreview {
   width: 100%;
-  height: 110px;
+  height: 96px;
   object-fit: contain;
 }
 
@@ -84,13 +84,42 @@
 }
 
 .character-panel .button-row {
-  margin-top: 2px;
+  margin-top: 5px;
 }
 
 .character-panel .button-row button {
   flex: 1;
-  padding-inline: 7px;
-  font-size: 10px;
+  min-height: 32px;
+  padding: 7px 5px;
+  font-size: 9px;
+}
+
+.character-status-card {
+  margin-top: 7px;
+  padding: 8px 9px;
+  border: 1px solid rgba(58, 94, 102, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 5px 12px rgba(42, 70, 76, 0.07);
+}
+
+.character-status-card p {
+  margin: 0;
+  font-size: 9px;
+  line-height: 1.45;
+  font-weight: 750;
+  color: rgba(26, 58, 64, 0.72);
+}
+
+.character-status-card p + p { margin-top: 2px; }
+.character-status-card[data-status="queued"] { border-color: rgba(63, 114, 180, 0.32); background: rgba(226, 239, 255, 0.78); }
+.character-status-card[data-status="processing"] { border-color: rgba(46, 139, 143, 0.35); background: rgba(224, 246, 245, 0.8); }
+.character-status-card[data-status="done"] { border-color: rgba(54, 139, 88, 0.34); background: rgba(228, 247, 234, 0.82); }
+.character-status-card[data-status="failed"] { border-color: rgba(190, 95, 60, 0.35); background: rgba(255, 235, 226, 0.82); }
+
+.character-export-actions button {
+  background: rgba(255, 255, 255, 0.68);
+  font-size: 8px !important;
 }
 
 .character-step-note {
