@@ -29,6 +29,10 @@ jobs:
       - name: Validate active P1.8 Godot project
         run: |
           grep -q "PocketPal P1.8" prototype/p1-godot/main.tscn
+          grep -q "prototype/p1-godot-web/" index.html
+          grep -q "GODOT_THREADS_ENABLED = false" prototype/p1-godot-web/index.html
+          test -f prototype/p1-godot-web/index.wasm
+          test -f prototype/p1-godot-web/index.pck
           grep -q "play_pet" prototype/p1-godot/scripts/character.gd
           grep -q "cycle_hat" prototype/p1-godot/scripts/character.gd
           python - <<'PY'
@@ -50,7 +54,6 @@ jobs:
           node --check prototype/p1-rive-character/app.js
           node --check prototype/p1-rive-character/pocketpal-contract.js
           grep -q "PocketPal P1.7" prototype/p1-rive-character/index.html
-          grep -q "prototype/p1-rive-character/" index.html
           grep -q "PocketPalState" prototype/p1-rive-character/pocketpal-contract.js
           grep -q "pocketpal.riv" prototype/p1-rive-character/app.js
           grep -q "basePreview" prototype/p1-rive-character/index.html
