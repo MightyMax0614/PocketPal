@@ -26,18 +26,31 @@ jobs:
           python -m py_compile tools/img2threejs_bridge.py
           python -m py_compile tools/character_job_v2_adapter.py
 
-      - name: Validate classic JavaScript
+      - name: Validate active P1.4 JavaScript
         run: |
           node --check prototype/p1-web/app.js
           node --check prototype/p1-web/touch-fix.js
+          node --check prototype/p1-web/soul-character.js
+          node --check prototype/p1-web/character-studio.js
+
+      - name: Validate retained research JavaScript
+        run: |
           node --check prototype/p1-web/character-customizer.js
           node --check prototype/p1-web/character-3d.js
           node --check prototype/p1-web/job-manager.js
-
-      - name: Validate module JavaScript
-        run: |
           cp prototype/p1-web/viewer-3d.js /tmp/viewer-3d.mjs
           node --check /tmp/viewer-3d.mjs
+
+      - name: Validate active P1.4 entry
+        run: |
+          grep -q "PocketPal P1.4" prototype/p1-web/index.html
+          grep -q "soul-character.js" prototype/p1-web/index.html
+          grep -q "character-studio.js" prototype/p1-web/index.html
+          grep -q "base-body-v01.css" prototype/p1-web/index.html
+          if grep -q "character-3d.js" prototype/p1-web/index.html; then
+            echo "P1.4 must not load the 3D workflow in the main UI"
+            exit 1
+          fi
 
       - name: Validate JSON examples
         run: |
