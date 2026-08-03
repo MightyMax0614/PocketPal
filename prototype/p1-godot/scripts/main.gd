@@ -1,9 +1,9 @@
 extends Control
 
 @onready var character = $Character
-@onready var speech: Label = $SpeechBubble
 @onready var auto_timer: Timer = $AutoTimer
 
+var web_action_callback
 var auto_lines := [
     ["curious", "지금 뭐 보고 있어? 나도 궁금해."],
     ["wave", "여기 있어! 잠깐 나 봐줘."],
@@ -12,27 +12,26 @@ var auto_lines := [
 ]
 
 func _ready() -> void:
-    var buttons := {
-        "calm": $BottomPanel/Margin/VBox/Buttons/Calm,
-        "curious": $BottomPanel/Margin/VBox/Buttons/Curious,
-        "happy": $BottomPanel/Margin/VBox/Buttons/Happy,
-        "talk": $BottomPanel/Margin/VBox/Buttons/Talk,
-        "pet": $BottomPanel/Margin/VBox/Buttons/Pet,
-        "wave": $BottomPanel/Margin/VBox/Buttons/Wave,
-        "jump": $BottomPanel/Margin/VBox/Buttons/Jump,
-        "sleepy": $BottomPanel/Margin/VBox/Buttons/Sleepy,
-        "face": $BottomPanel/Margin/VBox/Buttons/Face,
-        "hat": $BottomPanel/Margin/VBox/Buttons/Hat,
-        "outfit": $BottomPanel/Margin/VBox/Buttons/Outfit,
-        "badge": $BottomPanel/Margin/VBox/Buttons/Badge
-    }
-    for action in buttons:
-        buttons[action].pressed.connect(_on_action.bind(action))
     character.petted.connect(func(): _say("헤헤, 쓰다듬어 줘서 좋아."))
     auto_timer.timeout.connect(_on_auto_timer)
     auto_timer.wait_time = randf_range(10.0, 16.0)
     auto_timer.start()
-    _say("안녕. 나는 아직 하얀 기본 모습이야. 같이 나를 만들어 줘.")
+    _register_web_bridge()
+    _say("안녕. 나는 아직 아무것도 꾸미지 않은 하얀 모습이야.")
+
+func _register_web_bridge() -> void:
+    if not OS.has_feature("web"):
+        return
+    web_action_callback = JavaScriptBridge.create_callback(_on_web_action)
+    var window = JavaScriptBridge.get_interface("window")
+    if window:
+        window.__pocketpalReceiveAction = web_action_callback
+    JavaScriptBridge.eval("window.pocketpalBridgeReady && window.pocketpalBridgeReady();")
+
+func _on_web_action(arguments: Array) -> void:
+    if arguments.is_empty():
+        return
+    _on_action(str(arguments[0]))
 
 func _on_action(action: String) -> void:
     match action:
@@ -82,4 +81,7 @@ func _on_auto_timer() -> void:
     auto_timer.start()
 
 func _say(text: String) -> void:
-    speech.text = text
+    if OS.has_feature("web"):
+        JavaScriptBridge.eval("window.pocketpalSetSpeech && window.pocketpalSetSpeech(%s);" % JSON.stringify(text))
+    else:
+        print(text)
