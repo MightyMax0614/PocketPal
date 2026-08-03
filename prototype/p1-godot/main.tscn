@@ -1,3 +1,4 @@
+; PocketPal P1.8.1 character-only canvas
 [gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
@@ -30,32 +31,9 @@ grow_vertical = 2
 color = Color(0.91, 0.93, 0.91, 1)
 mouse_filter = 2
 
-[node name="Title" type="Label" parent="."]
-layout_mode = 0
-offset_left = 22.0
-offset_top = 18.0
-offset_right = 330.0
-offset_bottom = 48.0
-theme_override_colors/font_color = Color(0.15, 0.22, 0.21, 1)
-theme_override_font_sizes/font_size = 20
-text = "PocketPal P1.8 · Godot Free"
-
-[node name="SpeechBubble" type="Label" parent="."]
-layout_mode = 0
-offset_left = 38.0
-offset_top = 58.0
-offset_right = 442.0
-offset_bottom = 108.0
-theme_override_colors/font_color = Color(0.19, 0.28, 0.26, 1)
-theme_override_font_sizes/font_size = 14
-text = "안녕. 나는 아직 하얀 기본 모습이야."
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
 [node name="Character" type="Node2D" parent="."]
-position = Vector2(240, 104)
-scale = Vector2(0.64, 0.64)
+position = Vector2(240, 118)
+scale = Vector2(0.56, 0.56)
 script = ExtResource("2_character")
 
 [node name="Shadow" type="Sprite2D" parent="Character"]
@@ -77,16 +55,16 @@ position = Vector2(0, 92)
 texture = ExtResource("9_leg")
 
 [node name="ArmLeftPivot" type="Node2D" parent="Character"]
-position = Vector2(-103, 211)
-rotation = 0.0523599
+position = Vector2(-98, 210)
+rotation = 0.035
 
 [node name="Sprite" type="Sprite2D" parent="Character/ArmLeftPivot"]
 position = Vector2(0, 111)
 texture = ExtResource("8_arm")
 
 [node name="ArmRightPivot" type="Node2D" parent="Character"]
-position = Vector2(103, 211)
-rotation = -0.0523599
+position = Vector2(98, 210)
+rotation = -0.035
 
 [node name="Sprite" type="Sprite2D" parent="Character/ArmRightPivot"]
 position = Vector2(0, 111)
@@ -115,88 +93,6 @@ texture = ExtResource("5_head")
 
 [node name="Face" type="Node2D" parent="Character/HeadPivot"]
 script = ExtResource("3_face")
-
-[node name="BottomPanel" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -178.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Margin" type="MarginContainer" parent="BottomPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="VBox" type="VBoxContainer" parent="BottomPanel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 7
-
-[node name="Hint" type="Label" parent="BottomPanel/Margin/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.32, 0.42, 0.4, 1)
-theme_override_font_sizes/font_size = 11
-text = "몸을 누르면 쓰다듬기 · 손가락 위치를 눈으로 따라봄"
-horizontal_alignment = 1
-
-[node name="Buttons" type="GridContainer" parent="BottomPanel/Margin/VBox"]
-layout_mode = 2
-columns = 4
-theme_override_constants/h_separation = 6
-theme_override_constants/v_separation = 6
-
-[node name="Calm" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-custom_minimum_size = Vector2(0, 34)
-layout_mode = 2
-text = "편안함"
-
-[node name="Curious" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "궁금함"
-
-[node name="Happy" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "기쁨"
-
-[node name="Talk" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "말하기"
-
-[node name="Pet" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "쓰다듬기"
-
-[node name="Wave" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "손 흔들기"
-
-[node name="Jump" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "점프"
-
-[node name="Sleepy" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "졸림"
-
-[node name="Face" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "얼굴"
-
-[node name="Hat" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "모자"
-
-[node name="Outfit" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "옷"
-
-[node name="Badge" type="Button" parent="BottomPanel/Margin/VBox/Buttons"]
-layout_mode = 2
-text = "배지"
 
 [node name="AutoTimer" type="Timer" parent="."]
 one_shot = true
