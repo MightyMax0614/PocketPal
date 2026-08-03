@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#e9eeea">
+  <title>$GODOT_PROJECT_NAME</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#23302e;background:#0b0b0b}
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0b0b0b}
+    body{touch-action:none;-webkit-user-select:none;user-select:none}
+    #app{position:fixed;inset:0;display:grid;place-items:center;padding:max(0px,env(safe-area-inset-top)) 0 max(0px,env(safe-area-inset-bottom))}
+    #stage{position:relative;width:min(100vw,480px);height:min(100dvh,640px);max-height:100dvh;overflow:hidden;background:linear-gradient(180deg,#eef2ee,#e2e8e3);box-shadow:0 0 50px rgba(0,0,0,.35)}
+    #canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:0}
+    .ui{position:absolute;inset:0;pointer-events:none;z-index:5}
+    .top{position:absolute;left:18px;right:18px;top:max(14px,env(safe-area-inset-top));display:grid;gap:9px}
+    .version{font-size:13px;font-weight:800;letter-spacing:.04em;color:#41514e}
+    #speech{min-height:48px;padding:12px 15px;border:1px solid rgba(43,69,64,.10);border-radius:17px;background:rgba(255,255,255,.78);box-shadow:0 8px 24px rgba(50,69,65,.08);backdrop-filter:blur(12px);font-size:15px;font-weight:650;line-height:1.45;text-align:center}
+    .panel{position:absolute;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));padding:10px;border:1px solid rgba(41,64,60,.12);border-radius:22px;background:rgba(248,249,247,.88);box-shadow:0 14px 30px rgba(42,58,55,.13);backdrop-filter:blur(16px);pointer-events:auto}
+    .hint{margin:0 0 8px;color:#687672;font-size:11px;text-align:center}
+    .buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+    button{min-height:38px;border:1px solid rgba(46,78,73,.12);border-radius:12px;background:#fff;color:#2a3b38;font:inherit;font-size:12px;font-weight:750;-webkit-tap-highlight-color:transparent}
+    button:active{transform:scale(.97);background:#e9f3f0}
+    #status{position:absolute;inset:0;display:grid;place-items:center;background:#e9eeea;z-index:20}
+    #status-card{width:min(280px,80%);display:grid;gap:12px;text-align:center;color:#41504e;font-size:13px}
+    #status-progress{width:100%}#status-notice{white-space:pre-wrap;color:#a13f3c}
+    @media(max-height:620px){.top{top:8px}.version{font-size:11px}#speech{min-height:40px;padding:8px 12px;font-size:13px}.panel{bottom:5px;padding:7px}.hint{display:none}button{min-height:34px;font-size:11px}}
+  </style>
+  $GODOT_HEAD_INCLUDE
+</head>
+<body>
+  <div id="app"><div id="stage">
+    <canvas id="canvas" tabindex="0">브라우저가 캔버스를 지원하지 않습니다.</canvas>
+    <div class="ui">
+      <div class="top">
+        <div class="version">PocketPal P1.8.1 · Godot Free</div>
+        <div id="speech">안녕. 나는 아직 아무것도 꾸미지 않은 하얀 모습이야.</div>
+      </div>
+      <div class="panel">
+        <p class="hint">몸을 누르면 쓰다듬기 · 버튼으로 움직임과 꾸미기 시험</p>
+        <div class="buttons">
+          <button data-action="calm">편안함</button><button data-action="curious">궁금함</button><button data-action="happy">기쁨</button><button data-action="talk">말하기</button>
+          <button data-action="pet">쓰다듬기</button><button data-action="wave">손 흔들기</button><button data-action="jump">점프</button><button data-action="sleepy">졸림</button>
+          <button data-action="face">얼굴</button><button data-action="hat">모자</button><button data-action="outfit">옷</button><button data-action="badge">배지</button>
+        </div>
+      </div>
+    </div>
+    <div id="status"><div id="status-card"><strong>캐릭터를 준비하고 있어요</strong><progress id="status-progress"></progress><div id="status-notice"></div></div></div>
+  </div></div>
+  <script src="$GODOT_URL"></script>
+  <script>
+    const pendingActions=[];
+    window.pocketpalSetSpeech=function(text){document.getElementById('speech').textContent=String(text||'');};
+    window.pocketpalAction=function(action){
+      try{if(window.__pocketpalReceiveAction){window.__pocketpalReceiveAction(String(action));return;}}catch(error){console.error(error);}
+      pendingActions.push(String(action));
+    };
+    window.pocketpalBridgeReady=function(){while(pendingActions.length){window.pocketpalAction(pendingActions.shift());}};
+    document.querySelectorAll('button[data-action]').forEach(button=>button.addEventListener('click',()=>window.pocketpalAction(button.dataset.action)));
+
+    const status=document.getElementById('status');
+    const progress=document.getElementById('status-progress');
+    const notice=document.getElementById('status-notice');
+    const config=$GODOT_CONFIG;
+    config.canvas=document.getElementById('canvas');
+    const engine=new Engine(config);
+    const missing=Engine.getMissingFeatures({threads:false});
+    if(missing.length){notice.textContent='이 브라우저에서 필요한 기능이 없어요:\n'+missing.join('\n');progress.remove();}
+    else{
+      engine.startGame({onProgress:(current,total)=>{if(total>0){progress.max=total;progress.value=current;}}})
+        .then(()=>status.remove())
+        .catch(error=>{console.error(error);notice.textContent=error instanceof Error?error.message:String(error);progress.remove();});
+    }
+  </script>
+</body>
+</html>
