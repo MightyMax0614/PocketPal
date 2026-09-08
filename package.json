@@ -5,6 +5,7 @@
   "description": "Local Mac test harness; no npm dependencies required",
   "scripts": {
     "dev": "python3 tools/mac_server.py --preview --port 4173 --data-dir .test-data",
-    "test": "python3 -m unittest discover -s tests -p 'test_mac_lab.py' -v"
+    "test": "python3 -m unittest discover -s tests -p 'test_mac_lab.py' -v",
+    "test:motion": "node --test tests/test_motion.mjs"
   }
 }

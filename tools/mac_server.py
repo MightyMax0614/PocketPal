@@ -226,7 +226,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
-        self.send_header("Content-Security-Policy", "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'")
+        # Pose inference executes only local WASM in the separate mirror worker.
+        # The conversation and memory surface keeps its existing script policy.
+        script_policy = "'self' 'wasm-unsafe-eval'" if urllib.parse.urlsplit(self.path).path.startswith("/mirror/") else "'self'"
+        self.send_header("Content-Security-Policy", "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src " + script_policy + "; worker-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'")
         self.send_header("Permissions-Policy", "camera=(self), microphone=(), geolocation=()")
         for key, value in (extra or {}).items():
             self.send_header(key, value)
@@ -281,9 +284,11 @@ class Handler(BaseHTTPRequestHandler):
             else:
                 relative = "index.html" if path == "/" else path.lstrip("/")
             file = (root / relative).resolve()
-            if root.resolve() not in file.parents or not file.is_file() or file.suffix not in (".html", ".css", ".js", ".png", ".svg", ".ico", ".json"):
+            standard_asset = file.suffix in (".html", ".css", ".js", ".png", ".svg", ".ico", ".json")
+            mirror_asset = (relative.startswith("mirror/") and file.suffix == ".mjs") or (relative.startswith("mirror/vendor/") and file.suffix in (".wasm", ".task"))
+            if root.resolve() not in file.parents or not file.is_file() or not (standard_asset or mirror_asset):
                 return self.json(404, {"error": "파일이 없어요."})
-            mime = {".js": "text/javascript", ".css": "text/css", ".html": "text/html"}.get(file.suffix, mimetypes.guess_type(file.name)[0] or "application/octet-stream")
+            mime = {".js": "text/javascript", ".mjs": "text/javascript", ".wasm": "application/wasm", ".task": "application/octet-stream", ".css": "text/css", ".html": "text/html"}.get(file.suffix, mimetypes.guess_type(file.name)[0] or "application/octet-stream")
             self.send_bytes(200, file.read_bytes(), mime)
         except ValueError as exc:
             self.json(400, {"error": str(exc)})

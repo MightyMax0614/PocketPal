@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f6f5ef">
+  <title>PocketPal · 나 따라 해 봐</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="../catalog/data.js"></script><script defer src="../catalog/originals-data.js"></script>
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <header><a class="brand" href="/">PocketPal <small>작은 친구의 하루</small></a><nav><a href="../catalog/index.html">친구 34종</a><a href="/">대화·기억으로</a></nav></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">함께 움직이는 시간 / 0.5</p><h1>나 따라 해 봐.</h1><p>내가 움직이면, 작은 친구도 함께 반응해요.</p></div><span class="privacy">영상 저장·외부 전송 없음</span></div>
+    <div class="play-grid">
+      <section class="friend-card" aria-label="함께하는 캐릭터">
+        <div class="card-top"><label for="friend">오늘의 친구</label><select id="friend"></select></div>
+        <div id="stage" class="stage" tabindex="0" role="button" aria-label="친구 쓰다듬기">
+          <p id="speech" class="speech" aria-live="polite">안녕! 같이 움직여 볼까?</p>
+          <div class="orbit" aria-hidden="true"></div>
+          <div class="travel" id="travel"><div class="lift" id="lift"><div id="sprite" class="sprite" aria-hidden="true"></div></div></div>
+          <span id="emote" class="emote" aria-hidden="true"></span>
+          <span class="stage-hint">마우스를 움직이거나 친구를 톡 눌러 보세요</span>
+        </div>
+        <div class="reaction"><span id="source">카메라 꺼짐</span><strong id="action">편안히 쉬는 중</strong></div>
+        <form id="messageForm"><label for="message">친구에게 한마디</label><div class="input-row"><input id="message" maxlength="140" placeholder="안녕, 오늘 같이 놀자!" autocomplete="off"><button type="submit">말 걸기</button></div></form>
+        <p class="quiet">여기서는 정해진 문장과 동작으로 반응해요. 자유 대화·기억은 <a href="/">대화 화면</a>에서 이어가요.</p>
+      </section>
+      <section class="camera-card" aria-label="카메라와 따라 하기">
+        <div class="card-top"><h2>내 움직임</h2><span id="cameraBadge" class="badge">꺼짐</span></div>
+        <div class="camera-view" id="cameraView">
+          <video id="video" playsinline muted aria-label="카메라 미리보기"></video>
+          <canvas id="overlay" width="640" height="480" aria-label="인식한 자세"></canvas>
+          <div class="camera-placeholder" id="placeholder"><span aria-hidden="true">◎</span><strong>우리 같이 움직여 볼까?</strong><p>카메라를 켜고 얼굴·어깨·손이<br>화면에 보이도록 앉아 주세요.</p></div>
+        </div>
+        <p id="cameraStatus" class="status" role="status">직접 켰을 때만 카메라를 사용해요.</p>
+        <div class="camera-actions"><button id="start" class="primary">카메라 켜고 따라 하기</button><button id="stop" disabled>끄기</button></div>
+        <div class="options"><label>카메라 <select id="facing"><option value="user">전면 / 나 보기</option><option value="environment">후면 / 앞 보기</option></select></label><label><input id="mirror" type="checkbox" checked> 거울처럼</label><label><input id="lines" type="checkbox" checked> 자세 표시</label></div>
+        <div class="demo"><div><h3>카메라 없이 먼저 보기</h3><small>시연은 실제 카메라 인식과 구분해 표시해요.</small></div><div class="demo-buttons"><button data-demo="one">한 손 들기</button><button data-demo="both">두 손 들기</button><button data-demo="tilt">고개 기울이기</button><button data-demo="move">좌우 이동</button><button id="endDemo" hidden>시연 끝내기</button></div></div>
+        <button id="pause" class="text-button" aria-pressed="false">캐릭터 움직임 멈추기</button>
+      </section>
+    </div>
+    <div class="notes"><p><strong>지금은 첫 동작 시험이에요.</strong> 손 들기에는 인사·폴짝 반응을, 위치·기울기에는 이동·회전을 연결했어요. 팔·다리 관절을 똑같이 복제하거나 표정·활동의 의미를 이해하는 단계는 아직이에요.</p><p>사람·공룡·하마·돼지는 기존 애니메이션 초안이에요. 흰 배경과 프레임 차이가 남아 있어요. Pixel Adventure 원화·동작: <a href="https://opengameart.org/users/pixel-frog">Pixel Frog</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p></div>
+  </main>
+</body>
+</html>

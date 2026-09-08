@@ -39,6 +39,34 @@ class MacLabTests(unittest.TestCase):
         raw = response.read()
         return response.status, json.loads(raw) if response.headers.get_content_type() == "application/json" else raw
 
+    def test_mirror_assets_have_correct_types_and_local_wasm_policy(self):
+        assets = {
+            "/mirror/index.html": "text/html",
+            "/mirror/app.mjs": "text/javascript",
+            "/mirror/pose-worker.js": "text/javascript",
+            "/mirror/vendor/vision_bundle.mjs": "text/javascript",
+            "/mirror/vendor/wasm/vision_wasm_internal.wasm": "application/wasm",
+            "/mirror/vendor/pose_landmarker_lite.task": "application/octet-stream",
+        }
+        for path, mime in assets.items():
+            with self.subTest(path=path), urllib.request.urlopen(self.base + path, timeout=4) as response:
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.headers.get_content_type(), mime)
+                policy = response.headers["Content-Security-Policy"]
+                self.assertIn("'wasm-unsafe-eval'", policy)
+                self.assertNotIn("'unsafe-eval'", policy)
+                self.assertIn("connect-src 'self'", policy)
+                self.assertIn("worker-src 'self'", policy)
+                self.assertIn("microphone=()", response.headers["Permissions-Policy"])
+                self.assertTrue(response.read())
+        with urllib.request.urlopen(self.base + "/") as response:
+            self.assertNotIn("wasm-unsafe-eval", response.headers["Content-Security-Policy"])
+
+    def test_mirror_asset_paths_cannot_escape_static_root(self):
+        for path in ("/mirror/../../../tools/mac_server.py", "/mirror/%2e%2e/%2e%2e/tools/mac_server.py", "/mirror/vendor/../../../README.md"):
+            with self.subTest(path=path):
+                self.assertEqual(self.request(path)[0], 404)
+
     def test_names_memories_and_gifts_survive_server_restart(self):
         self.assertEqual(self.request("/api/profile", {"profile":"child-1", "child_name":"테스트 아이", "pal_name":"포켓 친구"})[0], 200)
         self.request("/api/memory", {"profile":"child-1", "text":"나는 공룡을 좋아해"})
