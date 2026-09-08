@@ -1,48 +1,133 @@
 "use strict";
 (() => {
-  const records=window.POCKETPAL_CATALOG;
-  const palette=["#efdbec","#f4edc9","#e7edd8","#edece1","#e0eaf0","#efe2d7"];
-  const gallery=document.querySelector("#gallery"),dialog=document.querySelector("#detail");
-  const large=document.querySelector("#detailSprite"),pause=document.querySelector("#pauseDetail");
-  let paused=false,detailPaused=false,flipped=false,selected=null;
-  function paint(el,clip,big=false){
-    const [x,y,r,b]=clip.box,w=r-x,h=b-y;
-    const scale=Math.max(1,Math.floor(Math.min((big?360:116)/w,(big?238:101)/h)));
-    el.style.cssText="width:"+w+"px;height:"+h+"px;--scale:"+scale+";--frames:"+clip.n+";--duration:"+(clip.n*50)+"ms;--start-x:"+(-x)+"px;--start-y:"+(-y)+"px;--end-x:"+(-clip.w*clip.n-x)+"px;--flip:"+(flipped&&big?-1:1);
-    el.style.backgroundImage='url("'+clip.data+'")';
-    el.style.backgroundSize=(clip.w*clip.n)+"px "+clip.h+"px";
-    if(big)el.style.animationPlayState=detailPaused?"paused":"running";
+  const records = window.POCKETPAL_CATALOG;
+  const originals = window.POCKETPAL_ORIGINALS || [];
+  const palette = ["#efdbec", "#f4edc9", "#e7edd8", "#edece1", "#e0eaf0", "#efe2d7"];
+  const dialog = document.querySelector("#detail");
+  const large = document.querySelector("#detailSprite");
+  const pause = document.querySelector("#pauseDetail");
+  const flip = document.querySelector("#flip");
+  const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let paused = motionPreference.matches;
+  let detailPaused = motionPreference.matches;
+  let flipped = false;
+  let selected = null;
+  let activeClip = 0;
+
+  function paint(el, clip, big = false) {
+    const [x, y, right, bottom] = clip.box;
+    const width = right - x, height = bottom - y;
+    const availableWidth = big ? Math.max(90, Math.min(360, window.innerWidth - 96)) : 116;
+    const availableHeight = big ? 238 : 101;
+    const fit = Math.min(availableWidth / width, availableHeight / height);
+    const scale = clip.concept ? fit : Math.max(0.25, fit >= 1 ? Math.floor(fit) : fit);
+    const fps = clip.fps || 20;
+    el.classList.toggle("concept", Boolean(clip.concept));
+    el.style.cssText = `width:${width}px;height:${height}px;--scale:${scale};--frames:${clip.n};--duration:${clip.n / fps}s;--start-x:${-x}px;--start-y:${-y}px;--end-x:${-clip.w * clip.n - x}px;--flip:${big && flipped ? -1 : 1}`;
+    el.style.backgroundImage = `url("${clip.data}")`;
+    el.style.backgroundSize = `${clip.imageW || clip.w * clip.n}px ${clip.imageH || clip.h}px`;
+    if (clip.n === 1) el.style.animation = "none";
+    if (big) el.style.animationPlayState = detailPaused ? "paused" : "running";
   }
-  function selectClip(index){
-    const c=selected.clips[index];paint(large,c,true);
-    document.querySelectorAll("#clips button").forEach((b,i)=>b.setAttribute("aria-pressed",String(i===index)));
-    document.querySelector("#frameInfo").textContent="원본 "+c.w+"×"+c.h+"px · "+c.n+"프레임"+(c.n>1?" · 20 FPS":" · 한 장의 포즈");
+
+  function selectClip(index) {
+    activeClip = index;
+    const clip = selected.clips[index];
+    paint(large, clip, true);
+    document.querySelectorAll("#clips button").forEach((button, i) => button.setAttribute("aria-pressed", String(i === index)));
+    const prefix = selected.source === "pocketpal-original" ? "동작 초안" : "작가 원본";
+    document.querySelector("#frameInfo").textContent = clip.concept
+      ? "정지 도트 시안 · 이 친구의 동작은 아직 제작 전이에요."
+      : `${prefix} · ${clip.w}×${clip.h}px · ${clip.n}프레임${clip.n > 1 ? ` · ${clip.fps || 20} FPS` : " · 한 장의 포즈"}`;
+    pause.hidden = clip.n === 1;
   }
-  function open(record,index){
-    selected=record;flipped=false;detailPaused=false;
-    document.querySelector("#detailTitle").textContent=record.ko;
-    document.querySelector("#detailOriginal").textContent=record.name+" · Pixel Adventure "+record.pack;
-    document.querySelector("#detailNote").textContent=record.note;
-    document.querySelector("#detailStage").style.setProperty("--scene",palette[index%palette.length]);
-    pause.textContent="이 동작 멈추기";pause.setAttribute("aria-pressed","false");
-    const clips=document.querySelector("#clips");clips.replaceChildren();
-    record.clips.forEach((c,i)=>{const b=document.createElement("button");b.textContent=c.label;b.addEventListener("click",()=>selectClip(i));clips.append(b);});
-    selectClip(0);document.body.classList.add("dialog-open");dialog.showModal();
+
+  function open(record, index) {
+    selected = record;
+    flipped = false;
+    detailPaused = motionPreference.matches;
+    document.querySelector("#detailTitle").textContent = record.ko;
+    document.querySelector("#detailOriginal").textContent = record.source === "pocketpal-original"
+      ? `${record.id} · PocketPal 오리지널`
+      : `${record.name} · Pixel Adventure ${record.pack}`;
+    document.querySelector("#detailNote").textContent = record.note;
+    document.querySelector("#detailStage").style.setProperty("--scene", record.background || palette[index % palette.length]);
+    pause.textContent = detailPaused ? "이 동작 다시 시작" : "이 동작 멈추기";
+    pause.setAttribute("aria-pressed", String(detailPaused));
+    flip.setAttribute("aria-pressed", "false");
+    const clips = document.querySelector("#clips");
+    clips.replaceChildren();
+    record.clips.forEach((clip, i) => {
+      const button = document.createElement("button");
+      button.textContent = clip.label;
+      button.addEventListener("click", () => selectClip(i));
+      clips.append(button);
+    });
+    selectClip(0);
+    document.body.classList.add("dialog-open");
+    dialog.showModal();
   }
-  records.forEach((r,index)=>{
-    const card=document.createElement("button");card.className="card";card.setAttribute("aria-label",r.ko+" 크게 보기");
-    card.style.setProperty("--scene",palette[index%palette.length]);
-    const area=document.createElement("span");area.className="art-area";
-    const sprite=document.createElement("span");sprite.className="sprite";sprite.setAttribute("aria-hidden","true");paint(sprite,r.clips[0]);area.append(sprite);
-    const label=document.createElement("span");label.className="card-label";
-    const name=document.createElement("strong");name.textContent=r.ko;
-    const original=document.createElement("small");original.textContent=r.name;label.append(name,original);
-    card.append(area,label);card.addEventListener("click",()=>open(r,index));gallery.append(card);
+
+  function addCards(items, gallery, original = false) {
+    items.forEach((record, index) => {
+      const card = document.createElement("button");
+      card.className = "card";
+      card.setAttribute("aria-label", `${record.ko} 크게 보기${original ? record.animated ? ", 동작 초안" : ", 정지 시안" : ""}`);
+      card.style.setProperty("--scene", record.background || palette[index % palette.length]);
+      const area = document.createElement("span");
+      area.className = "art-area";
+      const sprite = document.createElement("span");
+      sprite.className = "sprite";
+      sprite.setAttribute("aria-hidden", "true");
+      paint(sprite, record.clips[0]);
+      area.append(sprite);
+      const label = document.createElement("span");
+      label.className = "card-label";
+      const name = document.createElement("strong");
+      name.textContent = record.ko;
+      const subtitle = document.createElement("small");
+      subtitle.textContent = original ? `${record.id} · ${record.animated ? "4가지 동작 초안" : "정지 도트 시안"}` : record.name;
+      label.append(name, subtitle);
+      card.append(area, label);
+      card.addEventListener("click", () => open(record, index));
+      gallery.append(card);
+    });
+  }
+
+  addCards(originals, document.querySelector("#originalGallery"), true);
+  addCards(records, document.querySelector("#gallery"));
+  const moving = originals.filter(record => record.animated).length;
+  document.querySelector("#originalCount").textContent = `동작 초안 ${moving}종 · 정지 시안 ${originals.length - moving}종`;
+
+  function updatePauseAll() {
+    document.body.classList.toggle("paused", paused);
+    const button = document.querySelector("#pauseAll");
+    button.setAttribute("aria-pressed", String(paused));
+    button.textContent = paused ? "목록 움직임 다시 시작" : "목록 움직임 멈추기";
+  }
+  updatePauseAll();
+  document.querySelector("#pauseAll").addEventListener("click", () => { paused = !paused; updatePauseAll(); });
+  document.querySelector("#closeDetail").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("close", () => document.body.classList.remove("dialog-open"));
+  flip.addEventListener("click", () => {
+    flipped = !flipped;
+    large.style.setProperty("--flip", flipped ? -1 : 1);
+    flip.setAttribute("aria-pressed", String(flipped));
   });
-  document.querySelector("#pauseAll").addEventListener("click",e=>{paused=!paused;document.body.classList.toggle("paused",paused);e.currentTarget.setAttribute("aria-pressed",String(paused));e.currentTarget.textContent=paused?"목록 움직임 다시 시작":"목록 움직임 멈추기";});
-  document.querySelector("#closeDetail").addEventListener("click",()=>dialog.close());
-  dialog.addEventListener("close",()=>document.body.classList.remove("dialog-open"));
-  document.querySelector("#flip").addEventListener("click",()=>{flipped=!flipped;large.style.setProperty("--flip",flipped?-1:1);});
-  pause.addEventListener("click",()=>{detailPaused=!detailPaused;large.style.animationPlayState=detailPaused?"paused":"running";pause.setAttribute("aria-pressed",String(detailPaused));pause.textContent=detailPaused?"이 동작 다시 시작":"이 동작 멈추기";});
-  document.addEventListener("visibilitychange",()=>document.body.classList.toggle("hidden-tab",document.hidden));
+  pause.addEventListener("click", () => {
+    detailPaused = !detailPaused;
+    large.style.animationPlayState = detailPaused ? "paused" : "running";
+    pause.setAttribute("aria-pressed", String(detailPaused));
+    pause.textContent = detailPaused ? "이 동작 다시 시작" : "이 동작 멈추기";
+  });
+  motionPreference.addEventListener("change", event => {
+    paused = event.matches;
+    detailPaused = event.matches;
+    updatePauseAll();
+    if (selected) selectClip(activeClip);
+    pause.textContent = detailPaused ? "이 동작 다시 시작" : "이 동작 멈추기";
+    pause.setAttribute("aria-pressed", String(detailPaused));
+  });
+  window.addEventListener("resize", () => { if (dialog.open && selected) paint(large, selected.clips[activeClip], true); });
+  document.addEventListener("visibilitychange", () => document.body.classList.toggle("hidden-tab", document.hidden));
 })();

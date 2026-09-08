@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "updated": "2026-09-08",
   "counts": {
     "unique_characters": 34,
@@ -8,7 +8,10 @@
     "concept_boards": 4,
     "pixel_frog_source_files": 127,
     "pixel_concept_boards": 3,
-    "originals_with_pixel_concept": 10
+    "originals_with_pixel_concept": 10,
+    "originals_with_animation_preview": 4,
+    "original_animation_clips": 16,
+    "original_animation_frames": 96
   },
   "concept_boards": [
     {
@@ -82,8 +85,8 @@
       "name_ko": "모험가 친구",
       "category": "human",
       "source": "pocketpal-original",
-      "status": "concept_only",
-      "animated": false,
+      "status": "animation_prototype",
+      "animated": true,
       "current_revision": "v1",
       "board": "characters/originals/human-companions-v1.png",
       "panel": 0,
@@ -104,7 +107,12 @@
         "chest",
         "back"
       ],
-      "animation_assets": [],
+      "animation_assets": [
+        "characters/originals/animations/H1/idle.png",
+        "characters/originals/animations/H1/walk.png",
+        "characters/originals/animations/H1/talk.png",
+        "characters/originals/animations/H1/sleep.png"
+      ],
       "previous_boards": [
         "characters/originals/first-companions-v1.png"
       ],
@@ -115,7 +123,25 @@
         "status": "pixel_concept_only",
         "animated": false,
         "source_revision": "v1"
-      }
+      },
+      "animation_preview": {
+        "manifest": "characters/originals/animations/H1/manifest.json",
+        "status": "animation_prototype",
+        "transparent_background": false,
+        "companion_runtime_available": false
+      },
+      "implemented_preview_animations": [
+        "idle",
+        "blink",
+        "walk",
+        "talk",
+        "sleep"
+      ],
+      "remaining_animations": [
+        "greet",
+        "happy",
+        "shy"
+      ]
     },
     {
       "id": "H2",
@@ -196,8 +222,8 @@
       "name_ko": "순둥 티라노",
       "category": "dinosaur",
       "source": "pocketpal-original",
-      "status": "concept_only",
-      "animated": false,
+      "status": "animation_prototype",
+      "animated": true,
       "current_revision": "v2",
       "board": "characters/originals/dinosaur-hippo-pig-v2.png",
       "panel": 0,
@@ -218,7 +244,12 @@
         "chest",
         "back"
       ],
-      "animation_assets": [],
+      "animation_assets": [
+        "characters/originals/animations/D1/idle.png",
+        "characters/originals/animations/D1/walk.png",
+        "characters/originals/animations/D1/talk.png",
+        "characters/originals/animations/D1/sleep.png"
+      ],
       "previous_boards": [
         "characters/originals/dinosaur-companions-v1.png"
       ],
@@ -229,7 +260,25 @@
         "status": "pixel_concept_only",
         "animated": false,
         "source_revision": "v2"
-      }
+      },
+      "animation_preview": {
+        "manifest": "characters/originals/animations/D1/manifest.json",
+        "status": "animation_prototype",
+        "transparent_background": false,
+        "companion_runtime_available": false
+      },
+      "implemented_preview_animations": [
+        "idle",
+        "blink",
+        "walk",
+        "talk",
+        "sleep"
+      ],
+      "remaining_animations": [
+        "greet",
+        "happy",
+        "shy"
+      ]
     },
     {
       "id": "D2",
@@ -384,8 +433,8 @@
       "name_ko": "하마 친구",
       "category": "animal",
       "source": "pocketpal-original",
-      "status": "concept_only",
-      "animated": false,
+      "status": "animation_prototype",
+      "animated": true,
       "current_revision": "v1",
       "board": "characters/originals/dinosaur-hippo-pig-v2.png",
       "panel": 1,
@@ -406,7 +455,12 @@
         "chest",
         "back"
       ],
-      "animation_assets": [],
+      "animation_assets": [
+        "characters/originals/animations/A3/idle.png",
+        "characters/originals/animations/A3/walk.png",
+        "characters/originals/animations/A3/talk.png",
+        "characters/originals/animations/A3/sleep.png"
+      ],
       "pixel_design": {
         "board": "characters/originals/pixel/animal-companions-pixel-v1.png",
         "column": 0,
@@ -414,15 +468,33 @@
         "status": "pixel_concept_only",
         "animated": false,
         "source_revision": "v1"
-      }
+      },
+      "animation_preview": {
+        "manifest": "characters/originals/animations/A3/manifest.json",
+        "status": "animation_prototype",
+        "transparent_background": false,
+        "companion_runtime_available": false
+      },
+      "implemented_preview_animations": [
+        "idle",
+        "blink",
+        "walk",
+        "talk",
+        "sleep"
+      ],
+      "remaining_animations": [
+        "greet",
+        "happy",
+        "shy"
+      ]
     },
     {
       "id": "A4",
       "name_ko": "돼지 친구",
       "category": "animal",
       "source": "pocketpal-original",
-      "status": "concept_only",
-      "animated": false,
+      "status": "animation_prototype",
+      "animated": true,
       "current_revision": "v1",
       "board": "characters/originals/dinosaur-hippo-pig-v2.png",
       "panel": 2,
@@ -443,7 +515,12 @@
         "chest",
         "back"
       ],
-      "animation_assets": [],
+      "animation_assets": [
+        "characters/originals/animations/A4/idle.png",
+        "characters/originals/animations/A4/walk.png",
+        "characters/originals/animations/A4/talk.png",
+        "characters/originals/animations/A4/sleep.png"
+      ],
       "pixel_design": {
         "board": "characters/originals/pixel/animal-companions-pixel-v1.png",
         "column": 1,
@@ -451,7 +528,25 @@
         "status": "pixel_concept_only",
         "animated": false,
         "source_revision": "v1"
-      }
+      },
+      "animation_preview": {
+        "manifest": "characters/originals/animations/A4/manifest.json",
+        "status": "animation_prototype",
+        "transparent_background": false,
+        "companion_runtime_available": false
+      },
+      "implemented_preview_animations": [
+        "idle",
+        "blink",
+        "walk",
+        "talk",
+        "sleep"
+      ],
+      "remaining_animations": [
+        "greet",
+        "happy",
+        "shy"
+      ]
     }
   ],
   "pixel_frog": [
@@ -1807,7 +1902,7 @@
     }
   ],
   "preview": "Character_Catalog.html",
-  "runtime_note": "All ten original characters have illustration and static pixel-style concepts. Animation frames, transparent sprites, and game-ready atlases are not yet authored. The Mac Lab companion currently supports Pink Man and Ninja Frog. The 24-character catalog plays existing Pixel Frog clips.",
+  "runtime_note": "The collection now previews four original animation prototypes (H1, D1, A3, A4: idle/blink, walk, talk, sleep; 96x96 frames on white matte), six static pixel concepts, and all 24 Pixel Frog characters. Original pose consistency and walk cycles still need refinement. Transparent sprites, attachment points, and Mac Lab companion integration are pending. The Mac Lab companion still supports Pink Man and Ninja Frog.",
   "pixel_concept_boards": [
     {
       "path": "characters/originals/pixel/human-companions-pixel-v1.png",

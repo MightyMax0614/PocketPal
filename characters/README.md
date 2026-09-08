@@ -6,17 +6,17 @@
 
 | 자료 | 포함 내용 | 현재 상태 |
 |---|---|---|
-| [오리지널 원화](originals/) | 사람형 3종, 공룡형 3종, 동물형 4종 / 원화 보드 4장 | 외형·표정 시안, 애니메이션 제작 전 |
-| [오리지널 도트 시안](originals/pixel/README.md) | 동일한 10종의 도트 버전 / 보드 3장 | 정지 도트 시안, 동작 프레임 제작 전 |
+| [오리지널 원화](originals/) | 사람형 3종, 공룡형 3종, 동물형 4종 / 원화 보드 4장 | 외형·표정 시안 보관 |
+| [오리지널 도트 시안](originals/pixel/README.md) | 동일한 10종의 도트 버전 / 보드 3장 | 10종 정지 시안 + 별도 4종 동작 초안 |
 | [Pixel Frog 원본](pixel-frog/) | Pixel Adventure 1의 주인공 4종 + Pixel Adventure 2의 20종 | 작가 원본 PNG 127개 보관 |
-| [24종 동작 미리보기](../Character_Catalog.html) | 원본 동작·포즈 66개 | 파일을 내려받아 브라우저에서 실행 |
+| [34종 동작·시안 미리보기](../Character_Catalog.html) | 오리지널 4종 동작 16개 + 정지 6종 + 원본 동작·포즈 66개 | 파일을 내려받아 브라우저에서 실행 |
 | [전체 캐릭터 목록](catalog.json) | 34종의 ID·분류·원본 경로·제작 상태·출처 | 프로그램에서 읽을 수 있는 JSON |
 
-오리지널 10종은 원화 단계입니다. 현재 Mac Lab 대화·기억·선물 화면에서 선택할 수 있는 캐릭터는 Pink Man과 Ninja Frog 2종입니다. 24종 미리보기와 오리지널 목록은 개발용 컬렉션이며, 모든 캐릭터의 대화·수면·착용 애니메이션이 구현된 상태는 아닙니다.
+오리지널 10종 중 H1·D1·A3·A4에는 [4가지 동작 초안](originals/animations/README.md)을 추가했습니다. 나머지 6종은 정지 시안입니다. 현재 Mac Lab 대화·기억·선물 화면에서 선택할 수 있는 캐릭터는 Pink Man과 Ninja Frog 2종입니다. 34종 미리보기는 개발용 컬렉션이며, 모든 캐릭터의 대화·수면·착용 애니메이션이 구현된 상태는 아닙니다.
 
 ## 도트 버전도 포함합니다
 
-**오리지널 10종 모두 일반 원화와 도트 시안을 보관했습니다.** 아래 공룡을 포함해 [사람형 3종·공룡형 3종·동물형 4종의 도트 파일](originals/pixel/README.md)을 볼 수 있습니다. 정지 외형 시안이며, 게임용 투명 배경 스프라이트와 애니메이션 아틀라스는 제작 전입니다.
+**오리지널 10종 모두 일반 원화와 도트 시안을 보관했습니다.** 아래 공룡을 포함해 [사람형 3종·공룡형 3종·동물형 4종의 도트 파일](originals/pixel/README.md)을 볼 수 있습니다. 이 보드 자체는 정지 외형 시안입니다. 별도 [4종의 재생용 아틀라스](originals/animations/README.md)를 추가했으며, 투명 배경 최종 자산은 제작 전입니다.
 
 ![공룡 3종의 도트 시안](originals/pixel/dinosaur-companions-pixel-v2.png)
 
@@ -72,7 +72,7 @@ D1의 초기 주황색 시안도 아래에 보관했습니다. v1과 v2는 같�
 | Pink Man, Ninja Frog, Virtual Guy, Mask Dude | Bunny, Duck, AngryPig, Chicken, Ghost, Mushroom, BlueBird, Bee, Chameleon, FatBird, Radish, Plant, Snail, Turtle, Slime, Trunk, Bat, Rino, Rocks, Skull |
 
 - [원본 파일과 출처](pixel-frog/README.md): 대기·걷기·달리기뿐 아니라 배포본에 들어 있던 나머지 캐릭터 동작과 공용 등장·퇴장 파일도 포함합니다.
-- [움직이는 24종 비교 화면](../Character_Catalog.html): 다운로드한 HTML을 Safari나 Chrome에서 열면 인터넷 없이 볼 수 있습니다.
+- [오리지널과 함께 보는 34종 비교 화면](../Character_Catalog.html): 다운로드한 HTML을 Safari나 Chrome에서 열면 인터넷 없이 볼 수 있습니다.
 - [미리보기 소스와 설명](../prototype/mac-lab/catalog/README.md): 66개 비전투 동작·포즈를 사용합니다. Rocks의 크기 3개는 한 캐릭터의 변형으로 집계합니다.
 
 ## 제작 기록

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "characters": [
+    {
+      "id": "H1",
+      "path": "characters/originals/animations/raw/H1-v2.png",
+      "row_edges": [
+        0,
+        265,
+        515,
+        782,
+        1024
+      ]
+    },
+    {
+      "id": "D1",
+      "path": "characters/originals/animations/raw/D1-v2.png",
+      "column_edges": [
+        0,
+        260,
+        512,
+        768,
+        1024,
+        1280,
+        1536
+      ]
+    },
+    {
+      "id": "A3",
+      "path": "characters/originals/animations/raw/A3-v1.png"
+    },
+    {
+      "id": "A4",
+      "path": "characters/originals/animations/raw/A4-v1.png"
+    }
+  ],
+  "discarded_for_playback": [
+    "characters/originals/animations/raw/H1-v1.png",
+    "characters/originals/animations/raw/D1-v1.png"
+  ]
+}

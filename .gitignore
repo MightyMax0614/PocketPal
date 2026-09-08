@@ -5,3 +5,4 @@ mac-test-output/
 .test-data/
 *.sqlite3
 *.sqlite3-journal
+tools/asset-pipeline/node_modules/

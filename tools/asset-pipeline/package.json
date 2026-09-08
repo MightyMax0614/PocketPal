@@ -1,0 +1,7 @@
+{
+  "name": "pocketpal-asset-pipeline",
+  "private": true,
+  "type": "module",
+  "description": "Offline crop/alignment/atlas packaging for image-generated PocketPal animation frames",
+  "dependencies": { "sharp": "0.35.4" }
+}
