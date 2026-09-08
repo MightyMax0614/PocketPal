@@ -6,7 +6,9 @@
     "pocketpal_originals": 10,
     "pixel_frog": 24,
     "concept_boards": 4,
-    "pixel_frog_source_files": 127
+    "pixel_frog_source_files": 127,
+    "pixel_concept_boards": 3,
+    "originals_with_pixel_concept": 10
   },
   "concept_boards": [
     {
@@ -105,7 +107,15 @@
       "animation_assets": [],
       "previous_boards": [
         "characters/originals/first-companions-v1.png"
-      ]
+      ],
+      "pixel_design": {
+        "board": "characters/originals/pixel/human-companions-pixel-v1.png",
+        "column": 0,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "H2",
@@ -134,7 +144,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/human-companions-pixel-v1.png",
+        "column": 1,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "H3",
@@ -163,7 +181,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/human-companions-pixel-v1.png",
+        "column": 2,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "D1",
@@ -195,7 +221,15 @@
       "animation_assets": [],
       "previous_boards": [
         "characters/originals/dinosaur-companions-v1.png"
-      ]
+      ],
+      "pixel_design": {
+        "board": "characters/originals/pixel/dinosaur-companions-pixel-v2.png",
+        "column": 0,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v2"
+      }
     },
     {
       "id": "D2",
@@ -224,7 +258,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/dinosaur-companions-pixel-v2.png",
+        "column": 1,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "D3",
@@ -253,7 +295,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/dinosaur-companions-pixel-v2.png",
+        "column": 2,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "A1",
@@ -282,7 +332,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/animal-companions-pixel-v1.png",
+        "column": 0,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "A2",
@@ -311,7 +369,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/animal-companions-pixel-v1.png",
+        "column": 1,
+        "row": 0,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "A3",
@@ -340,7 +406,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/animal-companions-pixel-v1.png",
+        "column": 0,
+        "row": 1,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     },
     {
       "id": "A4",
@@ -369,7 +443,15 @@
         "chest",
         "back"
       ],
-      "animation_assets": []
+      "animation_assets": [],
+      "pixel_design": {
+        "board": "characters/originals/pixel/animal-companions-pixel-v1.png",
+        "column": 1,
+        "row": 1,
+        "status": "pixel_concept_only",
+        "animated": false,
+        "source_revision": "v1"
+      }
     }
   ],
   "pixel_frog": [
@@ -1725,5 +1807,65 @@
     }
   ],
   "preview": "Character_Catalog.html",
-  "runtime_note": "Original designs are concept art; the Mac Lab companion currently supports Pink Man and Ninja Frog. The 24-character catalog plays existing non-combat Pixel Frog clips."
+  "runtime_note": "All ten original characters have illustration and static pixel-style concepts. Animation frames, transparent sprites, and game-ready atlases are not yet authored. The Mac Lab companion currently supports Pink Man and Ninja Frog. The 24-character catalog plays existing Pixel Frog clips.",
+  "pixel_concept_boards": [
+    {
+      "path": "characters/originals/pixel/human-companions-pixel-v1.png",
+      "characters": [
+        "H1",
+        "H2",
+        "H3"
+      ],
+      "columns": 3,
+      "rows": 1,
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1721950,
+      "sha256": "b848795d6aa8dde2003ee1998800c170b587f33a2fe7a8372f8e6b420b32ba67",
+      "origin": "AI-generated pixel-style translation of original PocketPal concept art",
+      "status": "pixel_concept_only",
+      "animated": false,
+      "transparent_background": false,
+      "runtime_sprite_atlas": false
+    },
+    {
+      "path": "characters/originals/pixel/dinosaur-companions-pixel-v2.png",
+      "characters": [
+        "D1",
+        "D2",
+        "D3"
+      ],
+      "columns": 3,
+      "rows": 1,
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1478660,
+      "sha256": "e40c762ea1dcc24367764d1a09dcc22d60b38784adac6752d2322c7164c17c59",
+      "origin": "AI-generated pixel-style translation of original PocketPal concept art",
+      "status": "pixel_concept_only",
+      "animated": false,
+      "transparent_background": false,
+      "runtime_sprite_atlas": false
+    },
+    {
+      "path": "characters/originals/pixel/animal-companions-pixel-v1.png",
+      "characters": [
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "columns": 2,
+      "rows": 2,
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1539768,
+      "sha256": "176368efa005b0ff062570cf33db22f060dd2d51a306091f56ef822f52247515",
+      "origin": "AI-generated pixel-style translation of original PocketPal concept art",
+      "status": "pixel_concept_only",
+      "animated": false,
+      "transparent_background": false,
+      "runtime_sprite_atlas": false
+    }
+  ]
 }
