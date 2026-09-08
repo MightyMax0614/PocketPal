@@ -21,6 +21,13 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Validate Mac Lab storage, isolation and local API
+        run: |
+          python -m unittest discover -s tests -p 'test_mac_lab.py' -v
+          node --check prototype/mac-lab/app.js
+          bash -n Start_PocketPal.command
+          bash -n Run_Checks.command
+
       - name: Validate Python research bridges
         run: |
           python -m py_compile tools/img2threejs_bridge.py

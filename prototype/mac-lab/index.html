@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5f0">
+  <meta name="description" content="PocketPal 맥북 로컬 시험판. 두 아이의 대화, 기억, 그림 선물과 클릭휠을 시험합니다.">
+  <title>PocketPal · 픽셀 친구</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/pixel-character.css">
+  <script defer src="/pixel-character.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <a class="wordmark" href="/">PocketPal<span>PIXEL EDITION / 0.3</span></a>
+    <div class="header-right"><span class="connection" id="connection">연결 확인 중</span><label class="profile-label">함께할 아이 <select id="profileSelect"><option value="child-1">첫째</option><option value="child-2">둘째</option></select></label></div>
+  </header>
+  <main class="workspace">
+    <section class="companion-side" aria-label="PocketPal 화면과 클릭휠">
+      <div class="device-shell">
+        <div class="device-camera" aria-hidden="true"></div>
+        <div class="device-screen">
+          <div class="screen-bar"><time id="clock"></time><span id="modeBadge">기본 반응</span></div>
+          <div id="homeScreen" class="home-screen">
+            <p id="speech" class="speech-bubble" aria-live="polite">안녕! 오늘은 무슨 이야기를 할까?</p>
+            <div class="character-stage pixel-room" data-skin="pink">
+              <div class="pixel-terrain" aria-hidden="true"></div>
+              <div id="character" class="pixel-pal" role="button" tabindex="0" aria-label="캐릭터 쓰다듬기">
+                <div class="pixel-travel"><div class="pixel-facing"><div class="pixel-lift">
+                  <div class="pixel-sprite" aria-hidden="true"></div>
+                  <img id="palCustomGift" class="pixel-gift" alt="아이가 선물한 꾸미기 아이템" hidden>
+                </div></div></div>
+                <span class="pixel-emote" aria-hidden="true"></span>
+              </div>
+            </div>
+            <p class="pal-caption"><strong id="palLabel">포켓</strong><span id="moodLabel">편안하게 쉬는 중</span></p>
+          </div>
+          <div id="wheelMenu" class="wheel-menu" hidden><h2>무엇을 할까?</h2><div id="wheelItems"></div><small>휠로 이동 · 가운데 눌러 선택</small></div>
+        </div>
+        <div class="wheel-area" id="wheelArea" aria-label="클릭휠">
+          <button class="wheel-menu-button" id="menuButton" aria-label="메뉴 열기 또는 닫기">MENU</button>
+          <button class="wheel-prev" id="wheelPrev" aria-label="이전 항목">‹</button>
+          <button class="wheel-next" id="wheelNext" aria-label="다음 항목">›</button>
+          <button class="wheel-center" id="wheelCenter" aria-label="선택 또는 쓰다듬기"><span>●</span></button>
+          <span class="wheel-bottom" aria-hidden="true">PocketPal</span>
+        </div>
+      </div>
+      <div class="character-choice" aria-label="캐릭터 선택">
+        <button data-skin-choice="pink" aria-pressed="true"><span class="skin-icon skin-pink" aria-hidden="true"></span><span>핑크 친구<small>Pink Man</small></span></button>
+        <button data-skin-choice="frog" aria-pressed="false"><span class="skin-icon skin-frog" aria-hidden="true"></span><span>개구리 친구<small>Ninja Frog</small></span></button>
+      </div>
+      <div class="action-buttons"><button data-action="pet">쓰담쓰담</button><button data-action="wave">반가워</button><button data-action="run">달리기</button><button data-action="jump">폴짝</button><button data-action="sleepy">쉬기</button></div>
+      <div class="character-options"><button id="autoplayToggle" aria-pressed="true">자유롭게 움직이기 켜짐</button><button id="pauseCharacter" aria-pressed="false">움직임 멈추기</button></div>
+      <p class="companion-note"><a href="/character-preview.html" target="_blank" rel="noopener">큰 화면에서 캐릭터 만나기 ↗</a><br>원화·동작: <a href="https://pixelfrog-assets.itch.io/pixel-adventure-1" target="_blank" rel="noopener">Pixel Frog · Pixel Adventure</a> / 무료 CC0<br>기기는 확대 모형입니다.</p>
+      <div class="bond-row"><span>교감</span><progress id="bond" max="100" value="15"></progress><span id="bondText">15</span></div>
+    </section>
+    <section class="workbench" aria-label="시험 도구">
+      <div class="workbench-heading"><div><p class="eyebrow">작은 친구와 첫 하루</p><h1 id="sessionHeading">포켓과 함께하기</h1></div><span class="local-tag">이 맥북에 저장</span></div>
+      <nav class="tab-nav" aria-label="테스트 메뉴">
+        <button data-tab="talk" class="selected" aria-current="page">대화</button><button data-tab="memory">기억</button><button data-tab="gift">그림 선물</button><button data-tab="settings">설정</button><button data-tab="test">시험 순서</button>
+      </nav>
+      <section data-panel="talk" class="panel-body">
+        <div class="panel-title"><h2>오늘의 이야기</h2><label class="small-toggle"><input id="voiceEnabled" type="checkbox">음성 읽기</label></div>
+        <p class="helper" id="chatHint">기본 반응은 정해진 문장으로 교감을 시험합니다. 자유 대화는 설정에서 로컬 AI를 연결해 주세요.</p>
+        <ol id="messages" class="chat-list" aria-label="대화 기록"></ol>
+        <form id="chatForm" class="chat-form"><label class="sr-only" for="chatInput">친구에게 할 이야기</label><textarea id="chatInput" rows="2" maxlength="1000" placeholder="안녕! 오늘은 그림을 그렸어"></textarea><button id="sendButton" class="primary" type="submit">말 걸기</button></form>
+        <div class="proactive-row"><label><input id="proactiveEnabled" type="checkbox">가만히 있으면 먼저 말 걸기</label><button id="proactiveButton">지금 먼저 말해 줘</button></div>
+        <p class="helper">켜면 대화 탭에서 45초 동안 입력이 없을 때 먼저 말합니다. 5분 간격이며 다른 탭·숨긴 창에서는 멈춥니다.</p>
+        <p class="helper" id="lastResponse"></p>
+      </section>
+      <section data-panel="memory" class="panel-body" hidden>
+        <div class="panel-title"><h2>기억해 둘 이야기</h2><span id="memoryCount" class="count-label">0 / 100</span></div>
+        <p class="helper">기억할 내용은 직접 저장합니다. 대화 기록에서 자동으로 추출하지 않습니다.</p>
+        <form id="memoryForm" class="stack-form"><label for="memoryInput">기억할 내용</label><textarea id="memoryInput" rows="2" maxlength="240" placeholder="공룡 중에서 티라노사우루스를 가장 좋아해"></textarea><button class="primary" type="submit">기억 저장</button></form>
+        <ul id="memoryList" class="memory-list"></ul>
+        <p class="helper">새로고침·서버 재시작 후에도 유지됩니다. 다른 아이에게는 별도로 저장됩니다.</p>
+      </section>
+      <section data-panel="gift" class="panel-body" hidden>
+        <div class="panel-title"><h2>내 그림을 선물하기</h2><span class="count-label">착용 위치 시험</span></div>
+        <p class="helper">PNG·JPG·WebP 그림을 고르거나 맥북 카메라로 찍어 주세요. 이번 버전은 그림을 2D 파츠로 붙입니다. 3D 변환은 다음 단계입니다.</p>
+        <div class="upload-actions"><label class="file-button">그림 선택<input id="giftFile" type="file" accept="image/png,image/jpeg,image/webp"></label><button id="cameraStart">카메라 켜기</button></div>
+        <div id="cameraPanel" hidden><video id="cameraVideo" autoplay playsinline muted></video><div class="button-row"><button id="cameraCapture">촬영</button><button id="cameraStop">카메라 끄기</button></div></div>
+        <p id="cameraStatus" class="helper"></p>
+        <div class="gift-preview"><canvas id="giftCanvas" width="512" height="512" hidden></canvas><p id="giftEmpty">그림을 올리면 여기에서 확인할 수 있어요.</p></div>
+        <div class="gift-fields"><label>선물 이름<input id="giftName" maxlength="60" placeholder="내가 그린 모자"></label><label>붙일 위치<select id="giftSlot"><option value="head">머리 / 모자</option><option value="face">얼굴 / 안경</option><option value="badge">가슴 / 배지</option><option value="hand">손 / 가방</option><option value="body">몸통 / 옷 앞면</option></select></label></div>
+        <label class="range-field">흰 배경 지우기 <output id="thresholdLabel">끄기</output><input id="whiteThreshold" type="range" min="0" max="80" value="0"></label>
+        <p class="helper">단순 흰색 제거 기능입니다. 흰 그림도 지워질 수 있어 미리보기를 확인해 주세요. 512px로 축소해 저장합니다.</p>
+        <div class="button-row"><button id="giftSave" class="primary" disabled>미리보기대로 선물</button><button id="giftRemove" disabled>선물 벗기기</button></div>
+        <p id="giftStatus" class="helper">현재 착용한 선물이 없어요.</p>
+      </section>
+      <section data-panel="settings" class="panel-body" hidden>
+        <h2>이름과 대화 방식</h2>
+        <form id="profileForm" class="stack-form"><div class="gift-fields"><label>아이 이름<input id="childName" maxlength="20" placeholder="시험용 별명도 좋아요"></label><label>친구 이름<input id="palName" maxlength="20" value="포켓" required></label></div><button class="primary" type="submit">이름 저장</button></form>
+        <div class="settings-group"><label for="chatMode">대화 방식</label><select id="chatMode"><option value="basic">기본 반응 · 설치 없이 시험</option><option value="ollama">로컬 AI · 이 맥북의 Ollama</option></select><div class="button-row"><select id="modelSelect" aria-label="설치된 로컬 모델"><option value="qwen3:1.7b">qwen3:1.7b</option></select><button id="checkOllama">AI 연결 확인</button></div><p id="ollamaStatus" class="helper">Ollama는 선택 기능입니다. 연결 확인을 눌러 설치된 모델을 확인하세요.</p><p class="helper">AI로 보내는 내용: 현재 아이 이름·친구 이름·최근 기억 20개·최근 대화 10개·현재 질문. 사진은 전송하지 않습니다. 연결 대상은 이 맥북만입니다.</p></div>
+        <h2>보호자 데이터 관리</h2><p class="helper">두 프로필은 편집 가능한 시험용 구분입니다. 보호자 비밀번호와 아동용 접근 제한은 아직 없습니다.</p>
+        <div class="button-row"><button id="exportBackup">두 아이 백업 받기</button><label class="file-button">백업 복원<input id="restoreFile" type="file" accept="application/json,.json"></label><button id="resetProfile" class="danger">현재 아이 데이터 삭제</button></div>
+        <p class="helper" id="storagePath"></p><p class="helper">이 폴더는 일반 로컬 파일입니다. 기존 웹 시험판의 브라우저 저장값은 자동 이전하지 않습니다. 삭제해도 따로 받은 백업 파일은 남습니다.</p>
+      </section>
+      <section data-panel="test" class="panel-body" hidden>
+        <div class="panel-title"><h2>첫 20분 테스트</h2><span id="testProgress" class="count-label">0 / 8</span></div>
+        <p class="helper">실제로 확인한 항목만 표시해 주세요. 결과는 직접 확인한 기록이며 자동 통과 판정이 아닙니다.</p>
+        <ol class="test-list" id="testList">
+          <li><label><input type="checkbox" value="render">캐릭터가 보이고 대기·달리기·점프·쓰다듬기에 반응한다.</label></li>
+          <li><label><input type="checkbox" value="input">대화 칸에서 한글·띄어쓰기·화살표 입력이 정상이다.</label></li>
+          <li><label><input type="checkbox" value="memory">기억을 저장하고 “내가 좋아하는 걸 기억해?”에 답한다.</label></li>
+          <li><label><input type="checkbox" value="restart">서버를 종료·재실행해도 이름과 기억이 남아 있다.</label></li>
+          <li><label><input type="checkbox" value="profile">둘째로 바꾸면 첫째의 기억·선물이 나타나지 않는다.</label></li>
+          <li><label><input type="checkbox" value="gift">그림을 선물하고 움직이거나 다시 열어도 착용한다.</label></li>
+          <li><label><input type="checkbox" value="offline">Wi-Fi를 꺼도 기본 반응·기억·그림 선물이 작동한다.</label></li>
+          <li><label><input type="checkbox" value="backup">백업 후 시험 기억을 지우고 복원하면 되돌아온다.</label></li>
+        </ol>
+        <label for="testNotes">맥북에서 발견한 문제<textarea id="testNotes" rows="3" maxlength="2000" placeholder="macOS 버전 / Safari 또는 Chrome / 느리거나 안 된 동작"></textarea></label><button id="exportTest" class="primary">시험 결과 내려받기</button>
+        <p class="helper">카메라·한국어 음성·실제 AI 속도는 맥북에서 추가 확인합니다. 전·후면 카메라 전환은 두 카메라를 갖춘 기기에서 다음 단계로 시험합니다.</p>
+      </section>
+      <div class="status-message" id="statusMessage" role="status" aria-live="polite">기억을 불러오고 있어요.</div>
+    </section>
+  </main>
+  <footer class="app-footer">P1 · 실행 → 기억 → 교감 → 선물 <span>두 아이를 위한 시제품 / 카메라는 켜기 버튼을 눌렀을 때만 사용</span></footer>
+</body>
+</html>

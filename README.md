@@ -1,3 +1,29 @@
+# PocketPal · 오리지널 친구와 Pixel Adventure 컬렉션
+
+**[캐릭터 전체 보기 — 오리지널 10종 + Pixel Frog 24종](characters/README.md)**
+
+2026-09-08: 사람형 3종·공룡형 3종·동물형 4종의 오리지널 시안을 추가했습니다. 최신 보드에는 순하고 조금 어설픈 티라노 수정안, 하마, 돼지가 있습니다. 원화 보드 4장과 Pixel Frog 원본 캐릭터 PNG 127개를 보관합니다. **오리지널은 원화 단계**이고, 작가의 24종은 기존 동작 비교 화면에서 볼 수 있습니다.
+
+![최신 오리지널 공룡·하마·돼지 시안](characters/originals/dinosaur-hippo-pig-v2.png)
+
+- [모든 원화와 캐릭터 목록](characters/README.md)
+- [캐릭터 제작 방향과 현재 구현 범위](characters/ART_DIRECTION.md)
+- [작가 원본과 출처](characters/pixel-frog/README.md)
+- [프로그램용 34종 목록](characters/catalog.json)
+
+## 맥북에서 실행하기 · Pixel Edition 0.3
+
+2026-09-08 Pixel Edition 0.3: `Character_Preview.html`을 열면 설치 없이 새 픽셀 캐릭터를 볼 수 있습니다. 대화·기억·선물 저장은 `Start_PocketPal.command`, 실행 안내는 `START_HERE.html`, 변경·검증 내용은 `docs/PIXEL_CHARACTER_0.3.md`입니다.
+
+- [맥북 재시작 계획](docs/MAC_RESTART_PLAN_2026-09-08.md)
+- [검증 결과](docs/VALIDATION_2026-09-08.md)
+- 소스: `prototype/mac-lab/`, `tools/mac_server.py`
+- 검사: `python3 -m unittest discover -s tests -p 'test_mac_lab.py' -v`
+
+아래는 이전 P1.4 기록입니다. 최종 캐릭터 승인 상태나 현재 개발 방향을 나타내지 않습니다. **3D 선물·AR·전후 카메라 목표를 유지**하며 Mac Lab에서는 기억·교감·2D 착용을 먼저 검증합니다.
+
+---
+
 # PocketPal
 
 **아이와 대화하고, 기억하고, 먼저 말을 걸며 함께 성장하는 휴대형 AI 친구**

@@ -1,0 +1,33 @@
+/* Pixel Adventure's original pixels. CSS only plays frames and moves the actor. */
+.pixel-room{position:relative;isolation:isolate;overflow:visible;background:url("assets/pixel-adventure/world/pink.png") repeat center;background-size:128px 128px;image-rendering:pixelated}
+.pixel-room[data-skin=frog]{background-image:url("assets/pixel-adventure/world/green.png")}
+.pixel-terrain{position:absolute;width:192px;height:32px;bottom:0;left:50%;margin-left:-96px;background:url("assets/pixel-adventure/world/terrain.png") -384px -512px / 1408px 704px no-repeat;image-rendering:pixelated;z-index:0}
+.pixel-room[data-skin=frog] .pixel-terrain{background-position:-384px 0}
+.pixel-pal{--pixel-scale:4;--pixel-size:128px;position:absolute;width:var(--pixel-size);height:var(--pixel-size);left:50%;bottom:32px;margin-left:calc(var(--pixel-size) / -2);cursor:pointer;z-index:2;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.pixel-travel{width:32px;height:32px;transform:scale(var(--pixel-scale));transform-origin:0 0}
+.pixel-facing,.pixel-lift{position:relative;width:32px;height:32px;transform-origin:50% 100%}
+.pixel-sprite{width:32px;height:32px;background-repeat:no-repeat;background-size:calc(var(--frames,11) * 32px) 32px;image-rendering:pixelated;animation:pixel-frames var(--cycle,550ms) steps(var(--frames,11)) infinite}
+@keyframes pixel-frames{from{background-position:0 0}to{background-position:var(--sheet-end,-352px) 0}}
+.pixel-gift{position:absolute;object-fit:contain;pointer-events:none;z-index:3;image-rendering:auto;transform:translate(-50%,-50%);max-width:none;max-height:none}
+.pixel-emote{position:absolute;left:50%;top:-17px;transform:translateX(-50%);color:#c54868;font-size:21px;font-weight:750;line-height:1;white-space:nowrap;pointer-events:none}
+.pixel-pal[data-action=sleepy] .pixel-emote{font-size:15px;letter-spacing:4px;color:#677469}
+.pixel-pal[data-paused=true] .pixel-sprite{animation-play-state:paused}
+.pixel-pal[data-failed=true] .pixel-sprite{visibility:hidden}
+.character-stage.pixel-room{height:166px;margin-top:5px}
+.device-screen{background:#f7f4e9;border-color:#3f4d43}
+.home-screen{height:268px}
+.speech-bubble{max-height:66px;min-height:50px;font-weight:500}
+.pal-caption{bottom:3px}
+.character-choice{display:flex;gap:10px;margin-top:20px}
+.character-choice button{display:flex;align-items:center;gap:8px;padding:7px 12px;text-align:left;font-size:12px;min-width:147px;border-radius:13px;background:#fffefa}
+.character-choice button[aria-pressed=true]{border-color:#879e85;box-shadow:0 0 0 1px #879e85;background:#edf2e7}
+.character-choice small{display:block;font-size:9px;color:var(--muted);letter-spacing:.3px}
+.skin-icon{display:block;width:32px;height:32px;background-size:352px 32px;background-position:-160px 0;background-repeat:no-repeat;image-rendering:pixelated}
+.skin-pink{background-image:url("assets/pixel-adventure/pink/idle.png")}.skin-frog{background-image:url("assets/pixel-adventure/frog/idle.png")}
+.action-buttons{margin-top:13px;margin-bottom:10px;flex-wrap:wrap;justify-content:center;gap:6px}
+.action-buttons button{padding:8px 10px}
+.character-options{display:flex;gap:12px;margin-bottom:13px}
+.character-options button{border:0;padding:2px;background:transparent;font-size:10px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.companion-note a{text-underline-offset:3px}
+.pixel-room:not(.character-stage){min-height:360px}
+@media(prefers-reduced-motion:reduce){.pixel-pal .pixel-sprite{animation-play-state:paused}}

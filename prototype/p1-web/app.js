@@ -155,6 +155,9 @@ menus.forEach((menu, menuName) => {
 });
 
 window.addEventListener("keydown", (event) => {
+  // Text entry, Korean IME, and focused controls own their keyboard events.
+  if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey ||
+      event.target.closest?.("input, textarea, select, button, [contenteditable='true']")) return;
   if (["ArrowDown", "ArrowRight"].includes(event.key)) {
     event.preventDefault();
     moveMenu(1);

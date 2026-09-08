@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PocketPal · 캐릭터 24종 비교</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="data.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <header><div><p class="brand">PocketPal <span>CHARACTER COLLECTION</span></p><h1>어떤 친구가 마음에 들어요?</h1><p class="intro">캐릭터를 누르면 크게 보고, 원본 동작을 바꿔 볼 수 있어요.</p></div><button id="pauseAll" aria-pressed="false">목록 움직임 멈추기</button></header>
+  <main><div class="collection-label"><span><strong>24</strong>명의 작은 친구</span><span>추가 캐릭터 20종 + 기본 캐릭터 4종</span></div><div id="gallery" class="gallery" aria-label="캐릭터 목록"></div></main>
+  <dialog id="detail" aria-labelledby="detailTitle">
+    <div class="dialog-header"><div><p id="detailOriginal"></p><h2 id="detailTitle"></h2></div><button id="closeDetail" aria-label="크게 보기 닫기">닫기</button></div>
+    <div id="detailStage" class="detail-stage"><div class="sprite" id="detailSprite" aria-hidden="true"></div></div>
+    <p id="detailNote" class="detail-note"></p><div id="clips" class="clips" aria-label="원본 동작 선택"></div>
+    <div class="detail-controls"><button id="flip">반대쪽 보기</button><button id="pauseDetail" aria-pressed="false">이 동작 멈추기</button></div>
+    <p class="frame-info" id="frameInfo"></p>
+  </dialog>
+  <footer><p>원화·원본 동작: <a href="https://opengameart.org/users/pixel-frog" target="_blank" rel="noopener">Pixel Frog</a> · <a href="https://opengameart.org/content/pixel-adventure-1" target="_blank" rel="noopener">Pixel Adventure 1</a> · <a href="https://opengameart.org/content/pixel-adventure-2" target="_blank" rel="noopener">Pixel Adventure 2</a> · 공개 원본 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></p><p>원본 PNG의 픽셀과 동작을 유지했습니다. 이 화면은 외형·동작 비교용이며 인터넷 없이 열립니다. 원본에 없는 수면·대화 표정·옷 갈아입기는 별도 작업이 필요합니다.</p></footer>
+</body>
+</html>
